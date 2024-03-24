@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/welcome_primary_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Welcome to Expense Tracker"
+            android:textColor="@color/primary_txt"
+            android:textSize="24sp"
+            app:fontFamily="@font/abc_diatype_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/welcome_secondary_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="2dp"
+            android:fontFamily="@font/abc_diatype_regular_italic"
+            android:text="No more extra calculation"
+            android:textColor="@color/secondary_txt"
+            android:textSize="15sp"
+            app:fontFamily="@font/abc_diatype_regular_italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/welcome_primary_text" />
+
+        <TextView
+            android:id="@+id/name_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="48dp"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="Name"
+            android:textColor="@color/primary_txt"
+            android:textSize="14sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/welcome_secondary_text" />
+
+        <EditText
+            android:id="@+id/name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/only_stroke_with_7dp_radius"
+            android:hint="Enter your name"
+            android:inputType="text"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="17dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/primary_txt"
+            android:textColorHint="@color/secondary_txt"
+            android:textSize="12sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintTop_toBottomOf="@id/name_heading" />
+
+        <TextView
+            android:id="@+id/email_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="Email*"
+            android:textColor="@color/primary_txt"
+            android:textSize="14sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/name" />
+
+        <EditText
+            android:id="@+id/email"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/only_stroke_with_7dp_radius"
+            android:hint="Enter your Email Id."
+            android:inputType="textEmailAddress"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="17dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/primary_txt"
+            android:textColorHint="@color/secondary_txt"
+            android:textSize="12sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintTop_toBottomOf="@id/email_heading" />
+
+        <TextView
+            android:id="@+id/password_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="Password*"
+            android:textColor="@color/primary_txt"
+            android:textSize="14sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/email" />
+
+        <EditText
+            android:id="@+id/password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/only_stroke_with_7dp_radius"
+            android:hint="Enter the password here."
+            android:inputType="textWebPassword"
+            android:maxLines="1"
+            android:paddingStart="17dp"
+            android:paddingTop="15dp"
+            android:paddingEnd="17dp"
+            android:paddingBottom="15dp"
+            android:textColor="@color/primary_txt"
+            android:textColorHint="@color/secondary_txt"
+            android:textSize="12sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintTop_toBottomOf="@id/password_heading" />
+
+        <TextView
+            android:id="@+id/sign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="32dp"
+            android:background="@drawable/full_rounded_drawable"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:gravity="center"
+            android:paddingVertical="15dp"
+            android:text="Save &amp; Continue"
+            android:textColor="@color/primary_txt"
+            android:textSize="16sp"
+            app:fontFamily="@font/abc_diatype_medium"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
