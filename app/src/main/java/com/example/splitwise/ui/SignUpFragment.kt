@@ -1,5 +1,6 @@
 package com.example.splitwise.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -33,6 +34,9 @@ class SignUpFragment : Fragment() {
                 auth.createUserWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.d("Brijesh", "login is succesFull")
+                        val intent = Intent(requireActivity(),HomeActivity::class.java)
+                        requireContext().startActivity(intent)
+
                     }
                 }.addOnFailureListener {
                     Log.d("Brijesh", "Authentication Failed Reason is : ${it}")

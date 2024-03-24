@@ -1,5 +1,6 @@
 package com.example.splitwise.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -42,7 +43,11 @@ class LoginFragment : Fragment() {
                 inputEmail = binding.email.text.toString().trim()
                 inputPassword = binding.password.text.toString().trim()
                 auth.signInWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
-                    Log.d("Brijesh", "Sign in completed")
+                   if(it.isSuccessful){
+                       Log.d("Brijesh", "Sign in completed")
+                       val intent = Intent(requireActivity(),HomeActivity::class.java)
+                       requireContext().startActivity(intent)
+                   }
                 }.addOnFailureListener {
                     Log.d("Brijesh", "Sign in Failed due to $it")
                 }

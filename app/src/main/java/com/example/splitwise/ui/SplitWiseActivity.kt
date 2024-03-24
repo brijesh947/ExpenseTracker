@@ -1,5 +1,6 @@
 package com.example.splitwise.ui
 
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -33,7 +34,6 @@ class SplitWiseActivity : AppCompatActivity() {
             .addToBackStack(null)
             .commit()
     }
-
 
     private fun setWindowColor() {
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
