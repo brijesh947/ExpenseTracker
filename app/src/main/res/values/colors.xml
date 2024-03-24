@@ -11,5 +11,10 @@
     <color name="secondary_txt">#707070</color>
     <color name="primary_bg">#F7F7F7</color>
     <color name="text_cta_color">#1860A6</color>
+    <color name="ce_secondary_fg_light">#F3F3F3</color>
+    <color name="ce_low_contrast_fg_light">#EBECED</color>
+    <color name="ce_stroke_1_light">#E4E4E4</color>
+    <color name="transparent">#00000000</color>
+
     <color name="low_contrast_fg">#EBECED</color>
 </resources>

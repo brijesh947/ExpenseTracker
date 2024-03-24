@@ -7,18 +7,82 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <View
+            android:id="@+id/space"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
         <TextView
+            android:id="@+id/user_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="10dp"
             android:fontFamily="@font/abc_diatype_medium"
-            android:text="Welcome to the Expense Tracker"
+            android:text="Brijesh Dubey"
             android:textColor="@color/primary_txt"
             android:textSize="20sp"
             app:fontFamily="@font/abc_diatype_medium"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@id/space" />
+
+        <TextView
+            android:id="@+id/user_email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="2dp"
+            android:alpha="0.8"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="testerdubey@gmail.com"
+            android:textColor="@color/secondary_txt"
+            android:textSize="16sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_name" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/user_image"
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:src="@drawable/ic_user_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/space" />
+
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="20dp"
+            android:alpha="0.15"
+            android:background="@color/secondary_txt"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/user_email" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/seprator" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/create_group"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="24dp"
+            android:layout_marginBottom="24dp"
+            android:elevation="2dp"
+            android:translationZ="1dp"
+            android:src="@drawable/create_group_image"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:orientation="horizontal">
+
+            <RadioGroup
+                android:id="@+id/create_group_chip_parent"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+
+                android:orientation="horizontal">
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/group_type_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:background="@drawable/manhattan_chip_selector"
+
+                    android:button="@null"
+                    android:checked="false"
+                    android:fontFamily="@font/abc_diatype_medium"
+                    android:gravity="center"
+                    android:paddingStart="6dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="FlatMates"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/graph_selecter_chip_text"
+                    android:textSize="12sp"
+                    app:buttonCompat="@null"
+                    app:fontFamily="@font/abc_diatype_medium" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/group_type_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:background="@drawable/manhattan_chip_selector"
+                    android:button="@null"
+                    android:checked="true"
+                    android:fontFamily="@font/abc_diatype_medium"
+                    android:gravity="center"
+                    android:paddingStart="6dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Home"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/graph_selecter_chip_text"
+                    android:textSize="12sp"
+                    app:buttonCompat="@null"
+                    app:fontFamily="@font/abc_diatype_medium" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/group_type_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:background="@drawable/manhattan_chip_selector"
+                    android:button="@null"
+                    android:fontFamily="@font/abc_diatype_medium"
+                    android:gravity="center"
+                    android:paddingStart="6dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Couple"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/graph_selecter_chip_text"
+                    android:textSize="12sp"
+                    app:buttonCompat="@null"
+                    app:fontFamily="@font/abc_diatype_medium" />
+
+                <androidx.appcompat.widget.AppCompatRadioButton
+                    android:id="@+id/group_type_4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="7dp"
+                    android:background="@drawable/manhattan_chip_selector"
+                    android:button="@null"
+                    android:fontFamily="@font/abc_diatype_medium"
+                    android:gravity="center"
+                    android:paddingStart="6dp"
+                    android:paddingTop="6dp"
+                    android:paddingEnd="6dp"
+                    android:paddingBottom="6dp"
+                    android:text="Other"
+                    android:textAlignment="center"
+                    android:textColor="@drawable/graph_selecter_chip_text"
+                    android:textSize="12sp"
+                    app:buttonCompat="@null"
+                    app:fontFamily="@font/abc_diatype_medium" />
+
+            </RadioGroup>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+</layout>
