@@ -67,9 +67,11 @@
             android:id="@+id/recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="1dp"
+            android:paddingBottom="120dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/seprator" />
+            app:layout_constraintTop_toBottomOf="@id/seprator"
+            app:layout_constraintEnd_toEndOf="parent"/>
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/create_group"

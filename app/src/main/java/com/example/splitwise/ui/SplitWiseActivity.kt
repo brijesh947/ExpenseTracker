@@ -18,15 +18,27 @@ import com.google.firebase.ktx.Firebase
 
 class SplitWiseActivity : AppCompatActivity() {
     private lateinit var binding : MainLayoutBinding
+    private lateinit var auth:FirebaseAuth
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = MainLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setWindowColor()
+        auth = FirebaseAuth.getInstance()
+        if (auth.currentUser == null) {
+            supportFragmentManager.beginTransaction().replace(
+                binding.fragmentContainer.id, LoginFragment()
+            ).commit()
+        } else {
+            openHomeActivity()
+        }
 
-        supportFragmentManager.beginTransaction().replace(
-            binding.fragmentContainer.id, LoginFragment()
-        ).commit()
+    }
+
+    private fun openHomeActivity() {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
+        startActivity(intent)
     }
 
     fun showSignUpFragment() {
