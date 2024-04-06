@@ -28,6 +28,7 @@ class SignUpFragment : Fragment() {
 
         binding.sign.setOnClickListener {
             if (verifyInput() && auth.currentUser!=null) {
+                binding.progressBar.visibility = View.VISIBLE
                 inputEmail = binding.email.text.toString().trim()
                 inputPassword = binding.password.text.toString().trim()
                 Log.d("Brijesh", "inputEmail is  $inputEmail and input pasword $inputPassword")
@@ -36,10 +37,12 @@ class SignUpFragment : Fragment() {
                         Log.d("Brijesh", "login is succesFull")
                         val intent = Intent(requireActivity(),HomeActivity::class.java)
                         requireContext().startActivity(intent)
-
                     }
+                    binding.progressBar.visibility = View.GONE
+
                 }.addOnFailureListener {
                     Log.d("Brijesh", "Authentication Failed Reason is : ${it}")
+                    binding.progressBar.visibility = View.GONE
                 }
 
             }

@@ -40,10 +40,12 @@ class LoginFragment : Fragment() {
         inputPassword = binding.password.text.toString().trim()
         binding.sign.setOnClickListener {
             if (verifyInput()) {
+                binding.progressBar.visibility = View.VISIBLE
                 inputEmail = binding.email.text.toString().trim()
                 inputPassword = binding.password.text.toString().trim()
                 auth.signInWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
-                   if(it.isSuccessful){
+                    binding.progressBar.visibility = View.GONE
+                    if(it.isSuccessful){
                        Log.d("Brijesh", "Sign in completed")
                        val intent = Intent(requireActivity(),HomeActivity::class.java)
                        requireContext().startActivity(intent)
