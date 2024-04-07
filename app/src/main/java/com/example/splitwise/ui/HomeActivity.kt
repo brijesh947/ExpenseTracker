@@ -1,29 +1,44 @@
 package com.example.splitwise.ui
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.MyApplication
 import com.example.splitwise.R
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.CreateGroupBinding
 import com.example.splitwise.databinding.HomeLayoutBinding
+import com.example.splitwise.ui.di.component.DaggerHomeActivityComponent
+import com.example.splitwise.ui.di.module.HomeActivityModule
+import com.example.splitwise.ui.util.UiState
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 class HomeActivity : AppCompatActivity() {
-    private var db: FirebaseFirestore?=null
+
     private lateinit var binding: HomeLayoutBinding
     private var list = ArrayList<GroupDetailData>()
     private lateinit var recyclerView :RecyclerView
     private lateinit var adapter: HomeAdapter
-    private lateinit var auth: FirebaseAuth
-    private  var user: FirebaseUser? = null
+
+    @Inject
+    lateinit var viewModel: HomeViewModel
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        injectDependencies()
         super.onCreate(savedInstanceState)
         binding = HomeLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -32,9 +47,6 @@ class HomeActivity : AppCompatActivity() {
         binding.createGroup.setOnClickListener {
             openCreateGroupDialog()
         }
-        auth = FirebaseAuth.getInstance()
-        user = auth.currentUser
-        db = FirebaseFirestore.getInstance()
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter()
@@ -42,31 +54,43 @@ class HomeActivity : AppCompatActivity() {
 
     }
 
+    private fun injectDependencies() {
+        DaggerHomeActivityComponent.builder()
+            .applicationComponent((application as MyApplication).applicationComponent)
+            .homeActivityModule(HomeActivityModule(this)).build().inject(this)
+    }
+
 
     override fun onResume() {
-        fetchFirebaseData()
         super.onResume()
+        fetchData()
     }
 
-    private fun fetchFirebaseData() {
-        if (user != null) {
-            val userRef = db!!.collection("users").document(user!!.uid).collection("userDetail")
-            userRef.get().addOnSuccessListener {
-                if (it != null && !it.isEmpty) {
+    @SuppressLint("RepeatOnLifecycleWrongUsage")
+    private fun fetchData() {
+        viewModel.getUserDetail()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED){
+                viewModel.groupDetail.collect{
+                    when(it){
+                        is UiState.Success ->{
+                            if (it.data.isNotEmpty())
+                                adapter.setList(it.data)
+                            else
+                                Toast.makeText(this@HomeActivity,"List is Empty", Toast.LENGTH_SHORT).show()
+                        }
+                        else ->{
+                            Toast.makeText(this@HomeActivity,"Error from firebase $it", Toast.LENGTH_SHORT).show()
+                        }
 
-                    for (doc in it.documents) {
-                        var tempData = GroupDetailData("" + doc.get("group_name"), "Home", "" + doc.get("total_expense"))
-                        list.add(tempData)
                     }
-                    adapter.setList(list)
                 }
-            }.addOnFailureListener {
-                Log.d("TAGD", "exception while reading the firestore data ${it.message}")
+
             }
-        }else{
-            Log.d("TAGD", "user is null from firestore")
         }
+
     }
+
 
     private fun openCreateGroupDialog() {
         val dialogView = CreateGroupBinding.inflate(layoutInflater)
@@ -74,7 +98,7 @@ class HomeActivity : AppCompatActivity() {
         dialogView.createGroupButton.setOnClickListener {
              if(verifyInput(dialogView)){
                  val data = GroupDetailData(dialogView.groupName.text.toString().trim(),"Home","50000")
-                 addTotheFirebase(data)
+               //  addTotheFirebase(data)
                  list.add(data)
                  adapter.setList(list)
                  dialog.dismiss()
@@ -84,21 +108,20 @@ class HomeActivity : AppCompatActivity() {
         dialog.show()
     }
 
-    private fun addTotheFirebase(data: GroupDetailData) {
-
-        if(user!=null){
-            val userRef = db!!.collection("users").document(user!!.uid).collection("userDetail")
-            val userDetail = hashMapOf(
-                "group_name" to data.groupName,
-                "total_expense" to data.totalExpense
-            )
-            userRef.add(userDetail).addOnSuccessListener {
-                Log.d("TAGD", "data set to the firestore")
-            }.addOnFailureListener {
-                Log.d("TAGD", "failed due to ${it.message}")
-            }
-        }
-    }
+//    private fun addTotheFirebase(data: GroupDetailData) {
+//        if(user!=null){
+//            val userRef = db!!.collection("users").document(user!!.uid).collection("userDetail")
+//            val userDetail = hashMapOf(
+//                "group_name" to data.groupName,
+//                "total_expense" to data.totalExpense
+//            )
+//            userRef.add(userDetail).addOnSuccessListener {
+//                Log.d("TAGD", "data set to the firestore")
+//            }.addOnFailureListener {
+//                Log.d("TAGD", "failed due to ${it.message}")
+//            }
+//        }
+//    }
 
     private fun verifyInput(dialogView: CreateGroupBinding): Boolean {
 
