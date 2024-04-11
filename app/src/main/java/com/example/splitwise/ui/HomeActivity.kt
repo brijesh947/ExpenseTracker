@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.FirebaseCallback
 import com.example.splitwise.MyApplication
 import com.example.splitwise.R
 import com.example.splitwise.data.GroupDetailData
@@ -51,7 +52,7 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter()
         recyclerView.adapter = adapter
-
+        fetchData()
     }
 
     private fun injectDependencies() {
@@ -63,7 +64,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        fetchData()
+
     }
 
     @SuppressLint("RepeatOnLifecycleWrongUsage")
@@ -74,8 +75,10 @@ class HomeActivity : AppCompatActivity() {
                 viewModel.groupDetail.collect{
                     when(it){
                         is UiState.Success ->{
-                            if (it.data.isNotEmpty())
+                            if (it.data.isNotEmpty()) {
+                                list = it.data as ArrayList<GroupDetailData>
                                 adapter.setList(it.data)
+                            }
                             else
                                 Toast.makeText(this@HomeActivity,"List is Empty", Toast.LENGTH_SHORT).show()
                         }
@@ -97,10 +100,20 @@ class HomeActivity : AppCompatActivity() {
         val dialog = BottomSheetDialog(this)
         dialogView.createGroupButton.setOnClickListener {
              if(verifyInput(dialogView)){
-                 val data = GroupDetailData(dialogView.groupName.text.toString().trim(),"Home","50000")
-               //  addTotheFirebase(data)
-                 list.add(data)
-                 adapter.setList(list)
+                 val data = GroupDetailData("0",dialogView.groupName.text.toString().trim(),"Home","till now No Expenses")
+                 viewModel.addNewUserGroup(data, object : FirebaseCallback<Boolean> {
+                     override fun isSuccess(result: Boolean) {
+                         if (result) {
+                             list.add(data)
+                             adapter.setList(list)
+                         } else
+                             showError("User not Added")
+                     }
+                     override fun isFailed(reason: String) {
+                         showError(reason)
+                     }
+                 })
+
                  dialog.dismiss()
              }
         }
@@ -108,23 +121,12 @@ class HomeActivity : AppCompatActivity() {
         dialog.show()
     }
 
-//    private fun addTotheFirebase(data: GroupDetailData) {
-//        if(user!=null){
-//            val userRef = db!!.collection("users").document(user!!.uid).collection("userDetail")
-//            val userDetail = hashMapOf(
-//                "group_name" to data.groupName,
-//                "total_expense" to data.totalExpense
-//            )
-//            userRef.add(userDetail).addOnSuccessListener {
-//                Log.d("TAGD", "data set to the firestore")
-//            }.addOnFailureListener {
-//                Log.d("TAGD", "failed due to ${it.message}")
-//            }
-//        }
-//    }
+    private fun showError(reason: String) {
+        Log.d("TAGD", "error whiled adding data to the firebase is $reason")
+        Toast.makeText(this@HomeActivity,reason,Toast.LENGTH_SHORT).show()
+    }
 
     private fun verifyInput(dialogView: CreateGroupBinding): Boolean {
-
         if (dialogView.groupName.text.isEmpty()) {
             dialogView.groupName.error = "Group name can't be Empty"
             return false

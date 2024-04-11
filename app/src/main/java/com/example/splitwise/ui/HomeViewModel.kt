@@ -3,6 +3,7 @@ package com.example.splitwise.ui
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.splitwise.FirebaseCallback
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +17,6 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     private var _groupDetail = MutableStateFlow<UiState<List<GroupDetailData>>>(UiState.Loading)
     val groupDetail: StateFlow<UiState<List<GroupDetailData>>> get() = _groupDetail
     fun getUserDetail() {
-
         viewModelScope.launch {
             Log.d("TAGD", "getUserDetail in view model  is called")
             repository.getUserDetail().catch { e ->
@@ -28,6 +28,16 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                     _groupDetail.value = UiState.Error("User Detail is Empty")
                 else
                     _groupDetail.value = UiState.Success(it)
+            }
+        }
+    }
+
+    fun addNewUserGroup(data: GroupDetailData, callback: FirebaseCallback<Boolean>) {
+        viewModelScope.launch {
+            repository.addNewGroupToFirebase(data).catch {
+                callback.isFailed(it.message.toString())
+            }.collect { isAdded ->
+                callback.isSuccess(isAdded)
             }
         }
     }

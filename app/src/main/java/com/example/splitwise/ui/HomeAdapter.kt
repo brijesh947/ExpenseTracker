@@ -40,7 +40,6 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     private inner class GroupDetailHolder(val binding: GroupDetailLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
-
         fun setData(data: GroupDetailData) {
             binding.groupName.text = data.groupName
             binding.totalExpense.text = data.totalExpense
