@@ -41,4 +41,13 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+    fun deleteGroupFromFirebase(data: GroupDetailData, callback: FirebaseCallback<Boolean>) {
+        viewModelScope.launch {
+            repository.deleteGroupFromFirebase(data).catch {
+                callback.isFailed(it.message.toString())
+            }.collect {
+                callback.isSuccess(it)
+            }
+        }
+    }
 }

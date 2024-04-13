@@ -58,4 +58,20 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
 
     }
 
+    fun deleteGroupFromFirebase(groupData: GroupDetailData): Flow<Boolean> {
+        return callbackFlow {
+            if (auth.currentUser != null) {
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id)
+                userRef.delete().addOnSuccessListener {
+                    trySend(true)
+                }.addOnFailureListener {
+                    trySend(false)
+                }
+            } else
+                trySend(false)
+
+            awaitClose { }
+        }
+    }
+
 }
