@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.appbar.CollapsingToolbarLayout
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="120dp"
@@ -13,84 +14,78 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <TextView
+            android:id="@+id/shopping_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Sweet Home"
+            android:textAllCaps="true"
+            android:textColor="@color/ce_primary_bg_light"
+            android:textSize="18sp"
+            app:fontFamily="@font/abc_diatype_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/search_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="13dp"
+            android:layout_marginEnd="16dp"
+            android:src="@drawable/ic_search"
+            android:tint="@color/ce_primary_bg_light"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@id/seprator"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_name">
 
             <TextView
-                android:id="@+id/group_name"
+                android:id="@+id/total_expense_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
                 android:fontFamily="@font/abc_diatype_medium"
-                android:text="Sweet Home"
-                android:textAllCaps="true"
-                android:textColor="@color/ce_primary_bg_light"
-                android:textSize="18sp"
-                app:fontFamily="@font/abc_diatype_medium"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:text="Total Expenses so far"
+                android:textColor="@color/ce_highlight_ac2_light"
+                android:textSize="16sp" />
 
-            <androidx.appcompat.widget.AppCompatImageView
-                android:id="@+id/search_button"
+            <TextView
+                android:id="@+id/total_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="13dp"
-                android:layout_marginEnd="16dp"
-                android:src="@drawable/ic_search"
-                android:tint="@color/ce_primary_bg_light"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_regular"
+                android:text="$ 500"
+                android:textColor="@color/ce_highlight_khayi_light"
+                android:textSize="16sp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical"
-                app:layout_constraintBottom_toTopOf="@id/seprator"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/group_name">
-
-                <TextView
-                    android:id="@+id/total_expense_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:fontFamily="@font/abc_diatype_medium"
-                    android:text="Total Expenses so far"
-                    android:textColor="@color/ce_highlight_ac2_light"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:id="@+id/total_expense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="2dp"
-                    android:fontFamily="@font/abc_diatype_regular"
-                    android:text="$ 500"
-                    android:textColor="@color/ce_highlight_khayi_light"
-                    android:textSize="16sp" />
-
-            </LinearLayout>
+        </LinearLayout>
 
 
-            <View
-                android:id="@+id/seprator"
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/ce_stroke_1_light"
-                android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/ce_stroke_1_light"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    </com.google.android.material.appbar.CollapsingToolbarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/expense_recylerview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
@@ -107,6 +102,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar" />
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:id="@+id/add_records_button"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="32dp"
+        android:src="@drawable/add_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

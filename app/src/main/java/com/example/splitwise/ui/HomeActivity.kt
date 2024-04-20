@@ -53,6 +53,7 @@ class HomeActivity : AppCompatActivity() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter(this,application)
+        adapter.setViewType(1)
         recyclerView.adapter = adapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -143,7 +144,7 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        adapter.setViewType(1)
     }
 
     @SuppressLint("RepeatOnLifecycleWrongUsage")
