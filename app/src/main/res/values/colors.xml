@@ -8,6 +8,15 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="primary_txt">#000000</color>
+    <color name="liveTabBackColor">#304556</color>
+    <color name="ce_primary_fg_light">#FFFFFF</color>
+    <color name="ce_primary_bg_light">#90F1F1F1</color>
+
+    <color name="top_nav_bar_light">#0F1F2E</color>
+    <color name="ce_highlight_ac2_light">#9E6105</color>
+    <color name="ce_highlight_khayi_light">#A64040</color>
+
+    <color name="ce_high_contrast_txt_color_dark">#FCFCFC</color>
     <color name="secondary_txt">#707070</color>
     <color name="primary_bg">#F7F7F7</color>
     <color name="text_cta_color">#1860A6</color>
