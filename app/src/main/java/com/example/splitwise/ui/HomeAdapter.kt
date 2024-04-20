@@ -1,15 +1,19 @@
 package com.example.splitwise.ui
 
+import android.app.Application
+import android.content.Context
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.ExpenseDetailActivity
 import com.example.splitwise.R
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
 
-class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class HomeAdapter(private val context: Context, private val application: Application) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: List<GroupDetailData> = ArrayList()
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
@@ -43,6 +47,12 @@ class HomeAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         fun setData(data: GroupDetailData) {
             binding.groupName.text = data.groupName
             binding.totalExpense.text = data.totalExpense
+            binding.root.setOnClickListener {
+                val intent = Intent(context,ExpenseDetailActivity::class.java)
+                intent.putExtra("name",data.groupName)
+                intent.putExtra("expenses",data.totalExpense)
+                context.startActivity(intent)
+            }
         }
     }
 }

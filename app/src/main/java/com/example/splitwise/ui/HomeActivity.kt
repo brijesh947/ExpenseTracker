@@ -52,14 +52,14 @@ class HomeActivity : AppCompatActivity() {
         }
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
-        adapter = HomeAdapter()
+        adapter = HomeAdapter(this,application)
         recyclerView.adapter = adapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
         fetchData()
     }
 
-    val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
+    private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
         override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
             return false
         }
@@ -161,6 +161,11 @@ class HomeActivity : AppCompatActivity() {
                             else
                                 Toast.makeText(this@HomeActivity,"List is Empty", Toast.LENGTH_SHORT).show()
                         }
+
+                        is UiState.Loading -> {
+
+                        }
+
                         else ->{
                             Toast.makeText(this@HomeActivity,"Error from firebase $it", Toast.LENGTH_SHORT).show()
                         }

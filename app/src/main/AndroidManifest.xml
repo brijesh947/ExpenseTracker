@@ -28,6 +28,10 @@
             android:name=".ui.HomeActivity"
             android:exported="false"
             android:theme="@style/Theme.Home"></activity>
+        <activity
+            android:name=".ExpenseDetailActivity"
+            android:exported="false"
+            android:theme="@style/Theme.Home"></activity>
     </application>
 
 </manifest>
