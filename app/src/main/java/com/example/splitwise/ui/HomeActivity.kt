@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.text.TextPaint
 import android.util.Log
 import android.util.TypedValue
+import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -57,7 +58,7 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.adapter = adapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
-        fetchData()
+
     }
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -75,6 +76,9 @@ class HomeActivity : AppCompatActivity() {
                             adapter.notifyItemRemoved(position)
                         } else
                             showError("Error while deleting the data")
+                        if (list.isEmpty()) {
+                            binding.noGroup.visibility = View.VISIBLE
+                        }
                     }
 
                     override fun isFailed(reason: String) {
@@ -145,6 +149,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         adapter.setViewType(1)
+        fetchData()
     }
 
     @SuppressLint("RepeatOnLifecycleWrongUsage")
@@ -154,21 +159,25 @@ class HomeActivity : AppCompatActivity() {
             repeatOnLifecycle(Lifecycle.State.STARTED){
                 viewModel.groupDetail.collect{
                     when(it){
-                        is UiState.Success ->{
+                        is UiState.Success -> {
+                            binding.progressBar.visibility = View.GONE
                             if (it.data.isNotEmpty()) {
                                 list = it.data as ArrayList<GroupDetailData>
                                 adapter.setList(list)
+                                binding.noGroup.visibility = View.GONE
+                            } else {
+                                binding.noGroup.visibility = View.VISIBLE
                             }
-                            else
-                                Toast.makeText(this@HomeActivity,"List is Empty", Toast.LENGTH_SHORT).show()
+
                         }
 
                         is UiState.Loading -> {
-
+                            binding.progressBar.visibility = View.VISIBLE
                         }
 
-                        else ->{
-                            Toast.makeText(this@HomeActivity,"Error from firebase $it", Toast.LENGTH_SHORT).show()
+                        else -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.noGroup.visibility = View.VISIBLE
                         }
 
                     }
@@ -193,6 +202,9 @@ class HomeActivity : AppCompatActivity() {
                              adapter.setList(list)
                          } else
                              showError("User not Added")
+                         if (list.isNotEmpty()) {
+                             binding.noGroup.visibility = View.GONE
+                         }
                      }
                      override fun isFailed(reason: String) {
                          showError(reason)

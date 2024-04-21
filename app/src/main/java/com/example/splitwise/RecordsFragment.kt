@@ -105,7 +105,6 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                             list.add(data)
                             adapter.setList(list)
                         }
-                        Log.d("kflwh", "add expenses $result")
                     }
 
                     override fun isFailed(reason: String) {
@@ -113,8 +112,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                     }
 
                 })
-
-
+                viewModel.updateTotalExpense(groupData!!,totalShoppingSum.toString())
                 dialog.dismiss()
             }
         }
@@ -147,6 +145,9 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     @SuppressLint("RepeatOnLifecycleWrongUsage")
     private fun fetchData() {
         viewModel.getExpenseDetail(groupData!!)
+        groupData?.let {
+            binding.userGroupName.text = it.groupName
+        }
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 viewModel.expenseDetail.collect {
@@ -166,8 +167,8 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                                 list = it.data as ArrayList<ShoppingData>
                                 adapter.setList(list)
                                 totalShoppingSum = 0.0
-                                list.forEach {
-                                    totalShoppingSum += it.totalAmount.toDouble()
+                                list.forEach { shoppingData ->
+                                    totalShoppingSum += shoppingData.totalAmount.toDouble()
                                 }
                                 binding.totalExpense.text = totalShoppingSum.toString()
                                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
@@ -175,6 +176,8 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                             } else {
                                 binding.noElement.visibility = View.VISIBLE
                             }
+
+                            viewModel.updateTotalExpense(groupData!!,totalShoppingSum.toString())
 
                         }
 

@@ -11,6 +11,8 @@ import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.resume
+import kotlin.coroutines.suspendCoroutine
 
 class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth) {
     fun getUserDetail(): Flow<List<GroupDetailData>> {
@@ -99,6 +101,26 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 }
             }
             awaitClose {  }
+        }
+    }
+    suspend fun updateTotalExpensesInGroup(groupData: GroupDetailData, totalExpenses: String) :Boolean {
+        return suspendCoroutine { continuation ->
+            if (auth.currentUser != null) {
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id)
+
+                db.runTransaction { transaction ->
+                    transaction.update(userRef, "total_expense", totalExpenses)
+                }.addOnSuccessListener {
+                    continuation.resume(true)
+                }.addOnFailureListener {
+                    Log.d("jfdks", "updateTotalExpensesInGroup: fail $it")
+                    continuation.resume(false)
+                }
+
+            } else {
+                Log.d("jfdks", "updateTotalExpense auth is null")
+                continuation.resume(false)
+            }
         }
     }
 

@@ -15,7 +15,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:id="@+id/shopping_name"
+            android:id="@+id/user_group_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
@@ -47,7 +47,7 @@
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@id/seprator"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shopping_name">
+            app:layout_constraintTop_toBottomOf="@id/user_group_name">
 
             <TextView
                 android:id="@+id/total_expense_name"

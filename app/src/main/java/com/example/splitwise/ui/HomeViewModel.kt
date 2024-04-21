@@ -71,6 +71,12 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+
+    fun updateTotalExpense(data: GroupDetailData, totalExpense: String) {
+        viewModelScope.launch {
+            repository.updateTotalExpensesInGroup(data, totalExpenses = totalExpense)
+        }
+    }
     fun deleteGroupFromFirebase(data: GroupDetailData, callback: FirebaseCallback<Boolean>) {
         viewModelScope.launch {
             repository.deleteGroupFromFirebase(data).catch {
