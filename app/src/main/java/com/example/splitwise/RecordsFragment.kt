@@ -1,25 +1,61 @@
 package com.example.splitwise
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
 import com.example.splitwise.databinding.RecordFragmentLayoutBinding
 import com.example.splitwise.ui.HomeAdapter
+import com.example.splitwise.ui.HomeViewModel
+import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
+import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
+import com.example.splitwise.ui.di.module.HomeActivityModule
+import com.example.splitwise.ui.util.UiState
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RecordsFragment : Fragment() {
-    private lateinit var adapter: HomeAdapter
+class RecordsFragment(val application: MyApplication,val activity: ExpenseDetailActivity) : Fragment() {
+
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
-    private val  list :ArrayList<ShoppingData> = ArrayList()
+    private var  list :ArrayList<ShoppingData> = ArrayList()
+    private var groupData:GroupDetailData? = null
+
+    @Inject
+    lateinit var adapter: HomeAdapter
+
+    @Inject
+    lateinit var viewModel: HomeViewModel
     override fun onCreate(savedInstanceState: Bundle?) {
+        initFragment()
         super.onCreate(savedInstanceState)
+    }
+
+    fun setGroupData(data: GroupDetailData?) {
+        groupData = data
+    }
+
+    private fun initFragment() {
+        DaggerExpenseDetailActivityComponent.builder()
+            .applicationComponent((application as MyApplication).applicationComponent)
+            .homeActivityModule(HomeActivityModule(activity = activity as AppCompatActivity))
+            .expenseDetailActivityModule(ExpenseDetailActivityModule(application,activity))
+            .build()
+            .inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -31,7 +67,6 @@ class RecordsFragment : Fragment() {
 
         recyclerView = binding.expenseRecylerview
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
-        adapter = HomeAdapter(requireContext(),requireContext().applicationContext as MyApplication)
         recyclerView.adapter = adapter
         adapter.setViewType(2)
         return binding.root
@@ -60,12 +95,26 @@ class RecordsFragment : Fragment() {
                 } else {
                     "Other"
                 }
-                val data = ShoppingData(dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString())
+                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString())
                 totalShoppingSum += data.totalAmount.toDouble()
                 binding.totalExpense.text = totalShoppingSum.toString()
                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
-                list.add(data)
-                adapter.setList(list)
+                viewModel.addNewUserExpenses(groupData!!, data, object : FirebaseCallback<Boolean> {
+                    override fun isSuccess(result: Boolean) {
+                        if(result){
+                            list.add(data)
+                            adapter.setList(list)
+                        }
+                        Log.d("kflwh", "add expenses $result")
+                    }
+
+                    override fun isFailed(reason: String) {
+                        Log.d("kflwh", "Failed to add expenses $reason")
+                    }
+
+                })
+
+
                 dialog.dismiss()
             }
         }
@@ -86,28 +135,56 @@ class RecordsFragment : Fragment() {
         return true
     }
 
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
     private var totalShoppingSum = 0.0
 
     override fun onResume() {
         super.onResume()
         totalShoppingSum = 0.0
         adapter.setViewType(2)
-        if (list.isNotEmpty()) {
-            binding.noElement.visibility = View.GONE
-            list.forEach {
-                totalShoppingSum+= it.totalAmount.toDouble()
-            }
-            binding.totalExpense.text = totalShoppingSum.toString()
-            binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
+        fetchData()
+    }
 
-            adapter.setList(list)
-        } else {
-            binding.totalExpense.text = "No Expenses to Show"
-            binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.secondary_txt))
-            binding.noElement.visibility = View.VISIBLE
+    @SuppressLint("RepeatOnLifecycleWrongUsage")
+    private fun fetchData() {
+        viewModel.getExpenseDetail(groupData!!)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.expenseDetail.collect {
+                    when (it) {
+                        is UiState.Loading -> {
+                            list = ArrayList()
+                            adapter.setList(list)
+                            binding.totalExpense.text = "No Expenses"
+                            binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.secondary_txt))
+                            binding.progressBar.visibility = View.VISIBLE
+                            binding.noElement.visibility = View.GONE
+                        }
+
+                        is UiState.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            if (it.data.isNotEmpty()) {
+                                list = it.data as ArrayList<ShoppingData>
+                                adapter.setList(list)
+                                totalShoppingSum = 0.0
+                                list.forEach {
+                                    totalShoppingSum += it.totalAmount.toDouble()
+                                }
+                                binding.totalExpense.text = totalShoppingSum.toString()
+                                binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
+                                binding.noElement.visibility = View.GONE
+                            } else {
+                                binding.noElement.visibility = View.VISIBLE
+                            }
+
+                        }
+
+                        else -> {
+                            binding.progressBar.visibility = View.GONE
+                            binding.noElement.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
         }
     }
 

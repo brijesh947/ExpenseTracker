@@ -17,7 +17,7 @@ class HomeActivityModule(private val activity : AppCompatActivity) {
 
     @ActivityContext
     @Provides
-    fun provideContext():Context{
+    fun provideContext(): Context {
         return activity
     }
 

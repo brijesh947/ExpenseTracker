@@ -2,6 +2,7 @@ package com.example.splitwise.ui
 
 import android.util.Log
 import com.example.splitwise.data.GroupDetailData
+import com.example.splitwise.data.ShoppingData
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.channels.awaitClose
@@ -21,6 +22,29 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 userRef.get().addOnSuccessListener { querySnapshot ->
                     for (doc in querySnapshot.documents) {
                         val tempData = GroupDetailData(doc.id,"" + doc.get("group_name"), "Home", "" + doc.get("total_expense"))
+                        list.add(tempData)
+                    }
+                    trySend(list)
+                }.addOnFailureListener { exception ->
+                    Log.d("TAGD", "exception while reading the firestore data ${exception.message}")
+                    trySend(list)
+                }
+            } else {
+                Log.d("TAGD", "user is null from firestore")
+                trySend(list)
+            }
+            awaitClose {  }
+        }
+    }
+    fun getUserExpenseDetail(groupData: GroupDetailData): Flow<List<ShoppingData>> {
+        Log.d("TAGD", "getUserDetail in repo is called")
+        return callbackFlow {
+            val list: MutableList<ShoppingData> = mutableListOf()
+            if (auth.currentUser != null) {
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id).collection("expenseDetail")
+                userRef.get().addOnSuccessListener { querySnapshot ->
+                    for (doc in querySnapshot.documents) {
+                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"))
                         list.add(tempData)
                     }
                     trySend(list)
@@ -56,6 +80,26 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
             awaitClose {  }
         }
 
+    }
+    fun addNewExpenseToFirebase(groupData: GroupDetailData,expenseData: ShoppingData): Flow<Boolean> {
+        return callbackFlow {
+            var isGroupAdded: Boolean
+            if (auth.currentUser != null) {
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id).collection("expenseDetail")
+                val userDetail = hashMapOf("name" to expenseData.shoppingName, "type" to expenseData.shoppingCategory,"amount" to expenseData.totalAmount)
+                userRef.add(userDetail).addOnSuccessListener {
+                    isGroupAdded = true
+                    expenseData.id = it.id
+                    trySend(isGroupAdded)
+                    Log.d("TAGD", "expense added successFully")
+                }.addOnFailureListener {
+                    isGroupAdded = false
+                    trySend(isGroupAdded)
+                    Log.d("TAGD", "failed due to ${it.message}")
+                }
+            }
+            awaitClose {  }
+        }
     }
 
     fun deleteGroupFromFirebase(groupData: GroupDetailData): Flow<Boolean> {

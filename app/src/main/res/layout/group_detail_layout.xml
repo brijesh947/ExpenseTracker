@@ -4,12 +4,12 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="120dp">
+        android:layout_height="90dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/logo_card"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
             android:layout_marginStart="20dp"
             android:elevation="0dp"
             app:cardBackgroundColor="@color/transparent"
@@ -24,36 +24,50 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="fitXY"
-                android:src="@drawable/home_icon" />
+                android:src="@drawable/home" />
 
         </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/group_name"
+        <LinearLayout
+            android:id="@+id/text_parent"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="15dp"
-            android:fontFamily="@font/abc_diatype_medium"
-            android:text="Sweet Home"
-            android:textColor="@color/primary_txt"
-            android:textSize="20sp"
-            app:fontFamily="@font/abc_diatype_medium"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/logo_card"
             app:layout_constraintStart_toEndOf="@id/logo_card"
-            app:layout_constraintTop_toTopOf="@id/logo_card" />
+            app:layout_constraintTop_toTopOf="@id/logo_card">
 
-        <TextView
-            android:id="@+id/total_expense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:fontFamily="@font/abc_diatype_regular"
-            android:text="Total Expenses so far 50000"
-            android:textColor="@color/secondary_txt"
-            android:textSize="16sp"
-            app:fontFamily="@font/abc_diatype_regular"
-            app:layout_constraintStart_toEndOf="@id/logo_card"
-            app:layout_constraintTop_toBottomOf="@id/group_name" />
+            <TextView
+                android:id="@+id/group_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="Sweet Home"
+                android:textColor="@color/primary_txt"
+                android:textSize="18sp"
+                app:fontFamily="@font/abc_diatype_medium" />
+
+            <TextView
+                android:id="@+id/total_expense"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/abc_diatype_regular"
+                android:text="Total Expenses so far 50000"
+                android:textColor="@color/secondary_txt"
+                android:textSize="15sp"
+                app:fontFamily="@font/abc_diatype_regular" />
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="20dp"
+            android:background="@color/ce_stroke_1_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

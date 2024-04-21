@@ -78,6 +78,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
                 val intent = Intent(context,ExpenseDetailActivity::class.java)
                 intent.putExtra("name",data.groupName)
                 intent.putExtra("expenses",data.totalExpense)
+                intent.putExtra("id",data.id)
                 context.startActivity(intent)
             }
         }

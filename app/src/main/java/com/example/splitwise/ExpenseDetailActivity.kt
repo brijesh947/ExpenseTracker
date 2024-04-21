@@ -5,32 +5,53 @@ import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.replace
+import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.ExpensesDetailLayoutBinding
+import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
+import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
+import com.example.splitwise.ui.di.module.HomeActivityModule
+import javax.inject.Inject
 
 class ExpenseDetailActivity :AppCompatActivity(){
+
     private lateinit var binding: ExpensesDetailLayoutBinding
-    private lateinit var recordsFragment: RecordsFragment
-    private lateinit var analysisFragment: AnalysisFragment
-    private lateinit var budgetFragment: BudgetFragment
-    private lateinit var categoryFragment: CategoryFragment
+
+    @Inject
+    lateinit var recordsFragment: RecordsFragment
+
+    @Inject
+    lateinit var analysisFragment: AnalysisFragment
+
+    @Inject
+    lateinit var budgetFragment: BudgetFragment
+
+    @Inject
+    lateinit var categoryFragment: CategoryFragment
+
+    private var data: GroupDetailData? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        initFragment();
         super.onCreate(savedInstanceState)
         binding = ExpensesDetailLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setWindowColor()
         binding.bottomNavigation.itemIconTintList = null
-        initFragment();
+        intent.extras?.let {
+            data = GroupDetailData(it.getString("id")!!,it.getString("name")!!,"",it.getString("expenses")!!)
+        }
 
     }
     private var selectedFragmentPos = 1
     private var selectedFragment :Fragment? = null
 
     private fun initFragment() {
-        recordsFragment = RecordsFragment()
-        categoryFragment = CategoryFragment()
-        analysisFragment = AnalysisFragment()
-        budgetFragment = BudgetFragment()
+        DaggerExpenseDetailActivityComponent.builder()
+            .applicationComponent((application as MyApplication).applicationComponent)
+            .homeActivityModule(HomeActivityModule(this as AppCompatActivity))
+            .expenseDetailActivityModule(ExpenseDetailActivityModule(application as MyApplication, this))
+            .build()
+            .inject(this)
     }
 
     private fun setWindowColor() {
@@ -84,6 +105,9 @@ class ExpenseDetailActivity :AppCompatActivity(){
                 .replace(binding.container.id, selectedFragment!!, selectedFragmentPos.toString())
                 .commit()
             true
+        }
+        if(recordsFragment!=null){
+            recordsFragment.setGroupData(data)
         }
     }
 
