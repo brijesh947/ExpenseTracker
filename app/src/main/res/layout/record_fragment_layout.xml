@@ -5,81 +5,92 @@
     android:layout_height="match_parent">
 
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/toolbar"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolbar_parent"
         android:layout_width="match_parent"
-        android:layout_height="120dp"
-        android:background="@color/top_nav_bar_light"
-        android:elevation="1dp"
+        android:layout_height="wrap_content"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/user_group_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="@font/abc_diatype_medium"
-            android:text="Sweet Home"
-            android:textAllCaps="true"
-            android:textColor="@color/ce_primary_bg_light"
-            android:textSize="18sp"
-            app:fontFamily="@font/abc_diatype_medium"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/search_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="13dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_search"
-            android:tint="@color/ce_primary_bg_light"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/seprator"
+            android:layout_height="120dp"
+            android:background="@color/primary_bg"
+            android:elevation="1dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/user_group_name">
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/total_expense_name"
+                android:id="@+id/user_group_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
                 android:fontFamily="@font/abc_diatype_medium"
-                android:text="Total Expenses so far"
-                android:textColor="@color/ce_highlight_ac2_light"
-                android:textSize="16sp" />
+                android:text="Sweet Home"
+                android:textAllCaps="true"
+                android:textColor="@color/primary_txt"
+                android:textSize="18sp"
+                app:fontFamily="@font/abc_diatype_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-            <TextView
-                android:id="@+id/total_expense"
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/search_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="2dp"
-                android:fontFamily="@font/abc_diatype_regular"
-                android:text="$ 500"
-                android:textColor="@color/ce_highlight_khayi_light"
-                android:textSize="16sp" />
+                android:layout_marginTop="13dp"
+                android:layout_marginEnd="16dp"
+                android:src="@drawable/ic_search"
+                android:tint="@color/secondary_txt"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toTopOf="@id/seprator"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/user_group_name">
+
+                <TextView
+                    android:id="@+id/total_expense_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:fontFamily="@font/abc_diatype_medium"
+                    android:text="Total Expenses so far"
+                    android:textColor="@color/ce_highlight_ac2_light"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/total_expense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:fontFamily="@font/abc_diatype_regular"
+                    android:text="$ 500"
+                    android:textColor="@color/ce_highlight_khayi_light"
+                    android:textSize="16sp" />
+
+            </LinearLayout>
 
 
-        <View
-            android:id="@+id/seprator"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/ce_stroke_1_light"
-            android:visibility="invisible"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <View
+                android:id="@+id/seprator"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/ce_stroke_1_light"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <ProgressBar
         android:id="@+id/progress_bar"
@@ -89,7 +100,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_parent" />
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -101,7 +112,7 @@
         android:paddingBottom="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_parent" />
 
     <TextView
         android:id="@+id/no_element"
@@ -114,7 +125,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/toolbar" />
+        app:layout_constraintTop_toBottomOf="@id/toolbar_parent" />
 
     <androidx.appcompat.widget.AppCompatImageView
         android:id="@+id/add_records_button"

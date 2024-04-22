@@ -60,7 +60,7 @@ class ExpenseDetailActivity :AppCompatActivity(){
         if (selectedFragmentPos != 1)
             window.statusBarColor = resources.getColor(R.color.transparent)
         else
-            window.statusBarColor = resources.getColor(R.color.top_nav_bar_light)
+            window.statusBarColor = resources.getColor(R.color.primary_bg)
     }
 
     override fun onResume() {

@@ -1,6 +1,8 @@
 package com.example.splitwise.ui
 
+import android.content.Context.MODE_PRIVATE
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -27,10 +29,11 @@ class SignUpFragment : Fragment() {
         auth = Firebase.auth
 
         binding.sign.setOnClickListener {
-            if (verifyInput() && auth.currentUser!=null) {
+            if (verifyInput() && auth!=null) {
                 binding.progressBar.visibility = View.VISIBLE
                 inputEmail = binding.email.text.toString().trim()
                 inputPassword = binding.password.text.toString().trim()
+                saveUserDetail()
                 Log.d("Brijesh", "inputEmail is  $inputEmail and input pasword $inputPassword")
                 auth.createUserWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
                     if (it.isSuccessful) {
@@ -48,6 +51,18 @@ class SignUpFragment : Fragment() {
             }
         }
         return binding.root
+    }
+
+    private fun saveUserDetail() {
+       try{
+            val editor = requireContext().getSharedPreferences("user_detail", MODE_PRIVATE)!!.edit()
+            editor!!.putString("name", binding.name.text.toString())
+            editor.putString("email", binding.email.text.toString())
+            editor.putString("password", binding.password.text.toString())
+            editor.apply()
+        }catch (e:Exception){
+           Log.d("Brijesh", "exception while adding data in firebase ${e.message}")
+        }
     }
 
     private fun verifyInput(): Boolean {

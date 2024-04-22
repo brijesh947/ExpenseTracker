@@ -1,6 +1,7 @@
 package com.example.splitwise.ui
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
@@ -27,9 +28,11 @@ import com.example.splitwise.databinding.HomeLayoutBinding
 import com.example.splitwise.ui.di.component.DaggerHomeActivityComponent
 import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.UiState
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.abs
 
 class HomeActivity : AppCompatActivity() {
 
@@ -55,10 +58,17 @@ class HomeActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter(this,application)
         adapter.setViewType(1)
+        setUserNameAndEmail()
         recyclerView.adapter = adapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
+    }
+
+    private fun setUserNameAndEmail() {
+        val pref = this.getSharedPreferences("user_detail",Context.MODE_PRIVATE)
+        binding.userName.text =  pref.getString("name","NA")
+        binding.userEmail.text =  pref.getString("email","NA")
     }
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
@@ -150,6 +160,11 @@ class HomeActivity : AppCompatActivity() {
         super.onResume()
         adapter.setViewType(1)
         fetchData()
+        val appBarLayout1: AppBarLayout = binding.appBar
+        appBarLayout1.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
+            val percent = abs(verticalOffset) * 1f / (appBarLayout1.totalScrollRange * 1f)
+            binding.userDetailParent.alpha = 1 - percent
+        }
     }
 
     @SuppressLint("RepeatOnLifecycleWrongUsage")
