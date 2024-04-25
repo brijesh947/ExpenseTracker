@@ -4,6 +4,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include
+        android:id="@+id/search_layout"
+        layout="@layout/search_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/toolbar_parent"
@@ -107,8 +114,8 @@
         android:id="@+id/expense_recylerview"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
+        android:paddingTop="16dp"
         android:paddingBottom="14dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

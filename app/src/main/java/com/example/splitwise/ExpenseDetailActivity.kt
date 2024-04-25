@@ -82,6 +82,7 @@ class ExpenseDetailActivity :AppCompatActivity(){
                     if (selectedFragment == null) {
                         selectedFragment = analysisFragment
                     }
+                    recordsFragment.isSearchOpen = false
                 }
 
                 R.id.budgets -> {
@@ -90,6 +91,8 @@ class ExpenseDetailActivity :AppCompatActivity(){
                     if (selectedFragment == null) {
                         selectedFragment = budgetFragment
                     }
+                    recordsFragment.isSearchOpen = false
+
                 }
 
                 R.id.category -> {
@@ -98,6 +101,8 @@ class ExpenseDetailActivity :AppCompatActivity(){
                     if (selectedFragment == null) {
                         selectedFragment = categoryFragment
                     }
+                    recordsFragment.isSearchOpen = false
+
                 }
             }
             setWindowColor()

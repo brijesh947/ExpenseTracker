@@ -5,6 +5,8 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:id="@+id/parent"
         android:layout_width="match_parent"
+        app:elevation="0dp"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -12,6 +14,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/primary_bg"
+            app:elevation="0dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -19,6 +22,7 @@
                 android:id="@+id/user_detail_parent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                app:elevation="0dp"
                 app:layout_scrollFlags="snap|scroll|enterAlways">
 
                 <RelativeLayout
