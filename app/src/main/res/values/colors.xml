@@ -24,6 +24,8 @@
     <color name="ce_low_contrast_fg_light">#EBECED</color>
     <color name="ce_stroke_1_light">#E4E4E4</color>
     <color name="transparent">#00000000</color>
+    <color name="app_bar_background">#FFF2D5</color>
+    <color name="csk_color">#E9CF4F</color>
 
     <color name="low_contrast_fg">#EBECED</color>
 </resources>

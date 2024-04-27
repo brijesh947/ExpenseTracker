@@ -57,10 +57,8 @@ class ExpenseDetailActivity :AppCompatActivity(){
     private fun setWindowColor() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        if (selectedFragmentPos != 1)
-            window.statusBarColor = resources.getColor(R.color.transparent)
-        else
-            window.statusBarColor = resources.getColor(R.color.primary_bg)
+
+        window.statusBarColor = resources.getColor(R.color.app_bar_background)
     }
 
     override fun onResume() {

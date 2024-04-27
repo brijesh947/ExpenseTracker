@@ -253,6 +253,6 @@ class HomeActivity : AppCompatActivity() {
     private fun setWindowColor() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = resources.getColor(R.color.transparent)
+        window.statusBarColor = resources.getColor(R.color.csk_color)
     }
 }
