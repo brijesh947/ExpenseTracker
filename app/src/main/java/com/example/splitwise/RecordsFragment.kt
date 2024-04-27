@@ -18,6 +18,8 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.data.Data
+import com.example.splitwise.data.DateData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
@@ -33,16 +35,20 @@ import com.example.splitwise.ui.util.show
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 class RecordsFragment(val application: MyApplication,val activity: ExpenseDetailActivity) : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
-    private var list: ArrayList<ShoppingData> = ArrayList()
+    private var list: ArrayList<Data> = ArrayList()
     private var groupData: GroupDetailData? = null
 
     var isSearchOpen = false
+    private var date = -1
+    private var month = -1
+    private var year = -1
 
     @Inject
     lateinit var adapter: HomeAdapter
@@ -80,7 +86,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         binding.searchLayout.fragmentHomeSearchRecyclerview.layoutManager =
             LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.searchLayout.fragmentHomeSearchRecyclerview.adapter = adapter
-        adapter.setViewType(2)
+
 
         binding.searchLayout.fragmentHomeSearchClearTextButton.setOnClickListener {
             binding.searchLayout.fragmentHomeSearchTeamEditTxt.setText("")
@@ -102,9 +108,10 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                 if (s.isNotEmpty()) {
                     binding.searchLayout.fragmentHomeSearchClearTextButton.show()
                     list.forEach {
-                        if (it.shoppingName.trim().toLowerCase().contains(searchText)) {
-                            searchList.add(it)
-                        }
+                        if (it is ShoppingData)
+                            if (it.shoppingName.trim().toLowerCase().contains(searchText)) {
+                                searchList.add(it)
+                            }
                     }
                 } else {
                     binding.searchLayout.fragmentHomeSearchClearTextButton.hide()
@@ -183,7 +190,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         recyclerView = binding.expenseRecylerview
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
-        adapter.setViewType(2)
+
         return binding.root
     }
 
@@ -217,7 +224,13 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                 viewModel.addNewUserExpenses(groupData!!, data, object : FirebaseCallback<Boolean> {
                     override fun isSuccess(result: Boolean) {
                         if (result) {
-                            list.add(data)
+                            if (isDateChange()) {
+                                list.add(0, data)
+                                list.add(0, getNewDate())
+                            } else {
+                                list.add(1, data)
+                            }
+
                             adapter.setList(list)
                         }
                     }
@@ -233,6 +246,75 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         }
         dialog.setContentView(dialogView.root)
         dialog.show()
+    }
+
+    private fun getNewDate(): DateData {
+        val calendar = Calendar.getInstance().apply {
+            this.timeInMillis = System.currentTimeMillis()
+        }
+        var today = getDate(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH))
+
+        date = calendar.get(Calendar.DATE)
+        month = calendar.get(Calendar.MONTH)
+        year = calendar.get(Calendar.YEAR)
+        return DateData(today, date, month, year)
+
+    }
+
+    private fun getDate(date: Int, month: Int): String {
+        var today = "$date "
+        when (month) {
+            Calendar.JANUARY ->
+                today += "JANUARY"
+
+            Calendar.FEBRUARY ->
+                today += "FEBRUARY"
+
+            Calendar.MARCH ->
+                today += "MARCH"
+
+            Calendar.APRIL ->
+                today += "APRIL"
+
+            Calendar.MAY ->
+                today += "MAY"
+
+            Calendar.JUNE ->
+                today += "JUNE"
+
+            Calendar.JULY ->
+                today += "JULY"
+
+            Calendar.AUGUST ->
+                today += "AUGUST"
+
+            Calendar.SEPTEMBER ->
+                today += "SEPTEMBER"
+
+            Calendar.OCTOBER ->
+                today += "OCTOBER"
+
+            Calendar.NOVEMBER ->
+                today += "NOVEMBER"
+
+            Calendar.DECEMBER ->
+                today += "DECEMBER"
+        }
+        return today
+    }
+
+    private fun isDateChange(): Boolean {
+        val calendar = Calendar.getInstance().apply {
+            this.timeInMillis = System.currentTimeMillis()
+        }
+        if (calendar.get(Calendar.DATE) != date)
+            return true
+        if (calendar.get(Calendar.MONTH) != month)
+            return true
+        if (calendar.get(Calendar.YEAR) != year)
+            return true
+
+        return false
     }
 
     private fun verifyInput(dialogView: AddExpenseLayoutBinding): Boolean {
@@ -253,7 +335,6 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     override fun onResume() {
         super.onResume()
         totalShoppingSum = 0.0
-        adapter.setViewType(2)
         if (!isSearchOpen)
             fetchData()
     }
@@ -284,11 +365,17 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
 
                             binding.progressBar.visibility = View.GONE
                             if (it.data.isNotEmpty()) {
-                                list = it.data as ArrayList<ShoppingData>
+                                list = it.data as ArrayList<Data>
+                                if (list[0] is DateData) {
+                                    date = (list[0] as DateData).currentDate
+                                    month = (list[0] as DateData).month
+                                    year = (list[0] as DateData).year
+                                }
                                 adapter.setList(list)
                                 totalShoppingSum = 0.0
                                 list.forEach { shoppingData ->
-                                    totalShoppingSum += shoppingData.totalAmount.toDouble()
+                                    if (shoppingData is ShoppingData)
+                                        totalShoppingSum += shoppingData.totalAmount.toDouble()
                                 }
                                 binding.totalExpense.text = totalShoppingSum.toString()
                                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))

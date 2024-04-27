@@ -57,7 +57,6 @@ class HomeActivity : AppCompatActivity() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter(this,application)
-        adapter.setViewType(1)
         setUserNameAndEmail()
         recyclerView.adapter = adapter
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
@@ -158,7 +157,6 @@ class HomeActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        adapter.setViewType(1)
         fetchData()
         val appBarLayout1: AppBarLayout = binding.appBar
         appBarLayout1.addOnOffsetChangedListener { appBarLayout, verticalOffset ->

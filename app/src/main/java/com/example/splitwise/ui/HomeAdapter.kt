@@ -13,34 +13,54 @@ import com.example.splitwise.R
 import com.example.splitwise.ShoppingDetailHolder
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
+import com.example.splitwise.databinding.DateLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
+import com.example.splitwise.ui.util.GROUP_DATA
+import com.example.splitwise.ui.util.SHOPPING_DATA
 
 class HomeAdapter(private val context: Context, private val application: Application) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: List<Data> = ArrayList()
-    private val GROUP_TYPE =1
-    private val SHOPPING_TYPE =2
-
-    private var viewType = GROUP_TYPE
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        if (this.viewType == GROUP_TYPE) {
-            val binding = DataBindingUtil.inflate<GroupDetailLayoutBinding>(
-                LayoutInflater.from(parent.context),
-                R.layout.group_detail_layout,
-                parent,
-                false
-            )
-            return GroupDetailHolder(binding)
+        when (viewType) {
+
+            GROUP_DATA -> {
+                val binding = DataBindingUtil.inflate<GroupDetailLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.group_detail_layout,
+                    parent,
+                    false
+                )
+                return GroupDetailHolder(binding)
+
+            }
+
+            SHOPPING_DATA -> {
+                val binding = DataBindingUtil.inflate<SpendDetailLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.spend_detail_layout,
+                    parent,
+                    false
+                )
+                return ShoppingDetailHolder(binding)
+
+            }
+
+            else -> {
+                val binding = DataBindingUtil.inflate<DateLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.date_layout,
+                    parent,
+                    false
+                )
+                return DateHolder(binding)
+
+            }
 
         }
-        val binding = DataBindingUtil.inflate<SpendDetailLayoutBinding>(
-            LayoutInflater.from(parent.context),
-            R.layout.spend_detail_layout,
-            parent,
-            false
-        )
-        return ShoppingDetailHolder(binding)
+
+
     }
 
     fun setList(currentList: List<Data>) {
@@ -49,24 +69,21 @@ class HomeAdapter(private val context: Context, private val application: Applica
         notifyDataSetChanged()
     }
 
+    override fun getItemViewType(position: Int): Int {
+        return list[position].getType()
+    }
+
     override fun getItemCount(): Int {
         Log.d("BKD", "getItemCount: ${list.size}")
         return list.size
     }
 
-    fun setViewType(type: Int) {
-        viewType = if (type == 1)
-            GROUP_TYPE
-        else
-            SHOPPING_TYPE
-    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = list[position]
-        if (this.viewType == GROUP_TYPE)
-            (holder as GroupDetailHolder).setData(data)
-        else
-            (holder as ShoppingDetailHolder).setData(data)
+        if (list[position].getType() == GROUP_DATA) (holder as GroupDetailHolder).setData(data)
+        else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data)
+        else (holder as DateHolder).setData(data)
     }
 
     private inner class GroupDetailHolder(val binding: GroupDetailLayoutBinding) : RecyclerView.ViewHolder(binding.root) {

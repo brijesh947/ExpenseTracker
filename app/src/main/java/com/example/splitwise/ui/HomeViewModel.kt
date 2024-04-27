@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.splitwise.FirebaseCallback
+import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.ui.util.UiState
@@ -16,8 +17,8 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(private val repository: HomeRepository) : ViewModel() {
 
     private var _groupDetail = MutableStateFlow<UiState<List<GroupDetailData>>>(UiState.Loading)
-    private var _expenseDetail = MutableStateFlow<UiState<List<ShoppingData>>>(UiState.Loading)
-    val expenseDetail :StateFlow<UiState<List<ShoppingData>>> get() = _expenseDetail
+    private var _expenseDetail = MutableStateFlow<UiState<List<Data>>>(UiState.Loading)
+    val expenseDetail :StateFlow<UiState<List<Data>>> get() = _expenseDetail
     val groupDetail: StateFlow<UiState<List<GroupDetailData>>> get() = _groupDetail
     fun getUserDetail() {
         viewModelScope.launch {
