@@ -1,25 +1,46 @@
 package com.example.splitwise
 
+import androidx.compose.ui.text.toUpperCase
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
 
-class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding) : RecyclerView.ViewHolder(binding.root) {
+class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun setData(data: Data) {
         val newData = data as ShoppingData
         binding.spendingType.text = data.shoppingName
         binding.totalExpense.text = data.totalAmount
-        when (data.shoppingCategory) {
-            "Rent" -> {
+        when (data.shoppingCategory.toUpperCase()) {
+            "RENT" -> {
                 binding.groupLogo.setImageResource(R.drawable.home)
             }
-            "Health" -> {
+
+            "HEALTH" -> {
                 binding.groupLogo.setImageResource(R.drawable.health)
             }
-            "Food" -> {
+
+            "FOOD" -> {
                 binding.groupLogo.setImageResource(R.drawable.food)
             }
+
+            "MOVIE" -> {
+                binding.groupLogo.setImageResource(R.drawable.movie)
+            }
+
+            "CLOTHING" -> {
+                binding.groupLogo.setImageResource(R.drawable.clothing)
+            }
+
+            "PETROL_PUMP" -> {
+                binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+            }
+
+            "BEAUTY" -> {
+                binding.groupLogo.setImageResource(R.drawable.beauty)
+            }
+
             else -> binding.groupLogo.setImageResource(R.drawable.shopping)
         }
     }

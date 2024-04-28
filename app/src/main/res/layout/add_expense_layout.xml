@@ -25,10 +25,11 @@
             android:layout_marginStart="45dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
-            android:backgroundTint="@color/text_cta_color"
+            android:background="@drawable/only_stroke_with_7dp_radius"
             android:fontFamily="@font/abc_diatype_regular"
             android:hint="Enter your spending Detail"
             android:inputType="text"
+            android:padding="15dp"
             android:textColor="@color/primary_txt"
             android:textColorHint="@color/secondary_txt"
             android:textSize="16sp"
@@ -54,12 +55,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="45dp"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="24dp"
             android:layout_marginEnd="20dp"
-            android:backgroundTint="@color/text_cta_color"
+            android:background="@drawable/only_stroke_with_7dp_radius"
             android:fontFamily="@font/abc_diatype_regular"
             android:hint="Enter the price here"
             android:inputType="numberDecimal"
+            android:padding="15dp"
             android:textColor="@color/primary_txt"
             android:textColorHint="@color/secondary_txt"
             android:textSize="16sp"
@@ -85,13 +87,14 @@
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/expense_filter_parent" />
+            app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view" />
 
-        <include
-            android:id="@+id/expense_filter_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/expense_filter_recyler_view"
             layout="@layout/group_filter_layout"
             android:layout_width="match_parent"
-            android:layout_height="28dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:layout_marginTop="20dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shopping_price" />

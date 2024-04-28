@@ -16,24 +16,34 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
+import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
 import com.example.splitwise.databinding.RecordFragmentLayoutBinding
+import com.example.splitwise.ui.CategoryAdapter
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.HomeViewModel
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
+import com.example.splitwise.ui.util.BEAUTY
+import com.example.splitwise.ui.util.CLOTHING
+import com.example.splitwise.ui.util.FOOD
+import com.example.splitwise.ui.util.HEALTH
+import com.example.splitwise.ui.util.MOVIE
+import com.example.splitwise.ui.util.PETROL_PUMP
+import com.example.splitwise.ui.util.RENT
+import com.example.splitwise.ui.util.SHOPPING_GENERAL
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
@@ -49,6 +59,8 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     private var date = -1
     private var month = -1
     private var year = -1
+
+    private lateinit var categoryAdapter: CategoryAdapter
 
     @Inject
     lateinit var adapter: HomeAdapter
@@ -83,8 +95,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         )
 
 
-        binding.searchLayout.fragmentHomeSearchRecyclerview.layoutManager =
-            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        binding.searchLayout.fragmentHomeSearchRecyclerview.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         binding.searchLayout.fragmentHomeSearchRecyclerview.adapter = adapter
 
 
@@ -201,22 +212,28 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     private fun openCreateGroupDialog() {
         val dialogView = AddExpenseLayoutBinding.inflate(layoutInflater)
         val dialog = BottomSheetDialog(requireContext())
-        dialogView.expenseFilterParent.groupType1.text = "Rent"
-        dialogView.expenseFilterParent.groupType2.text = "Health"
-        dialogView.expenseFilterParent.groupType3.text = "Food"
+        var selectedCategory = SHOPPING_GENERAL
+        var previousPosition = -1
+        categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {
+            override fun selectedFilter(categoryType: Int, position: Int) {
+                selectedCategory = categoryType
+                (categoryList[position] as ExpenseCategoryData).isSelected = true
+                if (previousPosition != -1 && previousPosition != position) {
+                    (categoryList[previousPosition] as ExpenseCategoryData).isSelected = false
+                    categoryAdapter.notifyItemChanged(previousPosition)
+                }
+                previousPosition = position
+                categoryAdapter.notifyItemChanged(position)
+            }
+
+        })
+        dialogView.expenseFilterRecylerView.layoutManager = GridLayoutManager(requireContext(),2,GridLayoutManager.HORIZONTAL,false)
+        dialogView.expenseFilterRecylerView.adapter = categoryAdapter
+        categoryAdapter.setList(createCategoryList())
         dialogView.createGroupButton.setOnClickListener {
             if (verifyInput(dialogView)) {
                 binding.noElement.visibility = View.GONE
-                var filter = ""
-                filter = if (dialogView.expenseFilterParent.groupType1.isChecked) {
-                    "Rent"
-                } else if (dialogView.expenseFilterParent.groupType2.isChecked) {
-                    "Health"
-                } else if (dialogView.expenseFilterParent.groupType3.isChecked) {
-                    "Food"
-                } else {
-                    "Other"
-                }
+                var filter = getFilterType(selectedCategory)
                 val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString())
                 totalShoppingSum += data.totalAmount.toDouble()
                 binding.totalExpense.text = totalShoppingSum.toString()
@@ -246,6 +263,46 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         }
         dialog.setContentView(dialogView.root)
         dialog.show()
+    }
+    private val categoryList: ArrayList<Data> = ArrayList()
+
+    private fun createCategoryList(): ArrayList<Data> {
+        categoryList.clear()
+        for (i in 101..108) {
+            categoryList.add(ExpenseCategoryData(i,false))
+        }
+        return categoryList
+
+    }
+
+    private fun getFilterType(selectedCategory: Int): String {
+
+        when (selectedCategory) {
+            MOVIE ->
+                return "MOVIE"
+
+            CLOTHING ->
+                return "CLOTHING"
+
+            BEAUTY ->
+                return "BEAUTY"
+
+            FOOD ->
+                return "FOOD"
+
+            HEALTH ->
+                return "HEALTH"
+
+            RENT ->
+                return "RENT"
+
+            PETROL_PUMP ->
+                return "PETROL_PUMP"
+
+            else ->
+                return "other"
+        }
+
     }
 
     private fun getNewDate(): DateData {
