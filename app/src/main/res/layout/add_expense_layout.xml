@@ -6,7 +6,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/primary_bg"
-        android:paddingBottom="20dp">
+        android:paddingVertical="24dp">
 
         <androidx.appcompat.widget.AppCompatImageView
             android:id="@+id/shopping_image"
@@ -91,7 +91,6 @@
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/expense_filter_recyler_view"
-            layout="@layout/group_filter_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"

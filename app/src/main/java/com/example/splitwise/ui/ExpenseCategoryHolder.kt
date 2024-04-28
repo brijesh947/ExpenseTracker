@@ -22,7 +22,7 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
         val categoryData = data as ExpenseCategoryData
         when (categoryData.getType()) {
             MOVIE -> {
-                binding.categoryName.text = "MOVIE"
+                binding.categoryName.text = "Movie"
                 binding.groupLogo.setImageResource(R.drawable.movie)
             }
 
@@ -32,7 +32,7 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
             }
 
             RENT -> {
-                binding.categoryName.text = "RENT"
+                binding.categoryName.text = "Rent"
                 binding.groupLogo.setImageResource(R.drawable.home)
             }
 
