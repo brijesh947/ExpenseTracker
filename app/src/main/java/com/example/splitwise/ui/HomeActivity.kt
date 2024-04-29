@@ -28,6 +28,8 @@ import com.example.splitwise.databinding.HomeLayoutBinding
 import com.example.splitwise.ui.di.component.DaggerHomeActivityComponent
 import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.UiState
+import com.example.splitwise.ui.util.hide
+import com.example.splitwise.ui.util.show
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
@@ -86,7 +88,7 @@ class HomeActivity : AppCompatActivity() {
                         } else
                             showError("Error while deleting the data")
                         if (list.isEmpty()) {
-                            binding.noGroup.visibility = View.VISIBLE
+                            binding.noGroup.show()
                         }
                     }
 
@@ -173,24 +175,24 @@ class HomeActivity : AppCompatActivity() {
                 viewModel.groupDetail.collect{
                     when(it){
                         is UiState.Success -> {
-                            binding.progressBar.visibility = View.GONE
+                            binding.progressBar.hide()
                             if (it.data.isNotEmpty()) {
                                 list = it.data as ArrayList<GroupDetailData>
                                 adapter.setList(list)
-                                binding.noGroup.visibility = View.GONE
+                                binding.noGroup.hide()
                             } else {
-                                binding.noGroup.visibility = View.VISIBLE
+                                binding.noGroup.show()
                             }
 
                         }
 
                         is UiState.Loading -> {
-                            binding.progressBar.visibility = View.VISIBLE
+                            binding.progressBar.show()
                         }
 
                         else -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.noGroup.visibility = View.VISIBLE
+                            binding.progressBar.hide()
+                            binding.noGroup.show()
                         }
 
                     }
@@ -216,7 +218,7 @@ class HomeActivity : AppCompatActivity() {
                          } else
                              showError("User not Added")
                          if (list.isNotEmpty()) {
-                             binding.noGroup.visibility = View.GONE
+                             binding.noGroup.hide()
                          }
                      }
                      override fun isFailed(reason: String) {

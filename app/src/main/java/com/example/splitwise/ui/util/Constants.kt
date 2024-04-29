@@ -4,6 +4,7 @@ package com.example.splitwise.ui.util
 val DATE_TYPE = 1
 val GROUP_DATA = 2
 val SHOPPING_DATA = 3
+val MONTH = 4
 val MOVIE = 101
 val CLOTHING = 102
 val BEAUTY = 103

@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -27,6 +26,7 @@ import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
 import com.example.splitwise.databinding.RecordFragmentLayoutBinding
 import com.example.splitwise.ui.CategoryAdapter
+import com.example.splitwise.ui.ExpenseFilterListener
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.HomeViewModel
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
@@ -48,7 +48,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
-class RecordsFragment(val application: MyApplication,val activity: ExpenseDetailActivity) : Fragment() {
+class RecordsFragment(val application: MyApplication,val activity: ExpenseDetailActivity) : Fragment() ,ExpenseFilterListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
@@ -453,6 +453,10 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                 }
             }
         }
+    }
+
+    override fun selectedFilter(type: Int) {
+        TODO("Not yet implemented")
     }
 
 }

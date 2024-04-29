@@ -15,8 +15,11 @@ import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.DateLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
+import com.example.splitwise.databinding.MonthFilterLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
 import com.example.splitwise.ui.util.GROUP_DATA
+import com.example.splitwise.ui.util.MONTH
+import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.SHOPPING_DATA
 
 class HomeAdapter(private val context: Context, private val application: Application) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -44,6 +47,17 @@ class HomeAdapter(private val context: Context, private val application: Applica
                     false
                 )
                 return ShoppingDetailHolder(binding)
+
+            }
+
+            MONTH -> {
+                val binding = DataBindingUtil.inflate<MonthFilterLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.month_filter_layout,
+                    parent,
+                    false
+                )
+                return MonthHolder(binding)
 
             }
 
@@ -83,6 +97,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
         val data = list[position]
         if (list[position].getType() == GROUP_DATA) (holder as GroupDetailHolder).setData(data)
         else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data)
+        else if (list[position].getType() == MONTH) (holder as MonthHolder).setData(data)
         else (holder as DateHolder).setData(data)
     }
 

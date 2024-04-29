@@ -1,6 +1,8 @@
 package com.example.splitwise.ui
 
 import android.content.Context
+import android.content.res.Resources
+import android.graphics.drawable.GradientDrawable
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.CategoryFilterListener
@@ -62,16 +64,28 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
             }
 
         }
+        val density = Resources.getSystem().displayMetrics.density
         if (categoryData.isSelected) {
 
             binding.categoryName.setTextColor(context.resources.getColor(R.color.text_cta_color))
             val drawable = ContextCompat.getDrawable(context, R.drawable.only_stroke_text_cta_color_33dp)
+            binding.logoCard.foreground = drawable
+//            val drawable = binding.logoCard.foreground as GradientDrawable
+//            drawable.mutate()
+//
+//            drawable.setStroke((1*density).toInt(),context.getColor(R.color.text_cta_color))
             binding.logoCard.foreground = drawable
 
         } else {
             binding.categoryName.setTextColor(context.resources.getColor(R.color.primary_txt))
             val drawable = ContextCompat.getDrawable(context, R.drawable.only_stroke_ce_low_contrast_fg_33dp)
             binding.logoCard.foreground = drawable
+
+//            val drawable = binding.logoCard.foreground as GradientDrawable
+//            drawable.mutate()
+//            drawable.setStroke((1*density).toInt(),context.getColor(R.color.ce_low_contrast_fg_light))
+            binding.logoCard.foreground = drawable
+
 
         }
         
