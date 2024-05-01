@@ -3,6 +3,7 @@ package com.example.splitwise.ui
 import android.util.Log
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
+import com.example.splitwise.data.ExpenseFilterData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.MonthData
 import com.example.splitwise.data.ShoppingData
@@ -60,7 +61,6 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         val calendar = Calendar.getInstance().apply {
                             this.timeInMillis = currTimeInMills as Long
                         }
-
                         if (needToAddDMYData(calendar, month, year, date, Calendar.YEAR)) {
                             year = calendar.get(Calendar.YEAR)
                             //you can add year wise support here.
@@ -78,6 +78,9 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"))
                         list.add(tempData)
                     }
+
+                    if (list.isNotEmpty())
+                        list.add(0, ExpenseFilterData(currCalendar.get(Calendar.MONTH)))
                     trySend(list)
                 }.addOnFailureListener { exception ->
                     Log.d("TAGD", "exception while reading the firestore data ${exception.message}")

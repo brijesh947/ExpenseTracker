@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
 import com.example.splitwise.data.ExpenseCategoryData
+import com.example.splitwise.data.ExpenseFilterData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
@@ -34,10 +35,13 @@ import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.BEAUTY
 import com.example.splitwise.ui.util.CLOTHING
+import com.example.splitwise.ui.util.CURR_MONTH_FILTER
 import com.example.splitwise.ui.util.FOOD
 import com.example.splitwise.ui.util.HEALTH
 import com.example.splitwise.ui.util.MOVIE
+import com.example.splitwise.ui.util.NO_FILTER
 import com.example.splitwise.ui.util.PETROL_PUMP
+import com.example.splitwise.ui.util.PREV_MONTH_FILTER
 import com.example.splitwise.ui.util.RENT
 import com.example.splitwise.ui.util.SHOPPING_GENERAL
 import com.example.splitwise.ui.util.UiState
@@ -242,10 +246,16 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                     override fun isSuccess(result: Boolean) {
                         if (result) {
                             if (isDateChange()) {
-                                list.add(0, data)
-                                list.add(0, getNewDate())
+                                if (list.isEmpty()) {
+                                    list.add(0, data)
+                                    list.add(0, getNewDate())
+                                    list.add(0, ExpenseFilterData(getNewDate().month))
+                                } else {
+                                    list.add(1, data)
+                                    list.add(1, getNewDate())
+                                }
                             } else {
-                                list.add(1, data)
+                                list.add(2, data)
                             }
 
                             adapter.setList(list)
@@ -392,6 +402,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     override fun onResume() {
         super.onResume()
         totalShoppingSum = 0.0
+        adapter.setFilterListener(this)
         if (!isSearchOpen)
             fetchData()
     }
@@ -423,10 +434,10 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                             binding.progressBar.visibility = View.GONE
                             if (it.data.isNotEmpty()) {
                                 list = it.data as ArrayList<Data>
-                                if (list[0] is DateData) {
-                                    date = (list[0] as DateData).currentDate
-                                    month = (list[0] as DateData).month
-                                    year = (list[0] as DateData).year
+                                if (list[1] is DateData) {
+                                    date = (list[1] as DateData).currentDate
+                                    month = (list[1] as DateData).month
+                                    year = (list[1] as DateData).year
                                 }
                                 adapter.setList(list)
                                 totalShoppingSum = 0.0
@@ -455,8 +466,20 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         }
     }
 
-    override fun selectedFilter(type: Int) {
-        TODO("Not yet implemented")
+    override fun selectedFilter(type: Int, month: Int) {
+        when (type) {
+            CURR_MONTH_FILTER -> {
+
+            }
+
+            PREV_MONTH_FILTER -> {
+
+            }
+
+            NO_FILTER -> {
+
+            }
+        }
     }
 
 }

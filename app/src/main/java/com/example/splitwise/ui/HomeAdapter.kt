@@ -14,6 +14,7 @@ import com.example.splitwise.ShoppingDetailHolder
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.DateLayoutBinding
+import com.example.splitwise.databinding.ExpesnseFilterLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
 import com.example.splitwise.databinding.MonthFilterLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
@@ -21,10 +22,13 @@ import com.example.splitwise.ui.util.GROUP_DATA
 import com.example.splitwise.ui.util.MONTH
 import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.SHOPPING_DATA
+import com.example.splitwise.ui.util.SHOPPING_FILTER_DATA
 
 class HomeAdapter(private val context: Context, private val application: Application) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: List<Data> = ArrayList()
+
+    private var expenseFilterCallback: ExpenseFilterListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
 
@@ -61,6 +65,17 @@ class HomeAdapter(private val context: Context, private val application: Applica
 
             }
 
+            SHOPPING_FILTER_DATA -> {
+                val binding = DataBindingUtil.inflate<ExpesnseFilterLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.expesnse_filter_layout,
+                    parent,
+                    false
+                )
+                return ExpenseFilterHolder(binding)
+
+            }
+
             else -> {
                 val binding = DataBindingUtil.inflate<DateLayoutBinding>(
                     LayoutInflater.from(parent.context),
@@ -75,6 +90,10 @@ class HomeAdapter(private val context: Context, private val application: Applica
         }
 
 
+    }
+
+    fun setFilterListener(callback: ExpenseFilterListener) {
+        expenseFilterCallback = callback
     }
 
     fun setList(currentList: List<Data>) {
@@ -98,6 +117,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
         if (list[position].getType() == GROUP_DATA) (holder as GroupDetailHolder).setData(data)
         else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data)
         else if (list[position].getType() == MONTH) (holder as MonthHolder).setData(data)
+        else if (list[position].getType() == SHOPPING_FILTER_DATA) (holder as ExpenseFilterHolder).setData(data,expenseFilterCallback!!)
         else (holder as DateHolder).setData(data)
     }
 
