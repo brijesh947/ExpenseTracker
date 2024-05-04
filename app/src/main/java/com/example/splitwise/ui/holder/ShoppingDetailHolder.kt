@@ -41,6 +41,27 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding) :
                 binding.groupLogo.setImageResource(R.drawable.beauty)
             }
 
+            "BIKE" -> {
+                binding.groupLogo.setImageResource(R.drawable.bike)
+            }
+
+            "SPORTS" -> {
+
+                binding.groupLogo.setImageResource(R.drawable.sports)
+            }
+
+            "MOBILE" -> {
+                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+            }
+
+            "TRANSPORT" -> {
+                binding.groupLogo.setImageResource(R.drawable.car)
+            }
+
+            "DONATE" -> {
+                binding.groupLogo.setImageResource(R.drawable.donate)
+            }
+
             else -> binding.groupLogo.setImageResource(R.drawable.shopping)
         }
     }

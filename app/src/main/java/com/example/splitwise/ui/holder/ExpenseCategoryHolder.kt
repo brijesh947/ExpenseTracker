@@ -11,12 +11,17 @@ import com.example.splitwise.data.Data
 import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.databinding.ExpenseCategoryRecyclerItemBinding
 import com.example.splitwise.ui.util.BEAUTY
+import com.example.splitwise.ui.util.BIKE
 import com.example.splitwise.ui.util.CLOTHING
+import com.example.splitwise.ui.util.DONATE
 import com.example.splitwise.ui.util.FOOD
 import com.example.splitwise.ui.util.HEALTH
+import com.example.splitwise.ui.util.MOBILE
 import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.PETROL_PUMP
 import com.example.splitwise.ui.util.RENT
+import com.example.splitwise.ui.util.SPORTS
+import com.example.splitwise.ui.util.TRANSPORT
 
 class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
@@ -56,6 +61,31 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
             CLOTHING -> {
                 binding.categoryName.text = "Clothing"
                 binding.groupLogo.setImageResource(R.drawable.clothing)
+            }
+
+            BIKE -> {
+                binding.categoryName.text = "BIKE"
+                binding.groupLogo.setImageResource(R.drawable.bike)
+            }
+
+            TRANSPORT -> {
+                binding.categoryName.text = "Travel"
+                binding.groupLogo.setImageResource(R.drawable.car)
+            }
+
+            DONATE -> {
+                binding.categoryName.text = "Donation"
+                binding.groupLogo.setImageResource(R.drawable.donate)
+            }
+
+            SPORTS -> {
+                binding.categoryName.text = "Sports"
+                binding.groupLogo.setImageResource(R.drawable.sports)
+            }
+
+            MOBILE -> {
+                binding.categoryName.text = "Mobile"
+                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
             }
 
             else -> {

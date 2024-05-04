@@ -39,16 +39,21 @@ import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponen
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.BEAUTY
+import com.example.splitwise.ui.util.BIKE
 import com.example.splitwise.ui.util.CLOTHING
 import com.example.splitwise.ui.util.CURR_MONTH_FILTER
+import com.example.splitwise.ui.util.DONATE
 import com.example.splitwise.ui.util.FOOD
 import com.example.splitwise.ui.util.HEALTH
+import com.example.splitwise.ui.util.MOBILE
 import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.NO_FILTER
 import com.example.splitwise.ui.util.PETROL_PUMP
 import com.example.splitwise.ui.util.PREV_MONTH_FILTER
 import com.example.splitwise.ui.util.RENT
 import com.example.splitwise.ui.util.SHOPPING_GENERAL
+import com.example.splitwise.ui.util.SPORTS
+import com.example.splitwise.ui.util.TRANSPORT
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
@@ -299,7 +304,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
     private fun createCategoryList(): ArrayList<Data> {
         categoryList.clear()
-        for (i in 101..108) {
+        for (i in 101..113) {
             categoryList.add(ExpenseCategoryData(i,false))
         }
         return categoryList
@@ -329,6 +334,21 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
             PETROL_PUMP ->
                 return "PETROL_PUMP"
+
+            BIKE ->
+                return "BIKE"
+
+            TRANSPORT ->
+                return "TRANSPORT"
+
+            DONATE ->
+                return "DONATE"
+
+            SPORTS ->
+                return "SPORTS"
+
+            MOBILE ->
+                return "MOBILE"
 
             else ->
                 return "other"
