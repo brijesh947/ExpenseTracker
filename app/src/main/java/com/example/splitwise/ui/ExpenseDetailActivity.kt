@@ -1,15 +1,20 @@
-package com.example.splitwise
+package com.example.splitwise.ui
 
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.replace
+import com.example.splitwise.MyApplication
+import com.example.splitwise.R
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.ExpensesDetailLayoutBinding
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
+import com.example.splitwise.ui.fragment.AnalysisFragment
+import com.example.splitwise.ui.fragment.BudgetFragment
+import com.example.splitwise.ui.fragment.CategoryFragment
+import com.example.splitwise.ui.fragment.RecordsFragment
 import javax.inject.Inject
 
 class ExpenseDetailActivity :AppCompatActivity(){

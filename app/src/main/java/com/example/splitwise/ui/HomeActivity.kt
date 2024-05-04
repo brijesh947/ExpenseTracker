@@ -9,7 +9,6 @@ import android.os.Bundle
 import android.text.TextPaint
 import android.util.Log
 import android.util.TypedValue
-import android.view.View
 import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +29,7 @@ import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
+import com.example.splitwise.ui.viewmodel.HomeViewModel
 import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch

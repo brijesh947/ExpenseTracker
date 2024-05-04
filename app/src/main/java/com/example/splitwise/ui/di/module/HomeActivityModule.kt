@@ -3,8 +3,8 @@ package com.example.splitwise.ui.di.module
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
-import com.example.splitwise.ui.HomeRepository
-import com.example.splitwise.ui.HomeViewModel
+import com.example.splitwise.ui.repository.HomeRepository
+import com.example.splitwise.ui.viewmodel.HomeViewModel
 import com.example.splitwise.ui.di.ActivityContext
 import com.example.splitwise.ui.util.ViewModelProviderFactory
 import dagger.Module

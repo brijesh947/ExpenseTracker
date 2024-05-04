@@ -1,7 +1,7 @@
-package com.example.splitwise
+package com.example.splitwise.ui.holder
 
-import androidx.compose.ui.text.toUpperCase
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.R
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.SpendDetailLayoutBinding

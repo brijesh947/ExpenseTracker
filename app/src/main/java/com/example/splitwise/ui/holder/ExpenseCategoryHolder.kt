@@ -1,4 +1,4 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.holder
 
 import android.content.Context
 import android.content.res.Resources

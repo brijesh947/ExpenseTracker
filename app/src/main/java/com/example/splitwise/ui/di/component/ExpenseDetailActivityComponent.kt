@@ -1,7 +1,7 @@
 package com.example.splitwise.ui.di.component
 
-import com.example.splitwise.ExpenseDetailActivity
-import com.example.splitwise.RecordsFragment
+import com.example.splitwise.ui.ExpenseDetailActivity
+import com.example.splitwise.ui.fragment.RecordsFragment
 import com.example.splitwise.ui.di.ActivityScope
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule

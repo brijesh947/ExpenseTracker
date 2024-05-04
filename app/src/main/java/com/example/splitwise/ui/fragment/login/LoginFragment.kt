@@ -1,4 +1,4 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.fragment.login
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,6 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.splitwise.databinding.SignInLayoutBinding
+import com.example.splitwise.ui.HomeActivity
+import com.example.splitwise.ui.SplitWiseActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -47,7 +49,7 @@ class LoginFragment : Fragment() {
                     binding.progressBar.visibility = View.GONE
                     if(it.isSuccessful){
                        Log.d("Brijesh", "Sign in completed")
-                       val intent = Intent(requireActivity(),HomeActivity::class.java)
+                       val intent = Intent(requireActivity(), HomeActivity::class.java)
                        requireContext().startActivity(intent)
                    }
                 }.addOnFailureListener {

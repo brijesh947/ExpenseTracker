@@ -8,9 +8,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.splitwise.ExpenseDetailActivity
 import com.example.splitwise.R
-import com.example.splitwise.ShoppingDetailHolder
+import com.example.splitwise.ui.holder.ShoppingDetailHolder
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.DateLayoutBinding
@@ -18,9 +17,11 @@ import com.example.splitwise.databinding.ExpesnseFilterLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
 import com.example.splitwise.databinding.MonthFilterLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
+import com.example.splitwise.ui.holder.DateHolder
+import com.example.splitwise.ui.holder.ExpenseFilterHolder
+import com.example.splitwise.ui.holder.MonthHolder
 import com.example.splitwise.ui.util.GROUP_DATA
 import com.example.splitwise.ui.util.MONTH
-import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.SHOPPING_DATA
 import com.example.splitwise.ui.util.SHOPPING_FILTER_DATA
 
@@ -130,7 +131,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
             else
                 binding.totalExpense.text = "This Month's Expenses ${data.totalExpense}"
             binding.root.setOnClickListener {
-                val intent = Intent(context,ExpenseDetailActivity::class.java)
+                val intent = Intent(context, ExpenseDetailActivity::class.java)
                 intent.putExtra("name",data.groupName)
                 intent.putExtra("expenses",data.totalExpense)
                 intent.putExtra("id",data.id)

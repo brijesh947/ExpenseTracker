@@ -1,4 +1,4 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.viewmodel
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -7,6 +7,7 @@ import com.example.splitwise.FirebaseCallback
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
+import com.example.splitwise.ui.repository.HomeRepository
 import com.example.splitwise.ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

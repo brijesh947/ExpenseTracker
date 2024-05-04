@@ -1,4 +1,4 @@
-package com.example.splitwise
+package com.example.splitwise.ui.fragment
 
 import android.annotation.SuppressLint
 import android.content.Context.INPUT_METHOD_SERVICE
@@ -18,6 +18,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.CategoryFilterListener
+import com.example.splitwise.ui.ExpenseDetailActivity
+import com.example.splitwise.FirebaseCallback
+import com.example.splitwise.MyApplication
+import com.example.splitwise.R
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
 import com.example.splitwise.data.ExpenseCategoryData
@@ -29,7 +34,7 @@ import com.example.splitwise.databinding.RecordFragmentLayoutBinding
 import com.example.splitwise.ui.CategoryAdapter
 import com.example.splitwise.ui.ExpenseFilterListener
 import com.example.splitwise.ui.HomeAdapter
-import com.example.splitwise.ui.HomeViewModel
+import com.example.splitwise.ui.viewmodel.HomeViewModel
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
@@ -52,7 +57,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
-class RecordsFragment(val application: MyApplication,val activity: ExpenseDetailActivity) : Fragment() ,ExpenseFilterListener {
+class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : Fragment(), ExpenseFilterListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
@@ -109,11 +114,8 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
             adapter.setList(ArrayList())
         }
 
-        binding.searchLayout.fragmentHomeSearchTeamEditTxt.addTextChangedListener(object :
-            TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-
-            }
+        binding.searchLayout.fragmentHomeSearchTeamEditTxt.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
                 if (s == null)
@@ -479,7 +481,9 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                                     }
                                 }
                                 setExpensesHeadingFilterWise()
-                                binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
+                                binding.totalExpense.setTextColor(requireActivity().resources.getColor(
+                                    R.color.ce_highlight_khayi_light
+                                ))
                                 binding.noElement.visibility = View.GONE
                             } else {
                                 binding.noElement.visibility = View.VISIBLE

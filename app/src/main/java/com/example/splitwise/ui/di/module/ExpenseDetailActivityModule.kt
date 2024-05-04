@@ -1,13 +1,12 @@
 package com.example.splitwise.ui.di.module
 
 import android.content.Context
-import androidx.appcompat.app.AppCompatActivity
-import com.example.splitwise.AnalysisFragment
-import com.example.splitwise.BudgetFragment
-import com.example.splitwise.CategoryFragment
-import com.example.splitwise.ExpenseDetailActivity
+import com.example.splitwise.ui.fragment.AnalysisFragment
+import com.example.splitwise.ui.fragment.BudgetFragment
+import com.example.splitwise.ui.fragment.CategoryFragment
+import com.example.splitwise.ui.ExpenseDetailActivity
 import com.example.splitwise.MyApplication
-import com.example.splitwise.RecordsFragment
+import com.example.splitwise.ui.fragment.RecordsFragment
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.di.ActivityContext
 import dagger.Module

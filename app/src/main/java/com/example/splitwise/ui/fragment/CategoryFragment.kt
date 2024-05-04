@@ -1,49 +1,29 @@
-package com.example.splitwise
+package com.example.splitwise.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.splitwise.databinding.BudgetFragmentLayoutBinding
+import com.example.splitwise.databinding.CategoryFragmentLayoutBinding
 
-class BudgetFragment :Fragment() {
-    private lateinit var binding: BudgetFragmentLayoutBinding
+class CategoryFragment :Fragment(){
+    private lateinit var binding: CategoryFragmentLayoutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = BudgetFragmentLayoutBinding.inflate(layoutInflater)
+        binding = CategoryFragmentLayoutBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
     }
-
-    override fun onViewStateRestored(savedInstanceState: Bundle?) {
-        super.onViewStateRestored(savedInstanceState)
-    }
-
-    override fun onStart() {
-        super.onStart()
-    }
-
     override fun onResume() {
         super.onResume()
     }
 
-    override fun onPause() {
-        super.onPause()
-    }
-
-    override fun onStop() {
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
 }

@@ -1,4 +1,4 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.repository
 
 import android.util.Log
 import com.example.splitwise.data.Data

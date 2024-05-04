@@ -1,4 +1,4 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.holder
 
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.data.Data

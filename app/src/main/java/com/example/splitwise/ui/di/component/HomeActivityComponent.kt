@@ -1,6 +1,5 @@
 package com.example.splitwise.ui.di.component
 
-import com.example.splitwise.RecordsFragment
 import com.example.splitwise.ui.HomeActivity
 import com.example.splitwise.ui.di.ActivityScope
 import com.example.splitwise.ui.di.module.HomeActivityModule

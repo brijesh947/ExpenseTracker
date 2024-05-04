@@ -4,17 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
-import android.util.Patterns
 import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.splitwise.R
 import com.example.splitwise.databinding.MainLayoutBinding
-import com.example.splitwise.databinding.SignUpLayoutBinding
+import com.example.splitwise.ui.fragment.login.LoginFragment
+import com.example.splitwise.ui.fragment.login.SignUpFragment
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.ktx.Firebase
 
 class SplitWiseActivity : AppCompatActivity() {
     private lateinit var binding : MainLayoutBinding

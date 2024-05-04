@@ -1,22 +1,21 @@
-package com.example.splitwise
+package com.example.splitwise.ui.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.example.splitwise.databinding.AnalysisFragmentLayoutBinding
-import com.example.splitwise.databinding.RecordFragmentLayoutBinding
+import com.example.splitwise.databinding.BudgetFragmentLayoutBinding
 
-class AnalysisFragment : Fragment() {
-    private lateinit var binding: AnalysisFragmentLayoutBinding
+class BudgetFragment :Fragment() {
+    private lateinit var binding: BudgetFragmentLayoutBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         super.onCreateView(inflater, container, savedInstanceState)
-        binding = AnalysisFragmentLayoutBinding.inflate(layoutInflater)
+        binding = BudgetFragmentLayoutBinding.inflate(layoutInflater)
         return binding.root
     }
 

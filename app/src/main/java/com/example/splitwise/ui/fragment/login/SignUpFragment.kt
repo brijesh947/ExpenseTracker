@@ -1,8 +1,7 @@
-package com.example.splitwise.ui
+package com.example.splitwise.ui.fragment.login
 
 import android.content.Context.MODE_PRIVATE
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.util.Patterns
@@ -11,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.splitwise.databinding.SignUpLayoutBinding
+import com.example.splitwise.ui.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -38,7 +38,7 @@ class SignUpFragment : Fragment() {
                 auth.createUserWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
                     if (it.isSuccessful) {
                         Log.d("Brijesh", "login is succesFull")
-                        val intent = Intent(requireActivity(),HomeActivity::class.java)
+                        val intent = Intent(requireActivity(), HomeActivity::class.java)
                         requireContext().startActivity(intent)
                     }
                     binding.progressBar.visibility = View.GONE
