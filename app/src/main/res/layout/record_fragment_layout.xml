@@ -68,7 +68,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/abc_diatype_medium"
-                    android:text="Total Expenses so far"
+                    android:text="Overall Total Expenses"
                     android:textColor="@color/ce_highlight_ac2_light"
                     android:textSize="16sp" />
 
@@ -78,7 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="2dp"
                     android:fontFamily="@font/abc_diatype_regular"
-                    android:text="$ 500"
+                    android:text="No Expenses"
                     android:textColor="@color/ce_highlight_khayi_light"
                     android:textSize="16sp" />
 

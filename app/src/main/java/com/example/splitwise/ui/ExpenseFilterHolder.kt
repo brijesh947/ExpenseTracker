@@ -16,20 +16,35 @@ class ExpenseFilterHolder(val binding: ExpesnseFilterLayoutBinding) : RecyclerVi
         val filterData = data as ExpenseFilterData
         val prevMonth = getPrevMonth(filterData.currentMonth)
 
-        binding.currentMonth.text = getMonthText(filterData.currentMonth)
-        binding.prevMonth.text = getMonthText(prevMonth)
-        binding.all.text = "ALL"
+        binding.currentMonth.text = "All"
+        binding.prevMonth.text = getMonthText(filterData.currentMonth)
+        binding.all.text = getMonthText(prevMonth)
+
+        when (filterData.filterSelected) {
+            NO_FILTER -> {
+                binding.currentMonth.isChecked = true
+            }
+
+            PREV_MONTH_FILTER -> {
+                binding.all.isChecked = true
+            }
+
+            CURR_MONTH_FILTER -> {
+                binding.prevMonth.isChecked = true
+            }
+
+        }
 
         binding.currentMonth.setOnClickListener {
-            callback.selectedFilter(CURR_MONTH_FILTER,filterData.currentMonth)
+            callback.selectedFilter(NO_FILTER,-1)
         }
 
         binding.prevMonth.setOnClickListener {
-            callback.selectedFilter(PREV_MONTH_FILTER,prevMonth)
+            callback.selectedFilter(CURR_MONTH_FILTER,filterData.currentMonth)
         }
 
         binding.all.setOnClickListener {
-            callback.selectedFilter(NO_FILTER,-1)
+            callback.selectedFilter(PREV_MONTH_FILTER,prevMonth)
         }
 
     }

@@ -7,6 +7,7 @@ import com.example.splitwise.data.ExpenseFilterData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.MonthData
 import com.example.splitwise.data.ShoppingData
+import com.example.splitwise.ui.util.NO_FILTER
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -75,12 +76,12 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         }
 
                         Log.d("djkvf", "Date is ${calendar.get(Calendar.DATE)} and Month is ${calendar.get(Calendar.MONTH)+1} and the year is ${calendar.get(Calendar.YEAR)}")
-                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"))
+                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month)
                         list.add(tempData)
                     }
 
                     if (list.isNotEmpty())
-                        list.add(0, ExpenseFilterData(currCalendar.get(Calendar.MONTH)))
+                        list.add(0, ExpenseFilterData(currCalendar.get(Calendar.MONTH), NO_FILTER))
                     trySend(list)
                 }.addOnFailureListener { exception ->
                     Log.d("TAGD", "exception while reading the firestore data ${exception.message}")

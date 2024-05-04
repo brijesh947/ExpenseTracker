@@ -58,6 +58,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
     private lateinit var binding: RecordFragmentLayoutBinding
     private var list: ArrayList<Data> = ArrayList()
     private var groupData: GroupDetailData? = null
+    private var currExpesneFilter: Int = NO_FILTER
 
     var isSearchOpen = false
     private var date = -1
@@ -173,7 +174,14 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         if (list.isEmpty()) {
             binding.noElement.show()
         } else {
-            adapter.setList(list)
+            when (currExpesneFilter) {
+                PREV_MONTH_FILTER -> {
+                    selectedFilter(currExpesneFilter, getPreviousMonth(month))
+                }
+                else -> {
+                    selectedFilter(currExpesneFilter, month)
+                }
+            }
         }
 
     }
@@ -238,7 +246,7 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
             if (verifyInput(dialogView)) {
                 binding.noElement.visibility = View.GONE
                 var filter = getFilterType(selectedCategory)
-                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString())
+                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString(),getNewDate(false).month)
                 totalShoppingSum += data.totalAmount.toDouble()
                 binding.totalExpense.text = totalShoppingSum.toString()
                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
@@ -248,17 +256,18 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                             if (isDateChange()) {
                                 if (list.isEmpty()) {
                                     list.add(0, data)
-                                    list.add(0, getNewDate())
-                                    list.add(0, ExpenseFilterData(getNewDate().month))
+                                    list.add(0, getNewDate(true))
+                                    list.add(0, ExpenseFilterData(getNewDate(false).month, NO_FILTER))
                                 } else {
                                     list.add(1, data)
-                                    list.add(1, getNewDate())
+                                    list.add(1, getNewDate(true))
                                 }
                             } else {
                                 list.add(2, data)
                             }
 
                             adapter.setList(list)
+                            updateCurrentMonthExpenseForHome()
                         }
                     }
 
@@ -267,13 +276,23 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                     }
 
                 })
-                viewModel.updateTotalExpense(groupData!!, totalShoppingSum.toString())
                 dialog.dismiss()
             }
         }
         dialog.setContentView(dialogView.root)
         dialog.show()
     }
+
+    private fun updateCurrentMonthExpenseForHome() {
+        var currSum = 0.0
+        list.forEach {
+            if (it is ShoppingData && it.month == month) {
+                currSum += it.totalAmount.toDouble()
+            }
+        }
+        viewModel.updateTotalExpense(groupData!!, currSum.toString())
+    }
+
     private val categoryList: ArrayList<Data> = ArrayList()
 
     private fun createCategoryList(): ArrayList<Data> {
@@ -315,59 +334,70 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
 
     }
 
-    private fun getNewDate(): DateData {
+    private fun getNewDate(needToUpdate: Boolean): DateData {
         val calendar = Calendar.getInstance().apply {
             this.timeInMillis = System.currentTimeMillis()
         }
         var today = getDate(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH))
-
-        date = calendar.get(Calendar.DATE)
-        month = calendar.get(Calendar.MONTH)
-        year = calendar.get(Calendar.YEAR)
-        return DateData(today, date, month, year)
+        if (needToUpdate) {
+            date = calendar.get(Calendar.DATE)
+            month = calendar.get(Calendar.MONTH)
+            year = calendar.get(Calendar.YEAR)
+        }
+        return DateData(
+            today,
+            calendar.get(Calendar.DATE),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR)
+        )
 
     }
 
     private fun getDate(date: Int, month: Int): String {
         var today = "$date "
+        today+=getMonthName(month)
+        return today
+    }
+
+    private fun getMonthName(month: Int): String {
         when (month) {
             Calendar.JANUARY ->
-                today += "JANUARY"
+                return "JANUARY"
 
             Calendar.FEBRUARY ->
-                today += "FEBRUARY"
+                return "FEBRUARY"
 
             Calendar.MARCH ->
-                today += "MARCH"
+                return "MARCH"
 
             Calendar.APRIL ->
-                today += "APRIL"
+                return "APRIL"
 
             Calendar.MAY ->
-                today += "MAY"
+                return "MAY"
 
             Calendar.JUNE ->
-                today += "JUNE"
+                return "JUNE"
 
             Calendar.JULY ->
-                today += "JULY"
+                return "JULY"
 
             Calendar.AUGUST ->
-                today += "AUGUST"
+                return "AUGUST"
 
             Calendar.SEPTEMBER ->
-                today += "SEPTEMBER"
+                return "SEPTEMBER"
 
             Calendar.OCTOBER ->
-                today += "OCTOBER"
+                return "OCTOBER"
 
             Calendar.NOVEMBER ->
-                today += "NOVEMBER"
+                return "NOVEMBER"
 
             Calendar.DECEMBER ->
-                today += "DECEMBER"
+                return "DECEMBER"
         }
-        return today
+        return ""
     }
 
     private fun isDateChange(): Boolean {
@@ -439,21 +469,23 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
                                     month = (list[1] as DateData).month
                                     year = (list[1] as DateData).year
                                 }
-                                adapter.setList(list)
-                                totalShoppingSum = 0.0
-                                list.forEach { shoppingData ->
-                                    if (shoppingData is ShoppingData)
-                                        totalShoppingSum += shoppingData.totalAmount.toDouble()
+                                when (currExpesneFilter) {
+                                    PREV_MONTH_FILTER -> {
+                                        selectedFilter(PREV_MONTH_FILTER, getPreviousMonth(month))
+                                    }
+                                    else -> {
+                                        selectedFilter(currExpesneFilter, month)
+
+                                    }
                                 }
-                                binding.totalExpense.text = totalShoppingSum.toString()
+                                setExpensesHeadingFilterWise()
                                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
                                 binding.noElement.visibility = View.GONE
                             } else {
                                 binding.noElement.visibility = View.VISIBLE
                             }
 
-                            viewModel.updateTotalExpense(groupData!!, totalShoppingSum.toString())
-
+                           updateCurrentMonthExpenseForHome()
                         }
 
                         else -> {
@@ -466,20 +498,121 @@ class RecordsFragment(val application: MyApplication,val activity: ExpenseDetail
         }
     }
 
+    private fun setExpensesHeadingFilterWise() {
+        when (currExpesneFilter) {
+            NO_FILTER -> {
+                binding.totalExpenseName.text = "Overall Total Expenses"
+            }
+
+            CURR_MONTH_FILTER -> {
+                binding.totalExpenseName.text = "Total Expenses in ${getMonthName(month)}"
+            }
+
+            PREV_MONTH_FILTER -> {
+                binding.totalExpenseName.text =
+                    "Total Expenses in ${getMonthName(getPreviousMonth(month))}"
+            }
+        }
+    }
+
+    private fun calCulateTotalExpense(list: ArrayList<Data>, month: Int) {
+
+        when (currExpesneFilter) {
+
+            NO_FILTER -> {
+                totalShoppingSum = 0.0
+                list.forEach { shoppingData ->
+                    if (shoppingData is ShoppingData)
+                        totalShoppingSum += shoppingData.totalAmount.toDouble()
+
+                }
+                binding.totalExpense.text = totalShoppingSum.toString()
+                Log.d("CallledFarExpense", " curr filter is $currExpesneFilter and month is $month and total expense is $totalShoppingSum")
+
+            }
+
+            CURR_MONTH_FILTER -> {
+                totalShoppingSum = 0.0
+                var currMonth = month
+                list.forEach { data ->
+                    if (data is ShoppingData && data.month == currMonth) {
+                        totalShoppingSum += data.totalAmount.toDouble()
+                    }
+                }
+                Log.d("CallledFarExpense", " curr filter is $currExpesneFilter and month is $month and total expense is $totalShoppingSum")
+
+                binding.totalExpense.text = totalShoppingSum.toString()
+            }
+
+            PREV_MONTH_FILTER -> {
+                totalShoppingSum = 0.0
+                for (index in 0 until list.size) {
+                    if (list[index] is ShoppingData && (list[index] as ShoppingData).month == month)
+                        totalShoppingSum += (list[index] as ShoppingData).totalAmount.toDouble()
+                }
+
+                binding.totalExpense.text = totalShoppingSum.toString()
+            }
+        }
+
+    }
+
+    private fun getPreviousMonth(month: Int): Int {
+        if (month > 0)
+            return month - 1;
+        return 11;
+
+    }
+
     override fun selectedFilter(type: Int, month: Int) {
+
+        currExpesneFilter = type;
+        calCulateTotalExpense(list, month)
+        val currList = ArrayList<Data>()
+        setExpensesHeadingFilterWise()
+
+        if (list[0] is ExpenseFilterData) {
+            (list[0] as ExpenseFilterData).filterSelected = type
+            adapter.notifyItemChanged(0)
+        }
+
         when (type) {
             CURR_MONTH_FILTER -> {
-
+                binding.addRecordsButton.show()
+                list.forEach {
+                    if (it is ExpenseFilterData)
+                        currList.add(it)
+                    if (it is DateData && it.month == month) {
+                        currList.add(it)
+                    }
+                    if (it is ShoppingData && it.month == month) {
+                        currList.add(it)
+                    }
+                }
             }
 
             PREV_MONTH_FILTER -> {
 
+                binding.addRecordsButton.hide()
+                list.forEach {
+                    if (it is ExpenseFilterData)
+                        currList.add(it)
+
+                    if (it is DateData && it.month == month) {
+                        currList.add(it)
+                    }
+                    if (it is ShoppingData && it.month == month) {
+                        currList.add(it)
+                    }
+                }
             }
 
             NO_FILTER -> {
-
+                binding.addRecordsButton.show()
+                currList.addAll(list)
             }
         }
+        adapter.setList(currList)
     }
 
 }

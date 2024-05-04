@@ -128,7 +128,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
             if (data.totalExpense == "till now No Expenses")
                 binding.totalExpense.text = data.totalExpense
             else
-                binding.totalExpense.text = "Expenses ${data.totalExpense}"
+                binding.totalExpense.text = "This Month's Expenses ${data.totalExpense}"
             binding.root.setOnClickListener {
                 val intent = Intent(context,ExpenseDetailActivity::class.java)
                 intent.putExtra("name",data.groupName)

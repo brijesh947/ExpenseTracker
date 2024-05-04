@@ -74,6 +74,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
     }
 
     fun updateTotalExpense(data: GroupDetailData, totalExpense: String) {
+        Log.d("fghgjkhgdt", "updateTotalExpense: is called $totalExpense")
         viewModelScope.launch {
             repository.updateTotalExpensesInGroup(data, totalExpenses = totalExpense)
         }
