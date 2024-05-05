@@ -49,11 +49,11 @@
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/back_button"
-                    android:layout_width="30dp"
-                    android:layout_height="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
-                    android:paddingHorizontal="5dp"
-                    android:paddingVertical="3dp"
+                    android:paddingVertical="6dp"
+                    android:paddingStart="10dp"
                     android:src="@drawable/back" />
 
 
@@ -62,17 +62,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/abc_diatype_medium"
+                    android:paddingVertical="5dp"
                     android:text="May 2024"
                     android:textColor="@color/ce_highlight_ac2_light"
                     android:textSize="16sp" />
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/next_button"
-                    android:layout_width="30dp"
-                    android:layout_height="20dp"
+                    android:layout_width="40dp"
+                    android:layout_height="30dp"
                     android:layout_gravity="center_vertical"
-                    android:paddingHorizontal="5dp"
-                    android:paddingVertical="3dp"
+                    android:paddingVertical="5.2dp"
+                    android:paddingEnd="10dp"
                     android:src="@drawable/next" />
 
 
@@ -86,7 +87,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="Total Spending :-"
-                android:textColor="@color/secondary_txt"
+                android:textColor="@color/pausedColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -99,7 +100,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="40000"
-                android:textColor="@color/teal_200"
+                android:textColor="@color/pausedColor"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />

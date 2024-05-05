@@ -27,11 +27,11 @@ public class CustomMarkerView extends MarkerView {
     @Override
     public void refreshContent(Entry e, Highlight highlight) {
         try {
-            tvContent.setText("" +((PieEntry)(e)).getLabel() + " "  + e.getY());
+            tvContent.setText("" + ((PieEntry) (e)).getLabel() + " " + e.getY());
             // set the entry-value as the display text
             super.refreshContent(e, highlight);
 
-        }catch (Exception exception){
+        } catch (Exception exception) {
             Log.d("sdfvfr", "exception in markerView " + exception.getMessage());
         }
     }

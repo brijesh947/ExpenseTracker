@@ -13,6 +13,7 @@
         android:text="Rent"
         android:textSize="12dp"
         android:textColor="@color/ce_low_contrast_fg_light"
+        android:fontFamily="@font/abc_diatype_regular"
         android:ellipsize="end"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall" />

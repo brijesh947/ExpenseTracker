@@ -5,5 +5,5 @@
     android:viewportHeight="24">
   <path
       android:pathData="M6.8,23.7l-1.4,-1.4l10.3,-10.3l-10.3,-10.3l1.4,-1.4l11.7,11.7z"
-      android:fillColor="@color/primary_txt"/>
+      android:fillColor="@color/top_nav_bar_light"/>
 </vector>
