@@ -11,7 +11,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -38,22 +37,10 @@ import com.example.splitwise.ui.viewmodel.HomeViewModel
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
-import com.example.splitwise.ui.util.BEAUTY
-import com.example.splitwise.ui.util.BIKE
-import com.example.splitwise.ui.util.CLOTHING
 import com.example.splitwise.ui.util.CURR_MONTH_FILTER
-import com.example.splitwise.ui.util.DONATE
-import com.example.splitwise.ui.util.FOOD
-import com.example.splitwise.ui.util.HEALTH
-import com.example.splitwise.ui.util.MOBILE
-import com.example.splitwise.ui.util.MOVIE
 import com.example.splitwise.ui.util.NO_FILTER
-import com.example.splitwise.ui.util.PETROL_PUMP
 import com.example.splitwise.ui.util.PREV_MONTH_FILTER
-import com.example.splitwise.ui.util.RENT
 import com.example.splitwise.ui.util.SHOPPING_GENERAL
-import com.example.splitwise.ui.util.SPORTS
-import com.example.splitwise.ui.util.TRANSPORT
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
@@ -62,7 +49,7 @@ import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
-class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : Fragment(), ExpenseFilterListener {
+class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(), ExpenseFilterListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
@@ -99,9 +86,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         binding.addRecordsButton.hide()
         binding.noElement.hide()
         adapter.setList(ArrayList())
-
         binding.searchLayout.root.show()
-
         binding.searchLayout.fragmentHomeSearchTeamEditTxt.requestFocus()
         val imm = application.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         imm.showSoftInput(
@@ -253,7 +238,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             if (verifyInput(dialogView)) {
                 binding.noElement.visibility = View.GONE
                 var filter = getFilterType(selectedCategory)
-                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString(),getNewDate(false).month)
+                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString(),getNewDate(false).month,getNewDate(false).year,getNewDate(false).date)
                 totalShoppingSum += data.totalAmount.toDouble()
                 binding.totalExpense.text = totalShoppingSum.toString()
                 binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
@@ -300,62 +285,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         viewModel.updateTotalExpense(groupData!!, currSum.toString())
     }
 
-    private val categoryList: ArrayList<Data> = ArrayList()
-
-    private fun createCategoryList(): ArrayList<Data> {
-        categoryList.clear()
-        for (i in 101..113) {
-            categoryList.add(ExpenseCategoryData(i,false))
-        }
-        return categoryList
-
-    }
-
-    private fun getFilterType(selectedCategory: Int): String {
-
-        when (selectedCategory) {
-            MOVIE ->
-                return "MOVIE"
-
-            CLOTHING ->
-                return "CLOTHING"
-
-            BEAUTY ->
-                return "BEAUTY"
-
-            FOOD ->
-                return "FOOD"
-
-            HEALTH ->
-                return "HEALTH"
-
-            RENT ->
-                return "RENT"
-
-            PETROL_PUMP ->
-                return "PETROL_PUMP"
-
-            BIKE ->
-                return "BIKE"
-
-            TRANSPORT ->
-                return "TRANSPORT"
-
-            DONATE ->
-                return "DONATE"
-
-            SPORTS ->
-                return "SPORTS"
-
-            MOBILE ->
-                return "MOBILE"
-
-            else ->
-                return "other"
-        }
-
-    }
-
     private fun getNewDate(needToUpdate: Boolean): DateData {
         val calendar = Calendar.getInstance().apply {
             this.timeInMillis = System.currentTimeMillis()
@@ -373,53 +302,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             calendar.get(Calendar.YEAR)
         )
 
-    }
-
-    private fun getDate(date: Int, month: Int): String {
-        var today = "$date "
-        today+=getMonthName(month)
-        return today
-    }
-
-    private fun getMonthName(month: Int): String {
-        when (month) {
-            Calendar.JANUARY ->
-                return "JANUARY"
-
-            Calendar.FEBRUARY ->
-                return "FEBRUARY"
-
-            Calendar.MARCH ->
-                return "MARCH"
-
-            Calendar.APRIL ->
-                return "APRIL"
-
-            Calendar.MAY ->
-                return "MAY"
-
-            Calendar.JUNE ->
-                return "JUNE"
-
-            Calendar.JULY ->
-                return "JULY"
-
-            Calendar.AUGUST ->
-                return "AUGUST"
-
-            Calendar.SEPTEMBER ->
-                return "SEPTEMBER"
-
-            Calendar.OCTOBER ->
-                return "OCTOBER"
-
-            Calendar.NOVEMBER ->
-                return "NOVEMBER"
-
-            Calendar.DECEMBER ->
-                return "DECEMBER"
-        }
-        return ""
     }
 
     private fun isDateChange(): Boolean {
@@ -578,13 +460,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                 binding.totalExpense.text = totalShoppingSum.toString()
             }
         }
-
-    }
-
-    private fun getPreviousMonth(month: Int): Int {
-        if (month > 0)
-            return month - 1;
-        return 11;
 
     }
 

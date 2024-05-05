@@ -19,7 +19,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth) {
+class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth) : BaseRepository() {
     fun getUserDetail(): Flow<List<GroupDetailData>> {
         Log.d("TAGD", "getUserDetail in repo is called")
         return callbackFlow {
@@ -76,7 +76,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         }
 
                         Log.d("djkvf", "Date is ${calendar.get(Calendar.DATE)} and Month is ${calendar.get(Calendar.MONTH)+1} and the year is ${calendar.get(Calendar.YEAR)}")
-                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month)
+                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month,year,"" + date)
                         list.add(tempData)
                     }
 
@@ -95,75 +95,9 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
         }
     }
 
-    private fun getDate(date: Int, month: Int): String {
-        var today = "$date "
-        today+=getMonthName(month)
-        return today
-    }
-
-    private fun getMonthName(month: Int): String {
-        when (month) {
-            Calendar.JANUARY ->
-                return "JANUARY"
-
-            Calendar.FEBRUARY ->
-                return "FEBRUARY"
-
-            Calendar.MARCH ->
-                return "MARCH"
-
-            Calendar.APRIL ->
-                return "APRIL"
-
-            Calendar.MAY ->
-                return "MAY"
-
-            Calendar.JUNE ->
-                return "JUNE"
-
-            Calendar.JULY ->
-                return "JULY"
-
-            Calendar.AUGUST ->
-                return "AUGUST"
-
-            Calendar.SEPTEMBER ->
-                return "SEPTEMBER"
-
-            Calendar.OCTOBER ->
-                return "OCTOBER"
-
-            Calendar.NOVEMBER ->
-                return "NOVEMBER"
-
-            Calendar.DECEMBER ->
-                return "DECEMBER"
-        }
-        return ""
-    }
-
     /*
     * here DMY stands for Date wise ,Month and Year wise Filter
     * */
-    private fun needToAddDMYData(calendar: Calendar, month: Int, year: Int, date: Int, filterType: Int): Boolean {
-        when (filterType) {
-            Calendar.YEAR -> {
-                if (calendar.get(Calendar.YEAR) != year)
-                    return true
-            }
-
-            Calendar.MONTH -> {
-                if (calendar.get(Calendar.MONTH) != month)
-                    return true
-            }
-
-            Calendar.DATE -> {
-                if (calendar.get(Calendar.DATE) != date)
-                    return true
-            }
-        }
-        return false
-    }
 
     fun addNewGroupToFirebase(groupData: GroupDetailData): Flow<Boolean> {
         return callbackFlow {

@@ -94,7 +94,7 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
-
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("androidx.work:work-runtime-ktx:2.7.1")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-crashlytics")
@@ -102,6 +102,7 @@ dependencies {
     implementation("com.google.firebase:firebase-database")
     implementation("com.google.dagger:dagger:2.51.1")
     kapt("com.google.dagger:dagger-compiler:2.51.1")
+
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")

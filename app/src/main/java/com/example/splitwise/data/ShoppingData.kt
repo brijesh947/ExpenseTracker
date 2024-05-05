@@ -7,7 +7,9 @@ data class ShoppingData(
     val shoppingName: String,
     val shoppingCategory: String,
     val totalAmount: String,
-    val month :Int
+    val month :Int,
+    val year :Int,
+    val date:String
 ) : Data {
     override fun getType(): Int {
         return SHOPPING_DATA

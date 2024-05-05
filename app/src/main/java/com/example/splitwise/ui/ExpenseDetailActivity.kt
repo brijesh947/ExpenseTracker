@@ -35,6 +35,7 @@ class ExpenseDetailActivity :AppCompatActivity(){
 
     private var data: GroupDetailData? = null
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         initFragment();
         super.onCreate(savedInstanceState)
@@ -57,6 +58,10 @@ class ExpenseDetailActivity :AppCompatActivity(){
             .expenseDetailActivityModule(ExpenseDetailActivityModule(application as MyApplication, this))
             .build()
             .inject(this)
+    }
+
+    fun getGroupData(): GroupDetailData {
+        return data!!
     }
 
     private fun setWindowColor() {

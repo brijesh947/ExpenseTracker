@@ -12,6 +12,15 @@
     <color name="ce_primary_fg_light">#FFFFFF</color>
     <color name="ce_primary_bg_light">#90F1F1F1</color>
 
+    <color name="colorAccent">#FF4081</color>
+    <color name="upcomingColor">#ff9300</color>
+    <color name="pausedColor">#b10000</color>
+    <color name="commentColor">#990F2A39</color>
+    <color name="ce_score_highlight_light">#8AF9EB</color>
+    <color name="card_delete">#ffc7c7</color>
+
+
+
     <color name="top_nav_bar_light">#0F1F2E</color>
     <color name="ce_highlight_ac2_light">#9E6105</color>
     <color name="ce_highlight_khayi_light">#A64040</color>
