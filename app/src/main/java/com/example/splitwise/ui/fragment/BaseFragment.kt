@@ -145,7 +145,7 @@ open class BaseFragment() : Fragment() {
     fun getCurrentMonth(month: Int, year: Int): String {
         var name = ""
         name += getMonthName(month)
-        name += " "
+        name += ", "
         name += year
         return name
     }

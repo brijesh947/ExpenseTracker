@@ -40,18 +40,25 @@
                 android:id="@+id/month_parent"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
                 android:orientation="horizontal"
+                android:weightSum="4"
                 app:layout_constraintBottom_toTopOf="@id/total_spending_heading"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@id/filter_button"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/user_group_name">
+
+                <View
+                    android:layout_width="20dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
 
                 <androidx.appcompat.widget.AppCompatImageView
                     android:id="@+id/back_button"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:paddingVertical="6dp"
                     android:paddingStart="10dp"
                     android:src="@drawable/back" />
@@ -61,9 +68,12 @@
                     android:id="@+id/month_name_filter"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:fontFamily="@font/abc_diatype_medium"
+                    android:gravity="center"
                     android:paddingVertical="5dp"
-                    android:text="May 2024"
+                    android:text="May, 2024"
                     android:textColor="@color/ce_highlight_ac2_light"
                     android:textSize="16sp" />
 
@@ -71,13 +81,28 @@
                     android:id="@+id/next_button"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
                     android:paddingVertical="5.2dp"
                     android:paddingEnd="10dp"
-                    android:src="@drawable/next" />
+                    android:rotation="-180"
+                    android:src="@drawable/back" />
 
 
             </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatImageView
+                android:id="@+id/filter_button"
+                android:layout_width="40dp"
+                android:layout_height="30dp"
+                android:layout_gravity="center"
+                android:layout_marginEnd="12dp"
+                android:src="@drawable/filter_icon"
+                app:layout_constraintBottom_toBottomOf="@id/month_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@id/month_parent"
+                app:layout_constraintTop_toTopOf="@id/month_parent" />
+
 
             <TextView
                 android:id="@+id/total_spending_heading"
@@ -87,7 +112,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="Total Spending :-"
-                android:textColor="@color/pausedColor"
+                android:textColor="@color/ce_highlight_ac2_light"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
@@ -100,7 +125,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="40000"
-                android:textColor="@color/pausedColor"
+                android:textColor="@color/colorAccent"
                 android:textSize="16sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent" />
