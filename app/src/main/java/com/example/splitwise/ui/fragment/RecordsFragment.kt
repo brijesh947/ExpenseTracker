@@ -164,6 +164,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         )
 
         if (list.isEmpty()) {
+            binding.noElement.text = "Add Expenses to show here."
             binding.noElement.show()
         } else {
             when (currExpesneFilter) {
@@ -241,7 +242,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                 val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString(),getNewDate(false).month,getNewDate(false).year,getNewDate(false).date)
                 totalShoppingSum += data.totalAmount.toDouble()
                 binding.totalExpense.text = totalShoppingSum.toString()
-                binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.ce_highlight_khayi_light))
+                binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.total_expense_in_chart))
                 viewModel.addNewUserExpenses(groupData!!, data, object : FirebaseCallback<Boolean> {
                     override fun isSuccess(result: Boolean) {
                         if (result) {
@@ -356,8 +357,8 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                             adapter.setList(list)
                             binding.totalExpense.text = "No Expenses"
                             binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.secondary_txt))
-                            binding.progressBar.visibility = View.VISIBLE
-                            binding.noElement.visibility = View.GONE
+                            binding.progressBar.show()
+                            binding.noElement.hide()
                         }
 
                         is UiState.Success -> {
@@ -383,20 +384,20 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                                     }
                                 }
                                 setExpensesHeadingFilterWise()
-                                binding.totalExpense.setTextColor(requireActivity().resources.getColor(
-                                    R.color.ce_highlight_khayi_light
-                                ))
-                                binding.noElement.visibility = View.GONE
+                                binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.total_expense_in_chart))
+                                binding.noElement.hide()
                             } else {
-                                binding.noElement.visibility = View.VISIBLE
+                                binding.noElement.text = "Add Expenses to show here."
+                                binding.noElement.show()
                             }
 
                            updateCurrentMonthExpenseForHome()
                         }
 
                         else -> {
-                            binding.progressBar.visibility = View.GONE
-                            binding.noElement.visibility = View.VISIBLE
+                            binding.progressBar.hide()
+                            binding.noElement.text = "Add Expenses to show here."
+                            binding.noElement.show()
                         }
                     }
                 }
@@ -512,6 +513,14 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             }
         }
         adapter.setList(currList)
+        if (currList.size > 1)
+            binding.noElement.hide()
+        else {
+            binding.noElement.text = "No Expense recorded in this month"
+            binding.noElement.show()
+        }
+
+
     }
 
 }

@@ -3,6 +3,8 @@ package com.example.splitwise.ui
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Path
+import android.graphics.RectF
 import android.graphics.Typeface
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -102,15 +104,34 @@ class HomeActivity : AppCompatActivity() {
         override fun onChildDraw(canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
             if ( actionState != ItemTouchHelper.ACTION_STATE_SWIPE ) return
             if (dX > 0) {
-                canvas.clipRect(viewHolder.itemView.left, viewHolder.itemView.top, viewHolder.itemView.left + dX.toInt(), viewHolder.itemView.bottom)
-                val background = ColorDrawable(resources.getColor(R.color.text_cta_color))
+
+                val radius = 8f * resources.displayMetrics.density // Set the corner radius here
+
+                val clipPath = Path().apply {
+                    addRoundRect(
+                        RectF(
+                            viewHolder.itemView.left.toFloat(),
+                            viewHolder.itemView.top.toFloat(),
+                            viewHolder.itemView.left.toFloat() + dX,
+                            viewHolder.itemView.bottom.toFloat()
+                        ),
+                        radius,
+                        radius,
+                        Path.Direction.CW
+                    )
+                }
+
+                canvas.clipPath(clipPath)
+
+                val background = ColorDrawable(resources.getColor(R.color.group_delete))
                 background.setBounds(
                     viewHolder.itemView.left,
-                    viewHolder.itemView.top + (20 * (resources.displayMetrics.density.toInt())),
+                    viewHolder.itemView.top,
                     viewHolder.itemView.left + dX.toInt(),
-                    viewHolder.itemView.bottom - (20 * (resources.displayMetrics.density.toInt()))
+                    viewHolder.itemView.bottom
                 )
                 background.draw(canvas)
+
 
                 val textPaint = TextPaint()
                 textPaint.isAntiAlias = true
@@ -121,21 +142,33 @@ class HomeActivity : AppCompatActivity() {
                 canvas.drawText("Delete", viewHolder.itemView.left + (23 * (resources.displayMetrics.density.toInt())).toFloat() , (textTop-2).toFloat(), textPaint)
 
             } else {
-                canvas.clipRect(
+                val radius = 8f * resources.displayMetrics.density // Set the corner radius here
+
+                val clipPath = Path().apply {
+                    addRoundRect(
+                        RectF(
+                            (viewHolder.itemView.right + dX.toInt()).toFloat(),
+                            viewHolder.itemView.top.toFloat(),
+                            viewHolder.itemView.right.toFloat(),
+                            viewHolder.itemView.bottom.toFloat()
+                        ),
+                        radius,
+                        radius,
+                        Path.Direction.CW
+                    )
+                }
+
+                canvas.clipPath(clipPath)
+
+                val background = ColorDrawable(resources.getColor(R.color.group_delete))
+                background.setBounds(
                     viewHolder.itemView.right + dX.toInt(),
                     viewHolder.itemView.top,
                     viewHolder.itemView.right,
                     viewHolder.itemView.bottom
                 )
-                val background = ColorDrawable(resources.getColor(R.color.text_cta_color))
-                background.setBounds(
-                    viewHolder.itemView.right + dX.toInt(),
-                    viewHolder.itemView.top + (20 * (resources.displayMetrics.density.toInt())),
-                    viewHolder.itemView.right,
-                    viewHolder.itemView.bottom - (20 * (resources.displayMetrics.density.toInt()))
-                )
-
                 background.draw(canvas)
+
                 val textPaint = TextPaint()
                 textPaint.isAntiAlias = true
                 textPaint.textSize = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 20f, recyclerView.context.resources.displayMetrics)
@@ -253,6 +286,6 @@ class HomeActivity : AppCompatActivity() {
     private fun setWindowColor() {
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = resources.getColor(R.color.csk_color)
+        window.statusBarColor = resources.getColor(R.color.app_bar_background)
     }
 }

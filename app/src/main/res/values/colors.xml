@@ -18,10 +18,13 @@
     <color name="commentColor">#990F2A39</color>
     <color name="ce_score_highlight_light">#8AF9EB</color>
     <color name="card_delete">#ffc7c7</color>
+    <color name="group_delete">#fb7fae</color>
+    <color name="total_expense_in_chart">#22cd22</color>
 
 
 
     <color name="top_nav_bar_light">#0F1F2E</color>
+    <color name="progress_bar_background">#C6C6C6</color>
     <color name="ce_highlight_ac2_light">#9E6105</color>
     <color name="ce_highlight_khayi_light">#A64040</color>
     <color name="ce_cta_light">#05508D</color>
@@ -36,6 +39,7 @@
     <color name="ce_stroke_1_light">#E4E4E4</color>
     <color name="transparent">#00000000</color>
     <color name="app_bar_background">#FFF2D5</color>
+    <color name="app_bar_background_2">#FFF6E5</color>
     <color name="csk_color">#E9CF4F</color>
 
     <color name="low_contrast_fg">#EBECED</color>
