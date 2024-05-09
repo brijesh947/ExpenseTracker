@@ -13,8 +13,10 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.MyApplication
+import com.example.splitwise.data.CategoryAnalysisData
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.PieChartData
+import com.example.splitwise.databinding.AnalysisFilterSelectorBinding
 import com.example.splitwise.databinding.AnalysisFragmentLayoutBinding
 import com.example.splitwise.ui.AnalysisAdapter
 import com.example.splitwise.ui.ExpenseDetailActivity
@@ -25,11 +27,14 @@ import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
 import com.example.splitwise.ui.viewmodel.AnalysisViewModel
+import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import kotlinx.coroutines.launch
 import java.util.Calendar
+import java.util.Collections
 import javax.inject.Inject
 
-class AnalysisFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment() {
+class AnalysisFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(),Comparator<Data> {
     private lateinit var binding: AnalysisFragmentLayoutBinding
 
     private var currMonth = -1
@@ -38,6 +43,12 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
     private val BACKWORD = 10
     private val FORWORD = 11
 
+    private val NO_FILTER = 101
+    private val ASCENDING_ORDER = 102
+    private val DESCENDING_ORDER = 103
+
+    private var currFilter = NO_FILTER
+
     @Inject
     lateinit var viewModel: AnalysisViewModel
 
@@ -45,6 +56,8 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
     lateinit var adapter: AnalysisAdapter
 
     private lateinit var recyclerView: RecyclerView
+
+    private var list = ArrayList<Data>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +94,77 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
         recyclerView.adapter = adapter
 
         binding.userGroupName.text = activity.getGroupData().groupName
+        binding.filterButton.setOnClickListener {
+            val manageExpenseFilterDialog = BottomSheetDialog(activity)
+            val manageNotificationsDialogBinding =
+                AnalysisFilterSelectorBinding.inflate(LayoutInflater.from(activity))
+            manageExpenseFilterDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
+            manageExpenseFilterDialog.behavior.skipCollapsed = true
+            manageExpenseFilterDialog.setContentView(manageNotificationsDialogBinding.root)
+            manageNotificationsDialogBinding.doneButton.setOnClickListener { v -> manageExpenseFilterDialog.dismiss() }
+
+            var prevFilter = currFilter
+            showCheckStatus(prevFilter, manageNotificationsDialogBinding)
+
+            manageNotificationsDialogBinding.ascendingOrder.setOnClickListener {
+                currFilter = ASCENDING_ORDER
+                showCheckStatus(currFilter, manageNotificationsDialogBinding)
+            }
+            manageNotificationsDialogBinding.noFilter.setOnClickListener {
+                currFilter = NO_FILTER
+                showCheckStatus(currFilter, manageNotificationsDialogBinding)
+            }
+            manageNotificationsDialogBinding.descendingOrder.setOnClickListener {
+                currFilter = DESCENDING_ORDER
+                showCheckStatus(currFilter, manageNotificationsDialogBinding)
+
+            }
+
+            manageExpenseFilterDialog.setOnDismissListener {
+                Log.d("sdihfgu", "dismis listener is called")
+                if (prevFilter != currFilter)
+                    sortRecylerViewData(currFilter)
+            }
+
+
+            if (!manageExpenseFilterDialog.isShowing)
+                manageExpenseFilterDialog.show()
+        }
         return binding.root
+    }
+
+    private fun sortRecylerViewData(currFilter: Int) {
+
+        val newList = list.subList(1, list.size)
+        Collections.sort(newList, this)
+        val finalList: ArrayList<Data> = ArrayList()
+        finalList.add(list[0]);
+        finalList.addAll(newList)
+        adapter.setList(finalList)
+
+    }
+
+    private fun showCheckStatus(currFilter: Int, filterBinding: AnalysisFilterSelectorBinding) {
+        when (currFilter) {
+            NO_FILTER -> {
+                filterBinding.noCheckbox.isChecked = true
+                filterBinding.ascendingCheckbox.isChecked = false
+                filterBinding.descendingCheckbox.isChecked = false
+            }
+
+            ASCENDING_ORDER -> {
+                filterBinding.noCheckbox.isChecked = false
+                filterBinding.ascendingCheckbox.isChecked = true
+                filterBinding.descendingCheckbox.isChecked = false
+            }
+
+            DESCENDING_ORDER -> {
+                filterBinding.noCheckbox.isChecked = false
+                filterBinding.ascendingCheckbox.isChecked = false
+                filterBinding.descendingCheckbox.isChecked = true
+            }
+        }
+
     }
 
     private fun getDirectionWiseMonth(direction: Int) {
@@ -142,6 +225,7 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
                                         adapter.setList(it.data as ArrayList<Data>)
                                         binding.totalSpending.text =
                                             (it.data[0] as PieChartData).total
+                                        list = it.data
                                     } else {
                                         binding.noElement.visibility = View.VISIBLE
                                         binding.totalSpending.text = "NA"
@@ -194,6 +278,7 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
     override fun onResume() {
         super.onResume()
+        currFilter = NO_FILTER
         fetchData()
 
     }
@@ -208,5 +293,31 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
     override fun onDestroyView() {
         super.onDestroyView()
+    }
+
+    override fun compare(o1: Data?, o2: Data?): Int {
+        if (o1 == null || o2 == null)
+            return 0
+
+        if (o1 !is CategoryAnalysisData || o2 !is CategoryAnalysisData)
+            return 0
+
+        if (currFilter == NO_FILTER)
+            return java.util.Random().nextInt(5) - java.util.Random().nextInt(5)
+
+
+        return when (currFilter) {
+            ASCENDING_ORDER -> {
+                (o1.totalExpenseInCategory - o2.totalExpenseInCategory).toInt()
+            }
+
+            DESCENDING_ORDER -> {
+                (o2.totalExpenseInCategory - o1.totalExpenseInCategory).toInt()
+            }
+
+            else ->
+                0
+
+        }
     }
 }

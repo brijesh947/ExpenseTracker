@@ -40,6 +40,8 @@
     <color name="transparent">#00000000</color>
     <color name="app_bar_background">#FFF2D5</color>
     <color name="app_bar_background_2">#FFF6E5</color>
+    <color name="ce_low_contrast_fg_2_light">#F5F6F7</color>
+
     <color name="csk_color">#E9CF4F</color>
 
     <color name="low_contrast_fg">#EBECED</color>

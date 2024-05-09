@@ -1,0 +1,154 @@
+<layout>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/app_bar_background_2"
+        android:paddingTop="20dp"
+        android:paddingBottom="32dp">
+
+        <TextView
+            android:id="@+id/manage_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="12dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Manage Filter"
+            android:textColor="@color/primary_txt"
+            android:textSize="18sp" />
+
+        <TextView
+            android:id="@+id/done_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="12dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Done"
+            android:textColor="@color/text_cta_color"
+            android:textSize="18sp" />
+
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@id/manage_filter"
+            android:layout_marginTop="18dp"
+            android:background="@color/ce_stroke_1_light" />
+
+        <RelativeLayout
+            android:id="@+id/no_filter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/seprator"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="18dp"
+            android:clickable="true"
+            android:background="@drawable/only_stroke_ce_low_contrast_fg_2_7sdp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:text="No Filter"
+                android:textColor="@color/primary_txt"
+                android:textSize="16sp" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/no_checkbox"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:button="@drawable/circle_tick_selector"
+                android:checked="true"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false" />
+
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/descending_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/no_filter"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="18dp"
+            android:clickable="true"
+            android:background="@drawable/only_stroke_ce_low_contrast_fg_2_7sdp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:text="High Expense to Low"
+                android:textColor="@color/primary_txt"
+                android:textSize="16sp" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/descending_checkbox"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:button="@drawable/circle_tick_selector"
+                android:checked="false"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/ascending_order"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/descending_order"
+            android:layout_marginHorizontal="12dp"
+            android:layout_marginTop="18dp"
+            android:clickable="true"
+            android:background="@drawable/only_stroke_ce_low_contrast_fg_2_7sdp"
+            android:paddingVertical="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:gravity="center_vertical"
+                android:text="Low Expense to High"
+                android:textColor="@color/primary_txt"
+                android:textSize="16sp" />
+
+            <com.google.android.material.checkbox.MaterialCheckBox
+                android:id="@+id/ascending_checkbox"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_alignParentEnd="true"
+                android:layout_gravity="center_vertical"
+                android:layout_marginEnd="12dp"
+                android:button="@drawable/circle_tick_selector"
+                android:checked="false"
+                android:clickable="false"
+                android:enabled="false"
+                android:focusable="false" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</layout>
