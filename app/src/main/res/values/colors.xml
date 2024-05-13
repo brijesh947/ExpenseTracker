@@ -41,6 +41,9 @@
     <color name="app_bar_background">#FFF2D5</color>
     <color name="app_bar_background_2">#FFF6E5</color>
     <color name="ce_low_contrast_fg_2_light">#F5F6F7</color>
+    <color name="soft_color_1">#FAF4F1</color>
+    <color name="soft_color_2">#D1EDC0</color>
+    <color name="soft_green_color">#016A40</color>
 
     <color name="csk_color">#E9CF4F</color>
 

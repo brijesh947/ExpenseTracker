@@ -216,7 +216,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
     private fun openCreateGroupDialog() {
         val dialogView = AddExpenseLayoutBinding.inflate(layoutInflater)
-        val dialog = BottomSheetDialog(requireContext())
+        val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialogStyle)
         var selectedCategory = SHOPPING_GENERAL
         var previousPosition = -1
         categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {

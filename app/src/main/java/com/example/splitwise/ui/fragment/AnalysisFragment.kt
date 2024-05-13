@@ -13,6 +13,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.MyApplication
+import com.example.splitwise.R
 import com.example.splitwise.data.CategoryAnalysisData
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.PieChartData
@@ -95,7 +96,7 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
         binding.userGroupName.text = activity.getGroupData().groupName
         binding.filterButton.setOnClickListener {
-            val manageExpenseFilterDialog = BottomSheetDialog(activity)
+            val manageExpenseFilterDialog = BottomSheetDialog(activity, R.style.BottomSheetDialogStyle)
             val manageNotificationsDialogBinding =
                 AnalysisFilterSelectorBinding.inflate(LayoutInflater.from(activity))
             manageExpenseFilterDialog.behavior.state = BottomSheetBehavior.STATE_EXPANDED
