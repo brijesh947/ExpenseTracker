@@ -15,15 +15,18 @@ import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.DateLayoutBinding
 import com.example.splitwise.databinding.ExpesnseFilterLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
-import com.example.splitwise.databinding.MonthFilterLayoutBinding
+import com.example.splitwise.databinding.MonthWiseBalanceCardviewBinding
+import com.example.splitwise.databinding.RecentTransactionLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
 import com.example.splitwise.ui.holder.DateHolder
 import com.example.splitwise.ui.holder.ExpenseFilterHolder
-import com.example.splitwise.ui.holder.MonthHolder
+import com.example.splitwise.ui.holder.RecentTransactionHolder
+import com.example.splitwise.ui.holder.MonthWiseProgressHolder
 import com.example.splitwise.ui.util.GROUP_DATA
-import com.example.splitwise.ui.util.MONTH
+import com.example.splitwise.ui.util.RECENT_TRANSACTION
 import com.example.splitwise.ui.util.SHOPPING_DATA
 import com.example.splitwise.ui.util.SHOPPING_FILTER_DATA
+import com.example.splitwise.ui.util.TOTAL_SPENDING_CARD
 
 class HomeAdapter(private val context: Context, private val application: Application) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -55,14 +58,14 @@ class HomeAdapter(private val context: Context, private val application: Applica
 
             }
 
-            MONTH -> {
-                val binding = DataBindingUtil.inflate<MonthFilterLayoutBinding>(
+            RECENT_TRANSACTION -> {
+                val binding = DataBindingUtil.inflate<RecentTransactionLayoutBinding>(
                     LayoutInflater.from(parent.context),
-                    R.layout.month_filter_layout,
+                    R.layout.recent_transaction_layout,
                     parent,
                     false
                 )
-                return MonthHolder(binding)
+                return RecentTransactionHolder(binding)
 
             }
 
@@ -75,6 +78,16 @@ class HomeAdapter(private val context: Context, private val application: Applica
                 )
                 return ExpenseFilterHolder(binding)
 
+            }
+
+            TOTAL_SPENDING_CARD -> {
+                val binding = DataBindingUtil.inflate<MonthWiseBalanceCardviewBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.month_wise_balance_cardview,
+                    parent,
+                    false
+                )
+                return MonthWiseProgressHolder(binding)
             }
 
             else -> {
@@ -116,8 +129,9 @@ class HomeAdapter(private val context: Context, private val application: Applica
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         val data = list[position]
         if (list[position].getType() == GROUP_DATA) (holder as GroupDetailHolder).setData(data)
-        else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data)
-        else if (list[position].getType() == MONTH) (holder as MonthHolder).setData(data)
+        else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data, position == list.size - 1)
+        else if (list[position].getType() == RECENT_TRANSACTION) (holder as RecentTransactionHolder).setData(data)
+        else if (list[position].getType() == TOTAL_SPENDING_CARD) (holder as MonthWiseProgressHolder).setData(data)
         else if (list[position].getType() == SHOPPING_FILTER_DATA) (holder as ExpenseFilterHolder).setData(data,expenseFilterCallback!!)
         else (holder as DateHolder).setData(data)
     }

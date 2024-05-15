@@ -77,48 +77,48 @@ open class BaseFragment() : Fragment() {
     }
 
     fun getDate(date: Int, month: Int): String {
-        var today = "$date "
-        today += getMonthName(month)
+        var today = "$date"
+        //today += getMonthName(month)
         return today
     }
 
     fun getMonthName(month: Int): String {
         when (month) {
             Calendar.JANUARY ->
-                return "JANUARY"
+                return "Jan"
 
             Calendar.FEBRUARY ->
-                return "FEBRUARY"
+                return "Feb"
 
             Calendar.MARCH ->
-                return "MARCH"
+                return "Mar"
 
             Calendar.APRIL ->
-                return "APRIL"
+                return "Apr"
 
             Calendar.MAY ->
-                return "MAY"
+                return "May"
 
             Calendar.JUNE ->
-                return "JUNE"
+                return "Jun"
 
             Calendar.JULY ->
-                return "JULY"
+                return "Jul"
 
             Calendar.AUGUST ->
-                return "AUGUST"
+                return "Aug"
 
             Calendar.SEPTEMBER ->
-                return "SEPTEMBER"
+                return "Sep"
 
             Calendar.OCTOBER ->
-                return "OCTOBER"
+                return "Oct"
 
             Calendar.NOVEMBER ->
-                return "NOVEMBER"
+                return "Nov"
 
             Calendar.DECEMBER ->
-                return "DECEMBER"
+                return "Dec"
         }
         return ""
     }

@@ -5,13 +5,20 @@ import com.example.splitwise.R
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
+import com.example.splitwise.ui.util.hide
+import com.example.splitwise.ui.util.show
 
 class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding) :
     RecyclerView.ViewHolder(binding.root) {
-    fun setData(data: Data) {
+    fun setData(data: Data, isLast: Boolean) {
         val newData = data as ShoppingData
         binding.spendingType.text = data.shoppingName
-        binding.totalExpense.text = data.totalAmount
+        binding.totalSum.text = "\u20B9" + data.totalAmount
+        binding.spendingDate.text = "${data.date}-${data.month}-${data.year}"
+        if (isLast)
+            binding.seprator.hide()
+        else
+            binding.seprator.show()
         when (data.shoppingCategory.toUpperCase()) {
             "RENT" -> {
                 binding.groupLogo.setImageResource(R.drawable.home)

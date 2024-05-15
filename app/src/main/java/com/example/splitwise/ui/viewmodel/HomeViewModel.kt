@@ -36,10 +36,11 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
-    fun getExpenseDetail(groupDetailData: GroupDetailData) {
+    fun getExpenseDetail(groupDetailData: GroupDetailData, currMonth: Int, currYear: Int) {
         viewModelScope.launch {
             Log.d("TAGD", "getUserDetail in view model  is called")
-            repository.getUserExpenseDetail(groupDetailData).catch { e ->
+            _expenseDetail.value = UiState.Loading
+            repository.getUserExpenseDetail(groupDetailData,currMonth,currYear).catch { e ->
                 Log.d("TAGD", "error catch in flow ${e.message}")
                 _expenseDetail.value = UiState.Error(e.toString())
             }.collect {

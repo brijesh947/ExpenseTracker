@@ -110,13 +110,12 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@color/ce_low_contrast_fg_light" />
+        android:background="@color/progress_bar_background" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/fragment_home_search_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginEnd="20dp"
         android:clipToPadding="false"
         android:paddingTop="12dp"
         android:paddingBottom="30dp"

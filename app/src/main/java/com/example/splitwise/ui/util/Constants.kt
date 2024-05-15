@@ -6,6 +6,8 @@ val GROUP_DATA = 2
 val SHOPPING_DATA = 3
 val MONTH = 4
 val SHOPPING_FILTER_DATA = 5
+val TOTAL_SPENDING_CARD  = 6
+val RECENT_TRANSACTION  = 7
 
 /*
 * this is shopping category

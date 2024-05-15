@@ -2,12 +2,10 @@ package com.example.splitwise.ui.repository
 
 import android.util.Log
 import com.example.splitwise.data.Data
-import com.example.splitwise.data.DateData
-import com.example.splitwise.data.ExpenseFilterData
 import com.example.splitwise.data.GroupDetailData
-import com.example.splitwise.data.MonthData
+import com.example.splitwise.data.MonthWiseProgressData
+import com.example.splitwise.data.RecentTransactionData
 import com.example.splitwise.data.ShoppingData
-import com.example.splitwise.ui.util.NO_FILTER
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -43,7 +41,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
             awaitClose {  }
         }
     }
-    fun getUserExpenseDetail(groupData: GroupDetailData): Flow<List<Data>> {
+    fun getUserExpenseDetail(groupData: GroupDetailData,currMonth:Int,currYear:Int): Flow<List<Data>> {
         Log.d("TAGD", "getUserDetail in repo is called")
         return callbackFlow {
             val list: MutableList<Data> = mutableListOf()
@@ -51,37 +49,33 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val currCalendar = Calendar.getInstance().apply {
                     timeInMillis = System.currentTimeMillis()
                 }
-                var month = currCalendar.get(Calendar.MONTH)
-                var year = currCalendar.get(Calendar.YEAR)
+                var month: Int
+                var year: Int
                 var date = -1
-                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id).collection("expenseDetail").orderBy("time",Query.Direction.DESCENDING)
+                var totalSum :Long = 0
+                val userRef =
+                    db.collection("users").document(auth.currentUser!!.uid).collection("userDetail")
+                        .document(groupData.id).collection("expenseDetail")
+                        .whereEqualTo("month", getMonthName(currMonth))
+                        .whereEqualTo("year", currYear).orderBy("time", Query.Direction.DESCENDING)
                 userRef.get().addOnSuccessListener { querySnapshot ->
                     for (doc in querySnapshot.documents) {
                         val currTimeInMills  = doc.get("time")
-
                         val calendar = Calendar.getInstance().apply {
                             this.timeInMillis = currTimeInMills as Long
                         }
-                        if (needToAddDMYData(calendar, month, year, date, Calendar.YEAR)) {
-                            year = calendar.get(Calendar.YEAR)
-                            //you can add year wise support here.
-                        }
-                        if (needToAddDMYData(calendar, month, year, date, Calendar.MONTH)) {
-                            month = calendar.get(Calendar.MONTH)
-                            list.add(MonthData("End of ${getMonthName(month)} $year"))
-                        }
-                        if (needToAddDMYData(calendar, month, year, date, Calendar.DATE)) {
-                            date = calendar.get(Calendar.DATE)
-                            list.add(DateData(getDate(date, month), date, month, year))
-                        }
-
+                        year = calendar.get(Calendar.YEAR)
+                        month = calendar.get(Calendar.MONTH)
+                        date = calendar.get(Calendar.DATE)
+                        totalSum+=(doc.get("amount") as String).toLong()
                         Log.d("djkvf", "Date is ${calendar.get(Calendar.DATE)} and Month is ${calendar.get(Calendar.MONTH)+1} and the year is ${calendar.get(Calendar.YEAR)}")
                         val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month,year,"" + date)
                         list.add(tempData)
                     }
-
-                    if (list.isNotEmpty())
-                        list.add(0, ExpenseFilterData(currCalendar.get(Calendar.MONTH), NO_FILTER))
+                    if (list.isNotEmpty()) {
+                        list.add(0, RecentTransactionData(""))
+                        list.add(0, MonthWiseProgressData(50000, totalSum))
+                    }
                     trySend(list)
                 }.addOnFailureListener { exception ->
                     Log.d("TAGD", "exception while reading the firestore data ${exception.message}")

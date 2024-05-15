@@ -4,13 +4,15 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="60dp">
+        android:layout_height="60dp"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginBottom="5dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/logo_card"
             android:layout_width="45dp"
             android:layout_height="45dp"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="5dp"
             android:elevation="0dp"
             app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="7dp"
@@ -29,12 +31,13 @@
         </androidx.cardview.widget.CardView>
 
         <LinearLayout
+            android:id="@+id/shopping_detail"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="@id/logo_card"
-            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/total_sum"
             app:layout_constraintStart_toEndOf="@id/logo_card"
             app:layout_constraintTop_toTopOf="@id/logo_card">
 
@@ -49,14 +52,36 @@
                 app:fontFamily="@font/abc_diatype_medium" />
 
             <TextView
-                android:id="@+id/total_expense"
+                android:id="@+id/spending_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/abc_diatype_regular"
-                android:text="Added Expense will appear here."
-                android:textColor="@color/secondary_txt"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="14-05-2024"
+                android:textColor="@color/primary_txt"
                 android:textSize="14sp"
-                app:fontFamily="@font/abc_diatype_regular" />
+                app:fontFamily="@font/abc_diatype_medium" />
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/total_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="10dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="\u20B9250"
+            android:textColor="@color/pausedColor"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/progress_bar_background"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

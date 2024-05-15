@@ -10,3 +10,9 @@ fun View.show() {
 fun View.hide() {
     visibility = View.GONE
 }
+fun showRupeeString(string: Long): String {
+    return "\u20B9" + string
+}
+fun Int.showRupeeString(string: Int): String {
+    return "\u20B9" + string
+}
