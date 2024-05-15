@@ -18,10 +18,12 @@ import com.example.splitwise.databinding.GroupDetailLayoutBinding
 import com.example.splitwise.databinding.MonthWiseBalanceCardviewBinding
 import com.example.splitwise.databinding.RecentTransactionLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
+import com.example.splitwise.databinding.SwipableMonthDetailLayoutBinding
 import com.example.splitwise.ui.holder.DateHolder
 import com.example.splitwise.ui.holder.ExpenseFilterHolder
 import com.example.splitwise.ui.holder.RecentTransactionHolder
 import com.example.splitwise.ui.holder.MonthWiseProgressHolder
+import com.example.splitwise.ui.holder.SwipableMonthHolder
 import com.example.splitwise.ui.util.GROUP_DATA
 import com.example.splitwise.ui.util.RECENT_TRANSACTION
 import com.example.splitwise.ui.util.SHOPPING_DATA
@@ -81,13 +83,13 @@ class HomeAdapter(private val context: Context, private val application: Applica
             }
 
             TOTAL_SPENDING_CARD -> {
-                val binding = DataBindingUtil.inflate<MonthWiseBalanceCardviewBinding>(
+                val binding = DataBindingUtil.inflate<SwipableMonthDetailLayoutBinding>(
                     LayoutInflater.from(parent.context),
-                    R.layout.month_wise_balance_cardview,
+                    R.layout.swipable_month_detail_layout,
                     parent,
                     false
                 )
-                return MonthWiseProgressHolder(binding)
+                return SwipableMonthHolder(binding,parent.context)
             }
 
             else -> {
@@ -131,7 +133,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
         if (list[position].getType() == GROUP_DATA) (holder as GroupDetailHolder).setData(data)
         else if (list[position].getType() == SHOPPING_DATA) (holder as ShoppingDetailHolder).setData(data, position == list.size - 1)
         else if (list[position].getType() == RECENT_TRANSACTION) (holder as RecentTransactionHolder).setData(data)
-        else if (list[position].getType() == TOTAL_SPENDING_CARD) (holder as MonthWiseProgressHolder).setData(data)
+        else if (list[position].getType() == TOTAL_SPENDING_CARD) (holder as SwipableMonthHolder).setData(data)
         else if (list[position].getType() == SHOPPING_FILTER_DATA) (holder as ExpenseFilterHolder).setData(data,expenseFilterCallback!!)
         else (holder as DateHolder).setData(data)
     }

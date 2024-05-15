@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/featured_matches_at_home_parent"
+        android:layout_width="match_parent"
+        android:background="@color/app_bar_background_2"
+        android:layout_marginBottom="5dp"
+        android:layout_height="120dp">
+
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/featured_month_recycler"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:clipToPadding="false" />
+
+
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="12dp"
+            android:layout_below="@id/featured_month_recycler"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-8dp"
+            android:background="@color/app_bar_background_2"
+            app:tabBackground="@drawable/swipeable_home_dots_indicator"
+            app:tabGravity="center"
+            app:tabIndicatorGravity="center"
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="14dp"
+            app:tabMode="fixed" />
+
+    </RelativeLayout>
+
+
+</layout>
