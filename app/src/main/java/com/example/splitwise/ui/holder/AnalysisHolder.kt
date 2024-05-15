@@ -62,7 +62,7 @@ class AnalysisHolder(val binding: PieChartAnalysisBinding, val context: Context)
             legend.xEntrySpace = 10f
             legend.textColor = context.resources.getColor(R.color.primary_txt)
             legend.textSize = 10f
-            legend.isEnabled = false
+            //legend.isEnabled = false
 
             val mv = CustomMarkerView(context, R.layout.custom_marker_view_layout)
             binding.pieChart.marker = mv

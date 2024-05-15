@@ -8,6 +8,7 @@ import com.example.splitwise.data.Data
 import com.example.splitwise.databinding.PercentageWiseCategoryAnalysisBinding
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
+import com.example.splitwise.ui.util.showRupeeString
 
 class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
@@ -19,7 +20,7 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
         val formattedTotalPercent = String.format("%.1f", totalPercent)
 
         binding.expenseProgress.progress = totalPercent.toInt()
-        binding.totalExpense.text = categoryData.totalExpenseInCategory.toString()
+        binding.totalExpense.text = showRupeeString( categoryData.totalExpenseInCategory.toString())
         binding.categoryPercentage.text = "$formattedTotalPercent%"
         if (isLastItem)
             binding.seprator.hide()

@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.MonthYearPickerDialog
 import com.example.splitwise.MyApplication
 import com.example.splitwise.R
 import com.example.splitwise.data.CategoryAnalysisData
@@ -40,9 +41,6 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
     private var currMonth = -1
     private var currYear = -1
-
-    private val BACKWORD = 10
-    private val FORWORD = 11
 
     private val NO_FILTER = 101
     private val ASCENDING_ORDER = 102
@@ -82,19 +80,16 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
         super.onCreateView(inflater, container, savedInstanceState)
         binding = AnalysisFragmentLayoutBinding.inflate(layoutInflater)
         setCurrentMonth()
-        binding.monthNameFilter.text = getCurrentMonth(currMonth,currYear)
-        binding.backButton.setOnClickListener {
-            getDirectionWiseMonth(BACKWORD)
-        }
-        binding.nextButton.setOnClickListener {
-           getDirectionWiseMonth(FORWORD)
-        }
-
         recyclerView = binding.expenseRecylerview
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
 
-        binding.userGroupName.text = activity.getGroupData().groupName
+        binding.userGroupName.text = getMonthName(currMonth)+ " " + currYear
+
+        binding.monthFilter.setOnClickListener {
+            openMonthSelectorDialog()
+        }
+
         binding.filterButton.setOnClickListener {
             val manageExpenseFilterDialog = BottomSheetDialog(activity, R.style.BottomSheetDialogStyle)
             val manageNotificationsDialogBinding =
@@ -118,7 +113,6 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
             manageNotificationsDialogBinding.descendingOrder.setOnClickListener {
                 currFilter = DESCENDING_ORDER
                 showCheckStatus(currFilter, manageNotificationsDialogBinding)
-
             }
 
             manageExpenseFilterDialog.setOnDismissListener {
@@ -168,27 +162,24 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
     }
 
-    private fun getDirectionWiseMonth(direction: Int) {
-        when (direction) {
-            BACKWORD -> {
-                val prevMonth = getPreviousMonth(currMonth)
-                val prevYear = getPrevYear(currMonth,currYear)
-                currMonth = prevMonth
-                currYear = prevYear
-                binding.monthNameFilter.text = getCurrentMonth(currMonth, currYear)
-                fetchData()
-            }
-
-            FORWORD -> {
-                val nextMonth = getNextMonth(currMonth)
-                val nextYear = getNextYear(currMonth,currYear)
-                currMonth = nextMonth
-                currYear = nextYear
-                binding.monthNameFilter.text = getCurrentMonth(currMonth, currYear)
-                fetchData()
-            }
+    private fun openMonthSelectorDialog() {
+        var calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
         }
+        val pd = MonthYearPickerDialog.newInstance(
+            calendar[Calendar.MONTH] + 1,
+            calendar[Calendar.DAY_OF_MONTH], calendar[Calendar.YEAR]
+        )
+
+        pd.setListener { view, selectedYear, selectedMonth, selectedDay ->
+            currMonth = selectedMonth - 1
+            currYear = selectedYear
+            fetchData()
+            binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
+        }
+        pd.show(requireFragmentManager(), "MonthYearPickerDialog")
     }
+
     private fun setCurrentMonth() {
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis();
@@ -213,7 +204,7 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
                             is UiState.Loading -> {
                                 binding.progressBar.visibility = View.VISIBLE
                                 binding.noElement.visibility = View.GONE
-                                binding.totalSpending.text = "NA"
+                            //    binding.totalSpending.text = "NA"
                                 recyclerView.hide()
                             }
 
@@ -224,18 +215,17 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
                                         recyclerView.show()
                                         binding.noElement.visibility = View.GONE
                                         adapter.setList(it.data as ArrayList<Data>)
-                                        binding.totalSpending.text =
-                                            (it.data[0] as PieChartData).total
+                                    //    binding.totalSpending.text = (it.data[0] as PieChartData).total
                                         list = it.data
                                     } else {
                                         binding.noElement.visibility = View.VISIBLE
-                                        binding.totalSpending.text = "NA"
+                                       // binding.totalSpending.text = "NA"
                                         recyclerView.hide()
                                     }
                                 } else {
                                     binding.noElement.visibility = View.VISIBLE
                                     recyclerView.hide()
-                                    binding.totalSpending.text = "NA"
+                                    //binding.totalSpending.text = "NA"
                                 }
                             }
 
@@ -243,7 +233,7 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
                                 binding.progressBar.visibility = View.GONE
                                 binding.noElement.visibility = View.VISIBLE
                                 recyclerView.hide()
-                                binding.totalSpending.text = "NA"
+                               // binding.totalSpending.text = "NA"
                             }
                         }
                     }
@@ -281,7 +271,6 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
         super.onResume()
         currFilter = NO_FILTER
         fetchData()
-
     }
 
     override fun onPause() {

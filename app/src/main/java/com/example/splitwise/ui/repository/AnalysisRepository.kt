@@ -5,6 +5,7 @@ import com.example.splitwise.data.CategoryAnalysisData
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.PieChartData
+import com.example.splitwise.data.RecentTransactionData
 import com.example.splitwise.ui.util.BEAUTY
 import com.example.splitwise.ui.util.BIKE
 import com.example.splitwise.ui.util.CLOTHING
@@ -60,7 +61,11 @@ class AnalysisRepository @Inject constructor(private val db: FirebaseFirestore, 
                            list.add(CategoryAnalysisData(key,value.toLong(),totalSpending.toLong()))
                         }
                     }
-                    Log.d("ajdkfgb", "list data is ${list.toList().toString()}: ")
+                    Log.d("ajdkfgb", "list data is ${list.toList()}:")
+
+                    if (list.size > 1) {
+                        list.add(1, RecentTransactionData("Category Wise Analysis"))
+                    }
                     trySend(list)
                 }.addOnFailureListener {
                     trySend(list)

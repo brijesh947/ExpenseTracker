@@ -73,7 +73,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         list.add(tempData)
                     }
                     if (list.isNotEmpty()) {
-                        list.add(0, RecentTransactionData(""))
+                        list.add(0, RecentTransactionData("Recent Transaction"))
                         list.add(0, MonthWiseProgressData(50000, totalSum))
                     }
                     trySend(list)

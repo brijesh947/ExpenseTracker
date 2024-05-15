@@ -162,10 +162,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         binding.searchLayout.fragmentHomeSearchTeamEditTxt.clearFocus()
 
         val abc = application.getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
-        abc.hideSoftInputFromWindow(
-            binding.searchLayout.fragmentHomeSearchTeamEditTxt.windowToken,
-            0
-        )
+        abc.hideSoftInputFromWindow(binding.searchLayout.fragmentHomeSearchTeamEditTxt.windowToken, 0)
 
         if (list.isEmpty()) {
             binding.noElement.text = "Add Expenses to show here."
@@ -257,7 +254,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                         if (result) {
                             if (list.isEmpty()) {
                                 list.add(0, data)
-                                list.add(0, RecentTransactionData(""))
+                                list.add(0, RecentTransactionData("Recent Transaction"))
                                 list.add(0, MonthWiseProgressData(50000, data.totalAmount.toLong()))
 
                             } else {
@@ -279,6 +276,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                 dialog.dismiss()
             }
         }
+
         dialog.setContentView(dialogView.root)
         dialog.show()
     }
@@ -363,7 +361,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             currMonth = selectedMonth - 1
             currYear = selectedYear
             fetchData(currMonth, currYear)
-            binding.userGroupName.text = getMonthName(currMonth) +" " + currYear
+            binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
         }
         pd.show(requireFragmentManager(), "MonthYearPickerDialog")
     }

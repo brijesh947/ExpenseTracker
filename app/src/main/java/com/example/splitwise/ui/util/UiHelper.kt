@@ -13,6 +13,6 @@ fun View.hide() {
 fun showRupeeString(string: Long): String {
     return "\u20B9" + string
 }
-fun Int.showRupeeString(string: Int): String {
+fun showRupeeString(string: String): String {
     return "\u20B9" + string
 }

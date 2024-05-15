@@ -72,7 +72,7 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="2500"
-                android:textColor="@color/total_expense_in_chart"
+                android:textColor="@color/text_cta_color"
                 android:textSize="15sp"
                 app:layout_constraintBottom_toTopOf="@id/expense_progress"
                 app:layout_constraintEnd_toEndOf="parent"
