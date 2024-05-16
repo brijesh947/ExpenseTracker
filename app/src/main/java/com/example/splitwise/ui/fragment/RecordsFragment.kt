@@ -9,7 +9,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.view.inputmethod.InputMethodManager
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -53,7 +56,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 
-class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(), ExpenseFilterListener {
+class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(){
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
@@ -168,14 +171,15 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             binding.noElement.text = "Add Expenses to show here."
             binding.noElement.show()
         } else {
-            when (currExpesneFilter) {
-                PREV_MONTH_FILTER -> {
-                    selectedFilter(currExpesneFilter, getPreviousMonth(month))
-                }
-                else -> {
-                    selectedFilter(currExpesneFilter, month)
-                }
-            }
+//            when (currExpesneFilter) {
+//                PREV_MONTH_FILTER -> {
+//                    selectedFilter(currExpesneFilter, getPreviousMonth(month))
+//                }
+//                else -> {
+//                    selectedFilter(currExpesneFilter, month)
+//                }
+//            }
+            adapter.setList(list)
         }
 
     }
@@ -304,20 +308,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
     }
 
-    private fun isDateChange(): Boolean {
-        val calendar = Calendar.getInstance().apply {
-            this.timeInMillis = System.currentTimeMillis()
-        }
-        if (calendar.get(Calendar.DATE) != date)
-            return true
-        if (calendar.get(Calendar.MONTH) != month)
-            return true
-        if (calendar.get(Calendar.YEAR) != year)
-            return true
-
-        return false
-    }
-
     private fun verifyInput(dialogView: AddExpenseLayoutBinding): Boolean {
         if (dialogView.shoppingName.text.isEmpty()) {
             dialogView.shoppingName.error = "Shopping name can't be Empty"
@@ -339,13 +329,45 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
     override fun onResume() {
         super.onResume()
         totalShoppingSum = 0.0
-        adapter.setFilterListener(this)
+
         binding.monthFilter.setOnClickListener {
             openMonthSelectorDialog()
         }
 
         if (!isSearchOpen)
             fetchData(currMonth,currYear)
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val HIDE_THRESHOLD = 20
+            private var scrolledDistance = 0
+            private var controlsVisible = true
+            override fun onScrollStateChanged(@NonNull recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                    // Hide the floating button with animation
+                    binding.addRecordsButton.animate().translationY((binding.addRecordsButton.height + 110).toFloat())
+                        .setInterpolator(AccelerateInterpolator())
+                        .setDuration(300).start()
+                    controlsVisible = false
+                    scrolledDistance = 0
+                } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                    // Show the floating button with animation
+                    binding.addRecordsButton.animate().translationY(0F)
+                        .setInterpolator(DecelerateInterpolator())
+                        .setDuration(300).start()
+                    controlsVisible = true
+                    scrolledDistance = 0
+                }
+                if (controlsVisible && dy > 0 || !controlsVisible && dy < 0) {
+                    scrolledDistance += dy
+                }
+            }
+        })
+
     }
 
     private fun openMonthSelectorDialog() {
@@ -353,13 +375,22 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             timeInMillis = System.currentTimeMillis()
         }
         val pd = MonthYearPickerDialog.newInstance(
-            calendar[Calendar.MONTH] + 1,
-            calendar[Calendar.DAY_OF_MONTH], calendar[Calendar.YEAR]
+            currMonth+1,
+            calendar[Calendar.DAY_OF_MONTH], currYear
         )
 
         pd.setListener { view, selectedYear, selectedMonth, selectedDay ->
             currMonth = selectedMonth - 1
             currYear = selectedYear
+            if (currMonth != calendar.get(Calendar.MONTH) || currYear != calendar.get(Calendar.YEAR)) {
+                binding.addRecordsButton.hide()
+            } else {
+                binding.addRecordsButton.show()
+                binding.addRecordsButton.animate().translationY(0F)
+                    .setInterpolator(DecelerateInterpolator())
+                    .setDuration(300).start()
+            }
+
             fetchData(currMonth, currYear)
             binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
         }
@@ -396,7 +427,11 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                                 adapter.setList(list)
                                 binding.noElement.hide()
                             } else {
-                                binding.noElement.text = "Add Expenses to show here."
+                                binding.noElement.text =
+                                    if (binding.addRecordsButton.visibility == View.VISIBLE)
+                                        "Add Expenses to show here."
+                                    else
+                                        "No Expenses to show here"
                                 binding.noElement.show()
                             }
 
@@ -405,131 +440,13 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
                         else -> {
                             binding.progressBar.hide()
-                            binding.noElement.text = "Add Expenses to show here."
+                            binding.noElement.text = "No Expenses to show here."
                             binding.noElement.show()
                         }
                     }
                 }
             }
         }
-    }
-
-    private fun setExpensesHeadingFilterWise() {
-        when (currExpesneFilter) {
-            NO_FILTER -> {
-                //binding.totalExpenseName.text = "Overall Total Expenses"
-            }
-
-            CURR_MONTH_FILTER -> {
-               // binding.totalExpenseName.text = "Total Expenses in ${getMonthName(month)}"
-            }
-
-            PREV_MONTH_FILTER -> {
-              //  binding.totalExpenseName.text =
-                    "Total Expenses in ${getMonthName(getPreviousMonth(month))}"
-            }
-        }
-    }
-
-    private fun calCulateTotalExpense(list: ArrayList<Data>, month: Int) {
-
-        when (currExpesneFilter) {
-
-            NO_FILTER -> {
-//             //   totalShoppingSum = 0.0
-//                list.forEach { shoppingData ->
-//                    if (shoppingData is ShoppingData)
-//                        totalShoppingSum += shoppingData.totalAmount.toDouble()
-//
-//                }
-               // binding.totalExpense.text = totalShoppingSum.toString()
-                Log.d("CallledFarExpense", " curr filter is $currExpesneFilter and month is $month and total expense is $totalShoppingSum")
-
-            }
-
-            CURR_MONTH_FILTER -> {
-//                totalShoppingSum = 0.0
-//                var currMonth = month
-//                list.forEach { data ->
-//                    if (data is ShoppingData && data.month == currMonth) {
-//                        totalShoppingSum += data.totalAmount.toDouble()
-//                    }
-//                }
-                Log.d("CallledFarExpense", " curr filter is $currExpesneFilter and month is $month and total expense is $totalShoppingSum")
-
-              //  binding.totalExpense.text = totalShoppingSum.toString()
-            }
-
-            PREV_MONTH_FILTER -> {
-//                totalShoppingSum = 0.0
-//                for (index in 0 until list.size) {
-//                    if (list[index] is ShoppingData && (list[index] as ShoppingData).month == month)
-//                        totalShoppingSum += (list[index] as ShoppingData).totalAmount.toDouble()
-//                }
-
-               // binding.totalExpense.text = totalShoppingSum.toString()
-            }
-        }
-
-    }
-
-    override fun selectedFilter(type: Int, month: Int) {
-
-        currExpesneFilter = type;
-        calCulateTotalExpense(list, month)
-        val currList = ArrayList<Data>()
-        setExpensesHeadingFilterWise()
-
-        if (list[0] is ExpenseFilterData) {
-            (list[0] as ExpenseFilterData).filterSelected = type
-            adapter.notifyItemChanged(0)
-        }
-
-        when (type) {
-            CURR_MONTH_FILTER -> {
-                binding.addRecordsButton.show()
-                list.forEach {
-                    if (it is ExpenseFilterData)
-                        currList.add(it)
-                    if (it is DateData && it.month == month) {
-                        currList.add(it)
-                    }
-                    if (it is ShoppingData && it.month == month) {
-                        currList.add(it)
-                    }
-                }
-            }
-
-            PREV_MONTH_FILTER -> {
-
-                binding.addRecordsButton.hide()
-                list.forEach {
-                    if (it is ExpenseFilterData)
-                        currList.add(it)
-
-                    if (it is DateData && it.month == month) {
-                        currList.add(it)
-                    }
-                    if (it is ShoppingData && it.month == month) {
-                        currList.add(it)
-                    }
-                }
-            }
-
-            NO_FILTER -> {
-                binding.addRecordsButton.show()
-                currList.addAll(list)
-            }
-        }
-        adapter.setList(currList)
-        if (currList.size > 1)
-            binding.noElement.hide()
-        else {
-            binding.noElement.text = "No Expense recorded in this month"
-            binding.noElement.show()
-        }
-
-
     }
 
 }

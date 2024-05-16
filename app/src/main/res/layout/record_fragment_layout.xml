@@ -39,11 +39,11 @@
                 android:id="@+id/month_filter"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
                 android:background="@drawable/only_stroke_ce_low_contrast_fg_33dp"
                 android:orientation="horizontal"
                 android:paddingHorizontal="10dp"
                 android:paddingVertical="5dp"
-                android:layout_marginStart="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
@@ -64,11 +64,11 @@
                 <androidx.appcompat.widget.AppCompatImageView
                     android:layout_width="17dp"
                     android:layout_height="17dp"
-                    android:src="@drawable/next"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="6dp"
                     android:padding="2dp"
                     android:rotation="90"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="6dp"/>
+                    android:src="@drawable/next" />
 
             </LinearLayout>
 
@@ -163,14 +163,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/toolbar_parent" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <TextView
         android:id="@+id/add_records_button"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
-        android:layout_marginBottom="32dp"
-        android:scaleType="fitXY"
-        android:src="@drawable/add_button"
+        android:layout_marginBottom="24dp"
+        android:background="@drawable/full_rounded_solid_color_31dp"
+        android:fontFamily="@font/abc_diatype_medium"
+        android:paddingHorizontal="15dp"
+        android:paddingVertical="10dp"
+        android:elevation="5dp"
+        android:text="Add Expense"
+        android:textColor="@color/ce_high_contrast_txt_color_dark"
+        android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
