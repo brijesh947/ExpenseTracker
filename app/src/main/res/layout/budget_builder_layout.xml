@@ -4,28 +4,34 @@
     <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:paddingTop="24dp"
+        android:paddingBottom="12dp">
 
-        android:paddingVertical="24dp">
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/shopping_image"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
+        <TextView
+            android:id="@+id/category_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:src="@drawable/shopping"
-            app:layout_constraintBottom_toBottomOf="@id/shopping_name"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="Category Name"
+            android:textColor="@color/primary_txt"
+            android:textSize="14sp"
+            app:fontFamily="@font/abc_diatype_medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shopping_name" />
+            app:layout_constraintTop_toTopOf="parent" />
+
 
         <EditText
-            android:id="@+id/shopping_name"
+            android:id="@+id/category_name"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/only_stroke_with_7dp_radius"
+            android:clickable="false"
+            android:focusable="false"
             android:fontFamily="@font/abc_diatype_regular"
             android:hint="Enter your spending Detail"
             android:inputType="text"
@@ -35,19 +41,23 @@
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_regular"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/shopping_image"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/shopping_price_image"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/budgets"
-            app:layout_constraintBottom_toBottomOf="@id/shopping_price"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shopping_price" />
+            app:layout_constraintTop_toBottomOf="@id/category_heading" />
+
+
+        <TextView
+            android:id="@+id/budget_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:text="Budget"
+            android:textColor="@color/primary_txt"
+            android:textSize="14sp"
+            app:fontFamily="@font/abc_diatype_medium"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/category_name" />
 
 
         <EditText
@@ -55,11 +65,11 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="20dp"
             android:background="@drawable/only_stroke_with_7dp_radius"
             android:fontFamily="@font/abc_diatype_regular"
-            android:hint="Enter the price here"
+            android:hint="Set your budget here"
             android:inputType="numberDecimal"
             android:padding="15dp"
             android:textColor="@color/primary_txt"
@@ -67,12 +77,11 @@
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_regular"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/shopping_price_image"
-            app:layout_constraintTop_toBottomOf="@id/shopping_name" />
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/budget_heading" />
 
         <TextView
-            android:id="@+id/create_group_button"
+            android:id="@+id/done"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="20dp"
@@ -82,22 +91,13 @@
             android:fontFamily="@font/abc_diatype_medium"
             android:gravity="center"
             android:paddingVertical="15dp"
-            android:text="Add Expenses"
+            android:text="Set Budget"
             android:textColor="@color/primary_txt"
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_medium"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/expense_filter_recyler_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shopping_price" />
 
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
 </layout>

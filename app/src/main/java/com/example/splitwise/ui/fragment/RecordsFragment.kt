@@ -1,6 +1,7 @@
 package com.example.splitwise.ui.fragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
 import android.os.Bundle
 import android.text.Editable
@@ -171,14 +172,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             binding.noElement.text = "Add Expenses to show here."
             binding.noElement.show()
         } else {
-//            when (currExpesneFilter) {
-//                PREV_MONTH_FILTER -> {
-//                    selectedFilter(currExpesneFilter, getPreviousMonth(month))
-//                }
-//                else -> {
-//                    selectedFilter(currExpesneFilter, month)
-//                }
-//            }
             adapter.setList(list)
         }
 
@@ -407,8 +400,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                         is UiState.Loading -> {
                             list = ArrayList()
                             adapter.setList(list)
-//                            binding.totalExpense.text = "No Expenses"
-//                            binding.totalExpense.setTextColor(requireActivity().resources.getColor(R.color.secondary_txt))
                             binding.progressBar.show()
                             binding.noElement.hide()
                         }
@@ -421,8 +412,10 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                             binding.progressBar.visibility = View.GONE
                             if (it.data.isNotEmpty()) {
                                 list = it.data as ArrayList<Data>
-                                if (list[0] is MonthWiseProgressData)
+                                if (list[0] is MonthWiseProgressData) {
                                     totalShoppingSum = (list[0] as MonthWiseProgressData).totalExpense.toDouble()
+                                    (list[0] as MonthWiseProgressData).totalBudget = requireContext().getSharedPreferences("budget", Context.MODE_PRIVATE).getLong("" + currMonth + "_" + currYear, 50000)
+                                }
 
                                 adapter.setList(list)
                                 binding.noElement.hide()

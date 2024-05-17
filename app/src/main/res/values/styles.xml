@@ -9,4 +9,9 @@
         <item name="android:background">@drawable/bottom_sheet_background</item>
     </style>
 
+    <style name="DialogButtonStyle">
+        <item name="android:background">@color/app_bar_background_2</item> <!-- Set your desired background color here -->
+    </style>
+
+
 </resources>

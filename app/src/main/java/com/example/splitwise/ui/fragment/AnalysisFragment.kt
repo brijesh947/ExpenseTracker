@@ -167,8 +167,8 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
             timeInMillis = System.currentTimeMillis()
         }
         val pd = MonthYearPickerDialog.newInstance(
-            calendar[Calendar.MONTH] + 1,
-            calendar[Calendar.DAY_OF_MONTH], calendar[Calendar.YEAR]
+            currMonth+1,
+            calendar[Calendar.DAY_OF_MONTH], currYear
         )
 
         pd.setListener { view, selectedYear, selectedMonth, selectedDay ->

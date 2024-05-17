@@ -79,48 +79,6 @@ class AnalysisRepository @Inject constructor(private val db: FirebaseFirestore, 
         }
     }
 
-    private fun getCategoryType(key: String): Int {
-        when (key) {
-            "MOVIE" ->
-                return MOVIE
 
-            "CLOTHING" ->
-                return CLOTHING
-
-            "BEAUTY" ->
-                return BEAUTY
-
-            "FOOD" ->
-                return FOOD
-
-            "HEALTH" ->
-                return HEALTH
-
-            "RENT" ->
-                return RENT
-
-            "PETROL_PUMP" ->
-                return PETROL_PUMP
-
-            "BIKE" ->
-                return BIKE
-
-            "TRANSPORT" ->
-                return TRANSPORT
-
-            "DONATE" ->
-                return DONATE
-
-            "SPORTS" ->
-                return SPORTS
-
-            "MOBILE" ->
-                return MOBILE
-
-            else ->
-                return SHOPPING_GENERAL
-        }
-
-    }
 
 }

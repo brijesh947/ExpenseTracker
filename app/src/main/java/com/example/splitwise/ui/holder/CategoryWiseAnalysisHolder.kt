@@ -1,6 +1,10 @@
 package com.example.splitwise.ui.holder
 
 import android.content.Context
+import android.graphics.drawable.ClipDrawable
+import android.graphics.drawable.GradientDrawable
+import android.graphics.drawable.LayerDrawable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.R
 import com.example.splitwise.data.CategoryAnalysisData
@@ -19,9 +23,34 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
         val totalPercent = (categoryData.totalExpenseInCategory * 100.0) / categoryData.totalExpense
         val formattedTotalPercent = String.format("%.1f", totalPercent)
 
-        binding.expenseProgress.progress = totalPercent.toInt()
+
         binding.totalExpense.text = showRupeeString( categoryData.totalExpenseInCategory.toString())
         binding.categoryPercentage.text = "$formattedTotalPercent%"
+
+
+        val progressDrawable = binding.expenseProgress.progressDrawable as LayerDrawable
+
+        val progressLayer = progressDrawable.findDrawableByLayerId(android.R.id.progress) as ClipDrawable
+        val progressShape = progressLayer.drawable as GradientDrawable
+
+
+        binding.expenseProgress.progressDrawable = progressDrawable
+
+        if (totalPercent < 5) {
+            binding.totalExpense.setTextColor(context.getColor(R.color.soft_green_color))
+            progressShape.setColor(ContextCompat.getColor(context, R.color.soft_green_color))
+        } else if (totalPercent.toInt() in 5..25) {
+            binding.totalExpense.setTextColor(context.getColor(R.color.purple_500))
+            progressShape.setColor(ContextCompat.getColor(context, R.color.purple_500))
+        } else {
+            binding.totalExpense.setTextColor(context.getColor(R.color.pausedColor))
+            progressShape.setColor(ContextCompat.getColor(context, R.color.pausedColor))
+        }
+
+
+        binding.expenseProgress.progressDrawable = progressDrawable
+        binding.expenseProgress.setProgress(totalPercent.toInt(),true)
+
         if (isLastItem)
             binding.seprator.hide()
         else

@@ -4,21 +4,31 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.BudgetBuilder
 import com.example.splitwise.R
 import com.example.splitwise.data.Data
-import com.example.splitwise.data.PieChartData
+import com.example.splitwise.databinding.CategoryWiseBudgetLayoutBinding
 import com.example.splitwise.databinding.PercentageWiseCategoryAnalysisBinding
 import com.example.splitwise.databinding.PieChartAnalysisBinding
 import com.example.splitwise.databinding.RecentTransactionLayoutBinding
 import com.example.splitwise.ui.holder.AnalysisHolder
+import com.example.splitwise.ui.holder.CWBudgetHolder
 import com.example.splitwise.ui.holder.CategoryWiseAnalysisHolder
 import com.example.splitwise.ui.holder.RecentTransactionHolder
+import com.example.splitwise.ui.util.CURR_BUDGET
 import com.example.splitwise.ui.util.PERCENTAGE_WISE_ANALYSIS
 import com.example.splitwise.ui.util.RECENT_TRANSACTION
 
 class AnalysisAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var list: ArrayList<Data> = ArrayList()
+
+    private lateinit var listener : BudgetBuilder
+
+
+    fun setListener(listener: BudgetBuilder) {
+        this.listener = listener
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
@@ -43,6 +53,16 @@ class AnalysisAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
             }
 
+            CURR_BUDGET -> {
+                val binding = DataBindingUtil.inflate<CategoryWiseBudgetLayoutBinding>(
+                    LayoutInflater.from(parent.context),
+                    R.layout.category_wise_budget_layout,
+                    parent,
+                    false
+                )
+                return CWBudgetHolder(binding, parent.context,listener)
+
+            }
             else -> {
                 val binding = DataBindingUtil.inflate<PieChartAnalysisBinding>(
                     LayoutInflater.from(parent.context),
@@ -75,13 +95,17 @@ class AnalysisAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
     }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
-        if (list[position].getType() == PERCENTAGE_WISE_ANALYSIS) {
-            if (position == list.size - 1)
-                (holder as CategoryWiseAnalysisHolder).setData(list[position], true)
-            else
-                (holder as CategoryWiseAnalysisHolder).setData(list[position], false)
-        } else if (list[position].getType() == RECENT_TRANSACTION)
+        val isLastPosition = position == list.size - 1
+
+        if (list[position].getType() == PERCENTAGE_WISE_ANALYSIS)
+            (holder as CategoryWiseAnalysisHolder).setData(list[position], isLastPosition)
+
+        else if (list[position].getType() == RECENT_TRANSACTION)
             (holder as RecentTransactionHolder).setData(list[position])
+
+        else if (list[position].getType() == CURR_BUDGET)
+            (holder as CWBudgetHolder).setData(list[position], isLastPosition,position)
+
         else
             (holder as AnalysisHolder).setData(list[position])
     }

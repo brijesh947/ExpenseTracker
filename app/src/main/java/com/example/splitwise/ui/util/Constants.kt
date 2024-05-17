@@ -43,6 +43,21 @@ val NO_FILTER = 1003
 * End of Month wise filter in Records Fragment
 * */
 
+/*
+* Analysis Fragment's Constant
+* */
 
 val PIE_CHART = 10001
 val PERCENTAGE_WISE_ANALYSIS = 10002
+
+/*
+* End of Analysis Fragment's Constant
+* */
+
+
+/*
+* Budget Fragment's Constant
+* */
+
+val CURR_BUDGET = 100001
+

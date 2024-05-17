@@ -12,8 +12,10 @@ import com.example.splitwise.ui.fragment.RecordsFragment
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.di.ActivityContext
 import com.example.splitwise.ui.repository.AnalysisRepository
+import com.example.splitwise.ui.repository.BudgetRepository
 import com.example.splitwise.ui.util.ViewModelProviderFactory
 import com.example.splitwise.ui.viewmodel.AnalysisViewModel
+import com.example.splitwise.ui.viewmodel.BudgetViewModel
 import dagger.Module
 import dagger.Provides
 
@@ -40,7 +42,7 @@ class ExpenseDetailActivityModule(private val application: MyApplication, privat
 
     @Provides
     fun getBudgetFragment(): BudgetFragment {
-        return BudgetFragment()
+        return BudgetFragment(application, activity)
     }
 
     @Provides
@@ -59,10 +61,21 @@ class ExpenseDetailActivityModule(private val application: MyApplication, privat
     }
 
     @Provides
+    fun getBudgetRepository(): BudgetRepository {
+        return BudgetRepository(activity)
+    }
+
+    @Provides
     fun provideAnalysisViewModel(repository: AnalysisRepository): AnalysisViewModel {
         return ViewModelProvider(activity,
             ViewModelProviderFactory(AnalysisViewModel::class) { AnalysisViewModel(repository) })[AnalysisViewModel::class.java]
     }
 
+
+    @Provides
+    fun provideBudgetViewModel(repository: AnalysisRepository, budgetRepository: BudgetRepository): BudgetViewModel {
+        return ViewModelProvider(activity,
+            ViewModelProviderFactory(BudgetViewModel::class) { BudgetViewModel(repository, budgetRepository) })[BudgetViewModel::class.java]
+    }
 
 }
