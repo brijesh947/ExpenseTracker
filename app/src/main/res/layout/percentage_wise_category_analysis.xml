@@ -97,7 +97,8 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"
             android:layout_marginBottom=".5dp"
-            android:background="@color/ce_stroke_1_light"
+            android:layout_marginHorizontal="10dp"
+            android:background="@color/progress_bar_background"
             app:layout_constraintBottom_toBottomOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

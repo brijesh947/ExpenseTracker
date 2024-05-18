@@ -162,7 +162,7 @@ open class BaseRepository {
                 return "MOBILE"
 
             else ->
-                return "Other"
+                return "OTHER"
         }
 
     }
