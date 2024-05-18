@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.R
+import com.example.splitwise.UpdateRecordsListener
 import com.example.splitwise.ui.holder.ShoppingDetailHolder
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
@@ -36,6 +37,13 @@ class HomeAdapter(private val context: Context, private val application: Applica
     private var list: List<Data> = ArrayList()
 
     private var expenseFilterCallback: ExpenseFilterListener? = null
+
+    lateinit var updateRecordsListener: UpdateRecordsListener
+
+
+    fun setListener(listener: UpdateRecordsListener){
+        updateRecordsListener = listener
+    }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         when (viewType) {
 
@@ -57,7 +65,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
                     parent,
                     false
                 )
-                return ShoppingDetailHolder(binding)
+                return ShoppingDetailHolder(binding,updateRecordsListener,parent.context)
 
             }
 

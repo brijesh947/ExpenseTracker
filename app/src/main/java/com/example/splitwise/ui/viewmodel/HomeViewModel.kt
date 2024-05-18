@@ -74,6 +74,24 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+    fun updateUserExpenses(data: GroupDetailData, shoppingData: ShoppingData, callback: FirebaseCallback<Boolean>) {
+        viewModelScope.launch {
+            repository.updateExpenseToFirebase(data, shoppingData).catch {
+                callback.isFailed(it.message.toString())
+            }.collect { isAdded ->
+                callback.isSuccess(isAdded)
+            }
+        }
+    }
+    fun deleteUserExpenses(data: GroupDetailData,shoppingData: ShoppingData, callback: FirebaseCallback<Boolean>) {
+        viewModelScope.launch {
+            repository.deleteExpenseToFirebase(data,shoppingData).catch {
+                callback.isFailed(it.message.toString())
+            }.collect { isAdded ->
+                callback.isSuccess(isAdded)
+            }
+        }
+    }
 
     fun updateTotalExpense(data: GroupDetailData, totalExpense: String) {
         Log.d("fghgjkhgdt", "updateTotalExpense: is called $totalExpense")

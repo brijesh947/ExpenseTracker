@@ -3,6 +3,7 @@ package com.example.splitwise.ui.fragment
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.content.res.Resources
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,6 +27,7 @@ import com.example.splitwise.FirebaseCallback
 import com.example.splitwise.MonthYearPickerDialog
 import com.example.splitwise.MyApplication
 import com.example.splitwise.R
+import com.example.splitwise.UpdateRecordsListener
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
 import com.example.splitwise.data.ExpenseCategoryData
@@ -57,7 +59,7 @@ import java.util.Calendar
 import javax.inject.Inject
 
 
-class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(){
+class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(), UpdateRecordsListener{
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
@@ -210,8 +212,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         }
         currMonth = calendar.get(Calendar.MONTH)
         currYear = calendar.get(Calendar.YEAR)
-
-
+        adapter.setListener(this)
         return binding.root
     }
 
@@ -222,6 +223,8 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
     private fun openCreateGroupDialog() {
         val dialogView = AddExpenseLayoutBinding.inflate(layoutInflater)
         val dialog = BottomSheetDialog(requireContext(),R.style.BottomSheetDialogStyle)
+        dialog.behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
+
         var selectedCategory = SHOPPING_GENERAL
         var previousPosition = -1
         categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {
@@ -240,11 +243,26 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         dialogView.expenseFilterRecylerView.layoutManager = GridLayoutManager(requireContext(),2,GridLayoutManager.HORIZONTAL,false)
         dialogView.expenseFilterRecylerView.adapter = categoryAdapter
         categoryAdapter.setList(createCategoryList())
+
+        dialogView.updateAddDeleteParent.hide()
+        dialogView.createGroupButton.show()
+        dialogView.close.setOnClickListener {
+            dialog.dismiss()
+        }
         dialogView.createGroupButton.setOnClickListener {
             if (verifyInput(dialogView)) {
                 binding.noElement.visibility = View.GONE
                 var filter = getFilterType(selectedCategory)
-                val data = ShoppingData("",dialogView.shoppingName.text.toString(),filter,dialogView.shoppingPrice.text.toString(),getNewDate(false).month,getNewDate(false).year,getNewDate(false).date)
+                val data = ShoppingData(
+                    "",
+                    dialogView.shoppingName.text.toString(),
+                    filter,
+                    dialogView.shoppingPrice.text.toString(),
+                    getNewDate(false).month,
+                    getNewDate(false).year,
+                    getNewDate(false).date,
+                    dialogView.descriptionText.text.toString()
+                )
                 totalShoppingSum += data.totalAmount.toDouble()
                 viewModel.addNewUserExpenses(groupData!!, data, object : FirebaseCallback<Boolean> {
                     override fun isSuccess(result: Boolean) {
@@ -440,6 +458,46 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                 }
             }
         }
+    }
+
+    override fun updateRecord(data: ShoppingData, diff: Double, position: Int) {
+        Log.d("8iuhgvghjk", "${data.toString()} and position is $position")
+
+        viewModel.updateUserExpenses(groupData!!, data, object : FirebaseCallback<Boolean> {
+
+            override fun isSuccess(result: Boolean) {
+                Log.d("8iuhgvghjk", "update isSuccess:")
+                adapter.notifyItemChanged(position)
+                totalShoppingSum += diff
+                (list[0] as MonthWiseProgressData).totalExpense = totalShoppingSum.toLong()
+                adapter.notifyItemChanged(0)
+
+            }
+
+            override fun isFailed(reason: String) {
+                Log.d("8iuhgvghjk", "update is Failed $reason")
+            }
+
+        })
+
+    }
+
+    override fun deleteRecord(data: ShoppingData, position: Int) {
+       viewModel.deleteUserExpenses(groupData!!,data,object :FirebaseCallback<Boolean>{
+           override fun isSuccess(result: Boolean) {
+               Log.d("8iuhgvghjk", "update isSuccess:")
+               list.removeAt(position)
+               adapter.notifyItemRemoved(position)
+               totalShoppingSum -= data.totalAmount.toDouble()
+               (list[0] as MonthWiseProgressData).totalExpense = totalShoppingSum.toLong()
+               adapter.notifyItemChanged(0)
+           }
+
+           override fun isFailed(reason: String) {
+               Log.d("8iuhgvghjk", "update is Failed $reason")
+           }
+
+       })
     }
 
 }

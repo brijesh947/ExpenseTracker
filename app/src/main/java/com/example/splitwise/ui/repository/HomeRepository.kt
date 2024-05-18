@@ -68,8 +68,12 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         month = calendar.get(Calendar.MONTH)
                         date = calendar.get(Calendar.DATE)
                         totalSum+=(doc.get("amount") as String).toLong()
+                        var comment = ""
+                        if (doc.contains("comment")) {
+                            comment = "" + doc.get("comment")
+                        }
                         Log.d("djkvf", "Date is ${calendar.get(Calendar.DATE)} and Month is ${calendar.get(Calendar.MONTH)+1} and the year is ${calendar.get(Calendar.YEAR)}")
-                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month,year,"" + date)
+                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month,year,"" + date,comment)
                         list.add(tempData)
                     }
                     if (list.isNotEmpty()) {
@@ -134,7 +138,8 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                     "time" to System.currentTimeMillis(),
                     "date" to calendar.get(Calendar.DATE),
                     "month" to getMonthName(calendar.get(Calendar.MONTH)),
-                    "year" to calendar.get(Calendar.YEAR)
+                    "year" to calendar.get(Calendar.YEAR),
+                    "comment" to expenseData.comment
                 )
                 userRef.add(userDetail).addOnSuccessListener {
                     isGroupAdded = true
@@ -144,6 +149,56 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 }.addOnFailureListener {
                     isGroupAdded = false
                     trySend(isGroupAdded)
+                    Log.d("TAGD", "failed due to ${it.message}")
+                }
+            }
+            awaitClose {  }
+        }
+    }
+    fun updateExpenseToFirebase(groupData: GroupDetailData,expenseData: ShoppingData): Flow<Boolean> {
+        return callbackFlow {
+            var isGroupUpdated: Boolean
+            if (auth.currentUser != null) {
+                val userRef =
+                    db.collection("users").document(auth.currentUser!!.uid).collection("userDetail")
+                        .document(groupData.id).collection("expenseDetail").document(expenseData.id)
+
+
+                val userDetail = hashMapOf<String,Any>(
+                    "name" to expenseData.shoppingName,
+                    "type" to expenseData.shoppingCategory,
+                    "amount" to expenseData.totalAmount,
+                    "comment" to expenseData.comment
+                )
+                userRef.update(userDetail).addOnSuccessListener {
+                    isGroupUpdated = true
+                    trySend(isGroupUpdated)
+                    Log.d("TAGD", "expense added successFully")
+                }.addOnFailureListener {
+                    isGroupUpdated = false
+                    trySend(isGroupUpdated)
+                    Log.d("TAGD", "failed due to ${it.message}")
+                }
+            }
+            awaitClose {  }
+        }
+    }
+    fun deleteExpenseToFirebase(groupData: GroupDetailData,expenseData: ShoppingData): Flow<Boolean> {
+        return callbackFlow {
+            var isGroupUpdated: Boolean
+            if (auth.currentUser != null) {
+                val userRef =
+                    db.collection("users").document(auth.currentUser!!.uid).collection("userDetail")
+                        .document(groupData.id).collection("expenseDetail").document(expenseData.id)
+
+
+                userRef.delete().addOnSuccessListener {
+                    isGroupUpdated = true
+                    trySend(isGroupUpdated)
+                    Log.d("TAGD", "expense added successFully")
+                }.addOnFailureListener {
+                    isGroupUpdated = false
+                    trySend(isGroupUpdated)
                     Log.d("TAGD", "failed due to ${it.message}")
                 }
             }

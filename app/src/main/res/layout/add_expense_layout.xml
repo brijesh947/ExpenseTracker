@@ -5,18 +5,34 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="4dp"
+        android:paddingBottom="20dp">
 
-        android:paddingVertical="24dp">
 
         <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/shopping_image"
+            android:id="@+id/close"
             android:layout_width="32dp"
             android:layout_height="32dp"
+            android:padding="4dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_cross"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <TextView
+            android:id="@+id/shopping_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:src="@drawable/shopping"
-            app:layout_constraintBottom_toBottomOf="@id/shopping_name"
+            android:layout_marginTop="10dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Expense Name*"
+            android:textColor="@color/primary_txt"
+            android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shopping_name" />
+            app:layout_constraintTop_toBottomOf="@id/close" />
 
         <EditText
             android:id="@+id/shopping_name"
@@ -24,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/only_stroke_with_7dp_radius"
             android:fontFamily="@font/abc_diatype_regular"
             android:hint="Enter your spending Detail"
@@ -35,19 +51,22 @@
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_regular"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/shopping_image"
-            app:layout_constraintTop_toTopOf="parent" />
-
-
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/shopping_price_image"
-            android:layout_width="32dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="10dp"
-            android:src="@drawable/budgets"
-            app:layout_constraintBottom_toBottomOf="@id/shopping_price"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/shopping_price" />
+            app:layout_constraintTop_toBottomOf="@id/shopping_text" />
+
+
+        <TextView
+            android:id="@+id/shopping_budget"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Expense Budget*"
+            android:textColor="@color/primary_txt"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_name" />
 
 
         <EditText
@@ -55,8 +74,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="24dp"
-            android:layout_marginEnd="20dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
             android:background="@drawable/only_stroke_with_7dp_radius"
             android:fontFamily="@font/abc_diatype_regular"
             android:hint="Enter the price here"
@@ -67,8 +86,96 @@
             android:textSize="16sp"
             app:fontFamily="@font/abc_diatype_regular"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/shopping_price_image"
-            app:layout_constraintTop_toBottomOf="@id/shopping_name" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_budget" />
+
+
+        <TextView
+            android:id="@+id/comment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Description"
+            android:textColor="@color/primary_txt"
+            android:textSize="15sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/shopping_price" />
+
+        <EditText
+            android:id="@+id/description_text"
+            android:layout_width="0dp"
+            android:layout_height="100dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:background="@drawable/only_stroke_with_7dp_radius"
+            android:fontFamily="@font/abc_diatype_regular"
+            android:gravity="top|start"
+            android:inputType="text"
+            android:padding="15dp"
+            android:textColor="@color/primary_txt"
+            android:textColorHint="@color/secondary_txt"
+            android:textSize="16sp"
+            app:fontFamily="@font/abc_diatype_regular"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/comment" />
+
+
+        <LinearLayout
+            android:id="@+id/update_add_delete_parent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="32dp"
+            android:layout_marginBottom="32dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal"
+            android:visibility="visible"
+            android:weightSum="3"
+
+
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view">
+
+            <TextView
+                android:id="@+id/delete_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.8"
+                android:alpha="0.6"
+                android:background="@drawable/full_rounded_drawable"
+                android:backgroundTint="#bfb10000"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:gravity="center"
+                android:paddingVertical="15dp"
+                android:text="Delete"
+                android:textColor="@color/ce_high_contrast_txt_color_dark"
+                android:textSize="16sp"
+                app:fontFamily="@font/abc_diatype_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view" />
+
+            <TextView
+                android:id="@+id/update_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="15dp"
+                android:layout_weight="1.2"
+                android:background="@drawable/full_rounded_drawable"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:gravity="center"
+                android:paddingVertical="15dp"
+                android:text="Update Expenses"
+                android:textColor="@color/primary_txt"
+                android:textSize="16sp"
+                app:fontFamily="@font/abc_diatype_medium"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view" />
+
+        </LinearLayout>
 
 
         <TextView
@@ -85,6 +192,7 @@
             android:text="Add Expenses"
             android:textColor="@color/primary_txt"
             android:textSize="16sp"
+            android:visibility="gone"
             app:fontFamily="@font/abc_diatype_medium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/expense_filter_recyler_view" />
@@ -96,7 +204,7 @@
             android:layout_marginTop="20dp"
             android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shopping_price" />
+            app:layout_constraintTop_toBottomOf="@id/description_text" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
