@@ -18,6 +18,7 @@
             android:name=".ui.SplitWiseActivity"
             android:exported="true"
             android:label="@string/app_name"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Splitwise">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,10 +30,12 @@
         <activity
             android:name=".ui.HomeActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Home"></activity>
         <activity
             android:name=".ui.ExpenseDetailActivity"
             android:exported="false"
+            android:screenOrientation="portrait"
             android:theme="@style/Theme.Home"></activity>
     </application>
 
