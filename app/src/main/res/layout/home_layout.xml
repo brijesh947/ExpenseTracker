@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout>
+<layout xmlns:tool="http://schemas.android.com/tools">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -41,7 +41,7 @@
                         android:layout_marginStart="20dp"
                         android:layout_marginTop="10dp"
                         android:fontFamily="@font/abc_diatype_medium"
-                        android:text="Brijesh Dubey"
+                        tool:text="Brijesh Dubey"
                         android:textColor="@color/primary_txt"
                         android:textSize="20sp" />
 
@@ -55,7 +55,7 @@
                         android:layout_marginTop="2dp"
                         android:alpha="0.8"
                         android:fontFamily="@font/abc_diatype_regular"
-                        android:text="testerdubey@gmail.com"
+                        tool:text="testerdubey@gmail.com"
                         android:textColor="@color/secondary_txt"
                         android:textSize="16sp" />
 
@@ -68,16 +68,6 @@
                         android:layout_marginTop="10dp"
                         android:layout_marginEnd="20dp"
                         android:src="@drawable/ic_user_light" />
-
-                    <!--                    <View-->
-                    <!--                        android:id="@+id/seprator"-->
-                    <!--                        android:layout_width="match_parent"-->
-                    <!--                        android:layout_height="1dp"-->
-                    <!--                        android:layout_below="@id/user_image"-->
-                    <!--                        android:layout_alignParentStart="true"-->
-                    <!--                        android:layout_marginTop="20dp"-->
-                    <!--                        android:alpha="0.15"-->
-                    <!--                        android:background="@color/secondary_txt" />-->
 
                 </RelativeLayout>
 

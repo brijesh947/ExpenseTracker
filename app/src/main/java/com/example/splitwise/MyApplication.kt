@@ -5,14 +5,14 @@ import com.example.splitwise.ui.di.component.ApplicationComponent
 import com.example.splitwise.ui.di.component.DaggerApplicationComponent
 import com.example.splitwise.ui.di.module.ApplicationModule
 import com.google.firebase.FirebaseApp
-import dagger.internal.DaggerCollections
+import javax.inject.Inject
 
-class MyApplication : Application() {
+class MyApplication @Inject constructor() : Application() {
     lateinit var applicationComponent: ApplicationComponent
     override fun onCreate() {
         FirebaseApp.initializeApp(this)
-        super.onCreate()
         injectDaggerDependencies()
+        super.onCreate()
     }
 
     private fun injectDaggerDependencies() {

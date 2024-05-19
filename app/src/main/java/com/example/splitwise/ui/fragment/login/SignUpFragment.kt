@@ -13,6 +13,7 @@ import com.example.splitwise.databinding.SignUpLayoutBinding
 import com.example.splitwise.ui.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 class SignUpFragment : Fragment() {
@@ -35,15 +36,39 @@ class SignUpFragment : Fragment() {
                 inputPassword = binding.password.text.toString().trim()
                 saveUserDetail()
                 Log.d("Brijesh", "inputEmail is  $inputEmail and input pasword $inputPassword")
-                auth.createUserWithEmailAndPassword(inputEmail, inputPassword).addOnCompleteListener {
-                    if (it.isSuccessful) {
-                        Log.d("Brijesh", "login is succesFull")
-                        val intent = Intent(requireActivity(), HomeActivity::class.java)
-                        requireContext().startActivity(intent)
-                    }
-                    binding.progressBar.visibility = View.GONE
+                auth.createUserWithEmailAndPassword(inputEmail, inputPassword)
+                    .addOnCompleteListener {
+                        if (it.isSuccessful) {
+                            Log.d("Brijesh", "login is succesFull")
+                            val user = auth.currentUser
+                            if (user != null) {
+                                val userName = binding.name.text.toString()
+                                val userEmail = inputEmail
+                                val userPassword = inputPassword
 
-                }.addOnFailureListener {
+                                val userMap = hashMapOf(
+                                    "name" to userName,
+                                    "email" to userEmail,
+                                    "password" to userPassword
+                                )
+                                FirebaseFirestore.getInstance().collection("users")
+                                    .document(user.uid)
+                                    .collection("userPersonalDetail")
+                                    .add(userMap)
+                                    .addOnSuccessListener {
+                                        Log.d("TAG", "User data saved in Firestore")
+                                        binding.progressBar.visibility = View.GONE
+                                        val intent = Intent(requireActivity(), HomeActivity::class.java)
+                                        requireContext().startActivity(intent)
+                                    }
+                                    .addOnFailureListener { e ->
+                                        binding.progressBar.visibility = View.GONE
+                                        val intent = Intent(requireActivity(), HomeActivity::class.java)
+                                        requireContext().startActivity(intent)
+                                    }
+                            }
+                        }
+                    }.addOnFailureListener {
                     Log.d("Brijesh", "Authentication Failed Reason is : ${it}")
                     binding.progressBar.visibility = View.GONE
                 }

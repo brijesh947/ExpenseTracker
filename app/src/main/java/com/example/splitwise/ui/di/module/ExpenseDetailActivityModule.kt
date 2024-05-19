@@ -11,6 +11,7 @@ import com.example.splitwise.ui.AnalysisAdapter
 import com.example.splitwise.ui.fragment.RecordsFragment
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.di.ActivityContext
+import com.example.splitwise.ui.di.ApplicationContext
 import com.example.splitwise.ui.repository.AnalysisRepository
 import com.example.splitwise.ui.repository.BudgetRepository
 import com.example.splitwise.ui.util.ViewModelProviderFactory
@@ -28,6 +29,13 @@ class ExpenseDetailActivityModule(private val application: MyApplication, privat
     fun getContext(): Context {
         return activity
     }
+
+    @ApplicationContext
+    @Provides
+    fun provideApplicationContext(): MyApplication {
+        return application
+    }
+
 
 
     @Provides

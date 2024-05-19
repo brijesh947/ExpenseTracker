@@ -12,6 +12,7 @@ import com.example.splitwise.ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -33,6 +34,19 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                     _groupDetail.value = UiState.Error("User Detail is Empty")
                 else
                     _groupDetail.value = UiState.Success(it)
+            }
+        }
+    }
+
+    fun getUserPersonalDetail(callback: FirebaseCallback<List<String>>) {
+        viewModelScope.launch {
+            repository.getUserPersonalDetail().catch {
+                callback.isFailed(it.message!!)
+            }.collect {
+                if (it.isEmpty())
+                    callback.isFailed("List is Empty")
+                else
+                    callback.isSuccess(it)
             }
         }
     }

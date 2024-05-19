@@ -1,6 +1,9 @@
 package com.example.splitwise.ui.repository
 
+import android.content.Context
 import android.util.Log
+import androidx.core.content.ContentProviderCompat.requireContext
+import com.example.splitwise.MyApplication
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.MonthWiseProgressData
@@ -17,7 +20,7 @@ import javax.inject.Inject
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
-class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth) : BaseRepository() {
+class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth,private val application:MyApplication) : BaseRepository() {
     fun getUserDetail(): Flow<List<GroupDetailData>> {
         Log.d("TAGD", "getUserDetail in repo is called")
         return callbackFlow {
@@ -39,6 +42,31 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 trySend(list)
             }
             awaitClose {  }
+        }
+    }
+
+    fun getUserPersonalDetail(): Flow<List<String>> {
+
+        return callbackFlow {
+            val list: MutableList<String> = mutableListOf()
+            if (auth.currentUser != null) {
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userPersonalDetail")
+
+                userRef.get().addOnSuccessListener { querySnapshot ->
+                    for (doc in querySnapshot.documents) {
+                        list.add("" + doc.get("name"))
+                        list.add("" + doc.get("email"))
+                        list.add("" + doc.get("password"))
+                    }
+                    Log.d("wkhrl", "getUserPersonalDetail: is success and list is ${list.toList()}")
+                    trySend(list)
+                }.addOnFailureListener {
+
+                    Log.d("wkhrl", "getUserPersonalDetail: is failed and the reason is ${it.message}")
+                    trySend(list)
+                }
+            }
+            awaitClose { }
         }
     }
     fun getUserExpenseDetail(groupData: GroupDetailData,currMonth:Int,currYear:Int): Flow<List<Data>> {

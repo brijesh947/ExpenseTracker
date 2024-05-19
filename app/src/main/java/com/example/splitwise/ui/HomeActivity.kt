@@ -69,9 +69,21 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setUserNameAndEmail() {
-        val pref = this.getSharedPreferences("user_detail",Context.MODE_PRIVATE)
-        binding.userName.text =  pref.getString("name","NA")
-        binding.userEmail.text =  pref.getString("email","NA")
+        val pref = this.getSharedPreferences("user_detail", Context.MODE_PRIVATE)
+        viewModel.getUserPersonalDetail(object : FirebaseCallback<List<String>> {
+
+            override fun isSuccess(result: List<String>) {
+                if (result.isNotEmpty()) {
+                    binding.userName.text = result[0]
+                    binding.userEmail.text = result[1]
+                }
+            }
+
+            override fun isFailed(reason: String) {
+                binding.userName.text = pref.getString("name", "User")
+                binding.userEmail.text = pref.getString("email", "No email found")
+            }
+        })
     }
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
