@@ -1,6 +1,7 @@
 package com.example.splitwise.ui
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Path
@@ -11,8 +12,12 @@ import android.os.Bundle
 import android.text.TextPaint
 import android.util.Log
 import android.util.TypedValue
+import android.view.LayoutInflater
 import android.view.WindowManager
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
+import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
@@ -25,6 +30,7 @@ import com.example.splitwise.MyApplication
 import com.example.splitwise.R
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.CreateGroupBinding
+import com.example.splitwise.databinding.DeleteGroupAlertDialogBinding
 import com.example.splitwise.databinding.HomeLayoutBinding
 import com.example.splitwise.ui.di.component.DaggerHomeActivityComponent
 import com.example.splitwise.ui.di.module.HomeActivityModule
@@ -66,6 +72,42 @@ class HomeActivity : AppCompatActivity() {
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
+        setScrollListener()
+
+    }
+
+    private fun setScrollListener() {
+
+        recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            private val HIDE_THRESHOLD = 20
+            private var scrolledDistance = 0
+            private var controlsVisible = true
+            override fun onScrollStateChanged(@NonNull recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+            }
+
+            override fun onScrolled(@NonNull recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (scrolledDistance > HIDE_THRESHOLD && controlsVisible) {
+                    // Hide the floating button with animation
+                    binding.createGroup.animate().translationY((binding.createGroup.height + 110).toFloat())
+                        .setInterpolator(AccelerateInterpolator())
+                        .setDuration(300).start()
+                    controlsVisible = false
+                    scrolledDistance = 0
+                } else if (scrolledDistance < -HIDE_THRESHOLD && !controlsVisible) {
+                    // Show the floating button with animation
+                    binding.createGroup.animate().translationY(0F)
+                        .setInterpolator(DecelerateInterpolator())
+                        .setDuration(300).start()
+                    controlsVisible = true
+                    scrolledDistance = 0
+                }
+                if (controlsVisible && dy > 0 || !controlsVisible && dy < 0) {
+                    scrolledDistance += dy
+                }
+            }
+        })
     }
 
     private fun setUserNameAndEmail() {
@@ -93,31 +135,14 @@ class HomeActivity : AppCompatActivity() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
             val position = viewHolder.adapterPosition
-            viewModel.deleteGroupFromFirebase(list[position], object : FirebaseCallback<Boolean> {
-                    override fun isSuccess(result: Boolean) {
-                        Log.d("bghjgkj", "delete item is success $result")
-                        if (result) {
-                            list.removeAt(position)
-                            adapter.notifyItemRemoved(position)
-                        } else
-                            showError("Error while deleting the data")
-                        if (list.isEmpty()) {
-                            binding.noGroup.show()
-                        }
-                    }
-
-                    override fun isFailed(reason: String) {
-                        showError(reason)
-                    }
-
-                })
+            openAlertDialog(position)
         }
 
         override fun onChildDraw(canvas: Canvas, recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, dX: Float, dY: Float, actionState: Int, isCurrentlyActive: Boolean) {
             if ( actionState != ItemTouchHelper.ACTION_STATE_SWIPE ) return
             if (dX > 0) {
 
-                val radius = 8f * resources.displayMetrics.density // Set the corner radius here
+                val radius = 17f * resources.displayMetrics.density // Set the corner radius here
 
                 val clipPath = Path().apply {
                     addRoundRect(
@@ -135,7 +160,7 @@ class HomeActivity : AppCompatActivity() {
 
                 canvas.clipPath(clipPath)
 
-                val background = ColorDrawable(resources.getColor(R.color.group_delete))
+                val background = ColorDrawable(resources.getColor(R.color.pausedColor))
                 background.setBounds(
                     viewHolder.itemView.left,
                     viewHolder.itemView.top,
@@ -154,7 +179,7 @@ class HomeActivity : AppCompatActivity() {
                 canvas.drawText("Delete", viewHolder.itemView.left + (23 * (resources.displayMetrics.density.toInt())).toFloat() , (textTop-2).toFloat(), textPaint)
 
             } else {
-                val radius = 8f * resources.displayMetrics.density // Set the corner radius here
+                val radius = 17f * resources.displayMetrics.density // Set the corner radius here
 
                 val clipPath = Path().apply {
                     addRoundRect(
@@ -172,7 +197,7 @@ class HomeActivity : AppCompatActivity() {
 
                 canvas.clipPath(clipPath)
 
-                val background = ColorDrawable(resources.getColor(R.color.group_delete))
+                val background = ColorDrawable(resources.getColor(R.color.pausedColor))
                 background.setBounds(
                     viewHolder.itemView.right + dX.toInt(),
                     viewHolder.itemView.top,
@@ -193,6 +218,44 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
+    private fun openAlertDialog(position: Int) {
+        val view = DeleteGroupAlertDialogBinding.inflate(layoutInflater)
+
+        val builder = AlertDialog.Builder(this).setView(view.root)
+        val dialog = builder.create()
+
+        dialog.setCancelable(false)
+
+        view.positiveButton.setOnClickListener {
+            adapter.notifyItemChanged(position)
+            dialog.dismiss()
+        }
+
+        view.negativeButton.setOnClickListener {
+
+            viewModel.deleteGroupFromFirebase(list[position], object : FirebaseCallback<Boolean> {
+                override fun isSuccess(result: Boolean) {
+                    Log.d("bghjgkj", "delete item is success $result")
+                    if (result) {
+                        list.removeAt(position)
+                        adapter.notifyItemRemoved(position)
+                    } else
+                        showError("Error while deleting the data")
+                    if (list.isEmpty()) {
+                        binding.noGroup.show()
+                    }
+                }
+
+                override fun isFailed(reason: String) {
+                    showError(reason)
+                }
+
+            })
+            dialog.dismiss()
+        }
+
+        dialog.show()
+    }
 
 
     private fun injectDependencies() {
@@ -254,7 +317,19 @@ class HomeActivity : AppCompatActivity() {
         val dialog = BottomSheetDialog(this)
         dialogView.createGroupButton.setOnClickListener {
              if(verifyInput(dialogView)){
-                 val data = GroupDetailData("0",dialogView.groupName.text.toString().trim(),"Home","till now No Expenses")
+
+                 var group = ""
+                 group = if (dialogView.createGroupParent.groupType1.isChecked)
+                     "Flatmates"
+                 else if (dialogView.createGroupParent.groupType2.isChecked)
+                     "Home"
+                 else if (dialogView.createGroupParent.groupType3.isChecked)
+                     "Couple"
+                 else
+                     "Other"
+
+
+                 val data = GroupDetailData("0",dialogView.groupName.text.toString().trim(),group,"No spending to display here")
                  viewModel.addNewUserGroup(data, object : FirebaseCallback<Boolean> {
                      override fun isSuccess(result: Boolean) {
                          if (result) {

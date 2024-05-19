@@ -29,7 +29,11 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").orderBy("time",Query.Direction.DESCENDING)
                 userRef.get().addOnSuccessListener { querySnapshot ->
                     for (doc in querySnapshot.documents) {
-                        val tempData = GroupDetailData(doc.id,"" + doc.get("group_name"), "Home", "" + doc.get("total_expense"))
+                        var group = "Home"
+                        if (doc.contains("type"))
+                            group = "" + doc.get("type")
+
+                        val tempData = GroupDetailData(doc.id,"" + doc.get("group_name"), group, "" + doc.get("total_expense"))
                         list.add(tempData)
                     }
                     trySend(list)
@@ -133,6 +137,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userDetail = hashMapOf(
                     "group_name" to groupData.groupName,
                     "total_expense" to groupData.totalExpense,
+                    "type" to groupData.groupType,
                     "time" to System.currentTimeMillis()
                 )
                 userRef.add(userDetail).addOnSuccessListener {

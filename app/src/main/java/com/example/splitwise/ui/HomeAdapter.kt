@@ -151,10 +151,29 @@ class HomeAdapter(private val context: Context, private val application: Applica
         fun setData(data: Data) {
             val newData = data as GroupDetailData
             binding.groupName.text = data.groupName
-            if (data.totalExpense == "till now No Expenses")
+
+            when (newData.groupType) {
+                "Flatmates" -> {
+                    binding.groupLogo.setImageResource(R.drawable.flatemates)
+                }
+
+                "Home" -> {
+                    binding.groupLogo.setImageResource(R.drawable.home)
+                }
+
+                "Couple" -> {
+                    binding.groupLogo.setImageResource(R.drawable.couple_group_logo)
+                }
+
+                else -> {
+                    binding.groupLogo.setImageResource(R.drawable.other_group_logo)
+                }
+
+            }
+            if (data.totalExpense == "No spending to display here")
                 binding.totalExpense.text = data.totalExpense
             else
-                binding.totalExpense.text = "This Month's Expenses " + showRupeeString(data.totalExpense)
+                binding.totalExpense.text = "Total expenses: " + showRupeeString(data.totalExpense)
             binding.root.setOnClickListener {
                 val intent = Intent(context, ExpenseDetailActivity::class.java)
                 intent.putExtra("name",data.groupName)
