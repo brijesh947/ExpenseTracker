@@ -118,6 +118,7 @@ class HomeActivity : AppCompatActivity() {
                 if (result.isNotEmpty()) {
                     binding.userName.text = result[0]
                     binding.userEmail.text = result[1]
+                    binding.userImage.text = result[0][0].toString()
                 }
             }
 

@@ -10,6 +10,8 @@ import com.example.splitwise.R
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.MonthWiseProgressData
 import com.example.splitwise.databinding.MonthWiseBalanceCardviewBinding
+import com.example.splitwise.ui.util.hide
+import com.example.splitwise.ui.util.show
 import com.example.splitwise.ui.util.showRupeeString
 
 class MonthWiseProgressHolder(val binding: MonthWiseBalanceCardviewBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
@@ -18,8 +20,7 @@ class MonthWiseProgressHolder(val binding: MonthWiseBalanceCardviewBinding, val 
         val monthWiseData = data as MonthWiseProgressData
         if (position == 0) {
             binding.balanceText.text = "Available Balance"
-            binding.balanceNumber.text =
-                showRupeeString(monthWiseData.totalBudget - monthWiseData.totalExpense)
+            binding.balanceNumber.text = showRupeeString(monthWiseData.totalBudget - monthWiseData.totalExpense)
             val totalPercent =
                 ((monthWiseData.totalBudget - monthWiseData.totalExpense) * 100.0) / monthWiseData.totalBudget
             val formattedTotalPercent = String.format("%.1f", totalPercent)
@@ -38,9 +39,16 @@ class MonthWiseProgressHolder(val binding: MonthWiseBalanceCardviewBinding, val 
                 binding.balanceNumber.setTextColor(context.getColor(R.color.pausedColor))
             }
 
+
             binding.expenseProgress.progressDrawable = progressDrawable
 
-            binding.expenseProgress.progress = totalPercent.toInt()
+            if (monthWiseData.totalExpense >= monthWiseData.totalBudget) {
+                binding.expenseProgress.progress = 100
+                binding.limit.show()
+            } else {
+                binding.expenseProgress.progress = totalPercent.toInt()
+                binding.limit.hide()
+            }
         } else {
             binding.balanceText.text = "Total Expense"
             binding.balanceNumber.text = showRupeeString(monthWiseData.totalExpense)
@@ -62,6 +70,10 @@ class MonthWiseProgressHolder(val binding: MonthWiseBalanceCardviewBinding, val 
                 binding.balanceNumber.setTextColor(context.getColor(R.color.pausedColor))
             }
             binding.expenseProgress.progressDrawable = progressDrawable
+            if (totalPercent >= 100) {
+                binding.limit.show()
+            } else
+                binding.limit.hide()
             binding.expenseProgress.progress = totalPercent.toInt()
         }
 
