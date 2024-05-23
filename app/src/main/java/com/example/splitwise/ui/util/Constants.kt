@@ -49,6 +49,7 @@ const val NO_FILTER = 1003
 
 const val PIE_CHART = 10001
 const val PERCENTAGE_WISE_ANALYSIS = 10002
+const val TIME_WISE_CATEGORY_DATA = 10003
 
 /*
 * End of Analysis Fragment's Constant

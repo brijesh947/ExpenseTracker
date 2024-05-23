@@ -31,7 +31,7 @@ class BudgetRepository @Inject constructor(private val context: Context) : BaseR
                 for (index in 101..113) {
                     val key = getCategoryType(index)
                     if (pieDataMap.containsKey(key = key))
-                        list.add(CurrBudgetData(key, sharePref.getLong(("" + month + "_" + year + "_" + key), categoryBudget), pieDataMap[key]!!))
+                        list.add(CurrBudgetData(key, sharePref.getLong(("" + month + "_" + year + "_" + key), categoryBudget), getTotalExpense(pieDataMap[key]!!)))
                     else
                         list.add(CurrBudgetData(key, sharePref.getLong(("" + month + "_" + year + "_" + key), categoryBudget), 0.0))
                 }
@@ -52,6 +52,14 @@ class BudgetRepository @Inject constructor(private val context: Context) : BaseR
 
 
         }
+    }
+
+    private fun getTotalExpense(list: List<Pair<Long, Double>>): Double {
+        var expense = 0.0
+        for (item in list) {
+            expense += item.second
+        }
+        return expense
     }
 
 }

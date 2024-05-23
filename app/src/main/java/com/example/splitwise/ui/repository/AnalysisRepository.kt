@@ -43,22 +43,32 @@ class AnalysisRepository @Inject constructor(private val db: FirebaseFirestore, 
 
                 userRef.get().addOnSuccessListener { snapShot ->
                     snapShot?.let {
-                        val spending: HashMap<String, Double> = hashMapOf()
+                        val spending: HashMap<String, List<Pair<Long, Double>>> = hashMapOf()
                         var totalSpending = 0.0
+
                         for (doc in it.documents) {
-                            val key = "" + doc.get("type")
-                            if (spending.containsKey(key.toUpperCase()))
-                                spending[key.toUpperCase()] = spending[key.toUpperCase()]!! + ("" + doc.get("amount")).toDouble()
-                            else
-                                spending[key.toUpperCase()] = ("" + doc.get("amount")).toDouble()
-                            totalSpending += ("" + doc.get("amount")).toDouble()
+                            val key = ("" + doc.get("type")).toUpperCase()
+                            val time = ("" + doc.get("time")).toLong()
+                            val amount = ("" + doc.get("amount")).toDouble()
+                            val pair = Pair(time, amount)
+
+                            if (spending.containsKey(key)) {
+                                val updatedList = spending[key]?.toMutableList()
+                                updatedList?.add(pair)
+                                spending[key] = updatedList ?: listOf(pair)
+                            } else {
+                                spending[key] = listOf(pair)
+                            }
+
+                            totalSpending += amount
                         }
+
 
                         val pieData = PieChartData(spending, totalSpending.toString())
 
                         list.add(pieData)
                         for ((key, value) in pieData.listMap) {
-                           list.add(CategoryAnalysisData(key,value.toLong(),totalSpending.toLong()))
+                           list.add(CategoryAnalysisData(key,value,totalSpending.toLong()))
                         }
                     }
                     Log.d("ajdkfgb", "list data is ${list.toList()}:")

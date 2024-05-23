@@ -298,16 +298,13 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
         return when (currFilter) {
             ASCENDING_ORDER -> {
-                (o1.totalExpenseInCategory - o2.totalExpenseInCategory).toInt()
+                (o1.finalExpenseInCategory - o2.finalExpenseInCategory).toInt()
             }
-
             DESCENDING_ORDER -> {
-                (o2.totalExpenseInCategory - o1.totalExpenseInCategory).toInt()
+                (o2.finalExpenseInCategory - o1.finalExpenseInCategory).toInt()
             }
-
             else ->
                 0
-
         }
     }
 }

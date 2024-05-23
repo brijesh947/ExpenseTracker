@@ -49,7 +49,7 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
         val newData = data as ShoppingData
         binding.spendingType.text = data.shoppingName
         binding.totalSum.text = "\u20B9" + data.totalAmount
-        binding.spendingDate.text = "${data.date}-${data.month}-${data.year}"
+        binding.spendingDate.text = "${data.date}-${data.month +1}-${data.year}"
         if (isLast)
             binding.seprator.hide()
         else

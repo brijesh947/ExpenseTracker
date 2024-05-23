@@ -1,30 +1,48 @@
 package com.example.splitwise.ui.holder
 
 import android.content.Context
+import android.content.res.Resources
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
+import android.view.LayoutInflater
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewbinding.ViewBinding
 import com.example.splitwise.R
 import com.example.splitwise.data.CategoryAnalysisData
 import com.example.splitwise.data.Data
+import com.example.splitwise.data.TimeWiseCategoryData
+import com.example.splitwise.databinding.CategoryWiseRecordsLayoutBinding
 import com.example.splitwise.databinding.PercentageWiseCategoryAnalysisBinding
+import com.example.splitwise.ui.TimeWiseCategoryAdapter
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
 import com.example.splitwise.ui.util.showRupeeString
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.util.Calendar
 
 class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
+
+    private var month = -1;
+    private var year = -1;
     fun setData(data: Data,isLastItem:Boolean) {
 
         val categoryData = data as CategoryAnalysisData
         binding.spendingType.text = categoryData.categoryName
-        val totalPercent = (categoryData.totalExpenseInCategory * 100.0) / categoryData.totalExpense
+        var totalCategoryExpense = 0.0
+        for (item in categoryData.totalExpenseInCategory) {
+            totalCategoryExpense += item.second
+        }
+        categoryData.finalExpenseInCategory = totalCategoryExpense
+
+        val totalPercent = (totalCategoryExpense * 100.0) / categoryData.totalExpense
         val formattedTotalPercent = String.format("%.1f", totalPercent)
 
 
-        binding.totalExpense.text = showRupeeString( categoryData.totalExpenseInCategory.toString())
+        binding.totalExpense.text = showRupeeString(totalCategoryExpense.toLong().toString())
         binding.categoryPercentage.text = "$formattedTotalPercent%"
 
 
@@ -47,6 +65,10 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
             progressShape.setColor(ContextCompat.getColor(context, R.color.pausedColor))
         }
 
+        binding.root.setOnClickListener {
+            openTotalRecordsDialog(categoryData)
+        }
+
 
         binding.expenseProgress.progressDrawable = progressDrawable
         binding.expenseProgress.setProgress(totalPercent.toInt(),true)
@@ -55,51 +77,163 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
             binding.seprator.hide()
         else
             binding.seprator.show()
-        setImageIcon(categoryData)
+        setImageIcon(categoryData, binding)
 
     }
 
-    private fun setImageIcon(categoryData: CategoryAnalysisData) {
+    private fun openTotalRecordsDialog(categoryData: CategoryAnalysisData) {
+        val dialogView = CategoryWiseRecordsLayoutBinding.inflate(LayoutInflater.from(context))
+        val dialog = BottomSheetDialog(context,R.style.BottomSheetDialogStyle)
+//        dialog.behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
+
+        dialogView.categoryName.text = categoryData.categoryName
+        dialogView.closeButton.setOnClickListener {
+            dialog.dismiss()
+        }
+
+
+
+        val list: ArrayList<Data> = createData(categoryData)
+
+        setMonthAndYear((list[0] as TimeWiseCategoryData).time)
+        val adapter = TimeWiseCategoryAdapter()
+
+        val pref = context.getSharedPreferences("budget",Context.MODE_PRIVATE)
+
+        val budget = pref.getLong("" + month + "_" + year + "_" + categoryData.categoryName,10000)
+
+        dialogView.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
+        dialogView.recyclerView.adapter = adapter
+        adapter.setList(list)
+        dialogView.spent.text = showRupeeString(categoryData.finalExpenseInCategory.toInt().toString())
+        dialogView.remaining.text = showRupeeString((budget - categoryData.finalExpenseInCategory.toLong()).toString())
+        dialogView.limit.text = showRupeeString(budget)
+        setImageIcon(categoryData,dialogView)
+        dialog.setContentView(dialogView.root)
+        dialog.show()
+
+    }
+
+    private fun setMonthAndYear(time: Long) {
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = time
+        }
+        month = calendar.get(Calendar.MONTH)
+        year = calendar.get(Calendar.YEAR)
+    }
+
+    private fun createData(categoryData: CategoryAnalysisData): ArrayList<Data> {
+        val list: ArrayList<Data> = ArrayList()
+        for (item in categoryData.totalExpenseInCategory) {
+            list.add(TimeWiseCategoryData(item.first, item.second))
+        }
+        return list
+    }
+
+    private fun setImageIcon(categoryData: CategoryAnalysisData, binding: ViewBinding) {
 
         when (categoryData.categoryName) {
-            "MOVIE" ->
-                binding.groupLogo.setImageResource(R.drawable.movie)
+            "MOVIE" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.movie)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.movie)
+            }
 
-            "CLOTHING" ->
-                binding.groupLogo.setImageResource(R.drawable.clothing)
+            "CLOTHING" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.clothing)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.clothing)
 
-            "BEAUTY" ->
-                binding.groupLogo.setImageResource(R.drawable.beauty)
+            }
 
-            "FOOD" ->
-                binding.groupLogo.setImageResource(R.drawable.food)
+            "BEAUTY" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.beauty)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.beauty)
 
-            "HEALTH" ->
-                binding.groupLogo.setImageResource(R.drawable.health)
+            }
 
-            "RENT" ->
-                binding.groupLogo.setImageResource(R.drawable.home)
+            "FOOD" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.food)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.pizza_food)
+            }
 
-            "PETROL_PUMP" ->
-                binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+            "HEALTH" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.health)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.health)
 
-            "BIKE" ->
-                binding.groupLogo.setImageResource(R.drawable.bike)
+            }
 
-            "TRANSPORT" ->
-                binding.groupLogo.setImageResource(R.drawable.car)
+            "RENT" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.home)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.home)
 
-            "DONATE" ->
-                binding.groupLogo.setImageResource(R.drawable.donate)
+            }
 
-            "SPORTS" ->
-                binding.groupLogo.setImageResource(R.drawable.sports)
+            "PETROL_PUMP" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.petrol_pump)
 
-            "MOBILE" ->
-                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+            }
 
-            else ->
-                binding.groupLogo.setImageResource(R.drawable.shopping)
+            "BIKE" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.bike)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.bike)
+
+            }
+
+            "TRANSPORT" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.car)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.car)
+
+            }
+
+            "DONATE" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.donate)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.donate)
+
+            }
+
+            "SPORTS" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.sports)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.sports)
+
+            }
+
+            "MOBILE" -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+
+            }
+
+            else -> {
+                if (binding is PercentageWiseCategoryAnalysisBinding)
+                    binding.groupLogo.setImageResource(R.drawable.shopping)
+                else if (binding is CategoryWiseRecordsLayoutBinding)
+                    binding.groupLogo.setImageResource(R.drawable.shopping)
+
+            }
         }
 
 

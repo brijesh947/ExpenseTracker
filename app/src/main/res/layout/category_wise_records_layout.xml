@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/category_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Movie"
+            android:textColor="@color/primary_txt"
+            android:textSize="20sp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true" />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/close_button"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginEnd="10dp"
+            android:src="@drawable/ic_cross"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true" />
+
+        <View
+            android:id="@+id/seprator"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@color/progress_bar_background"
+            android:layout_below="@id/category_name" />
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/category_detail"
+            android:layout_width="match_parent"
+            android:layout_height="90dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/only_stroke_ce_low_contrast_fg_2_7sdp"
+            android:paddingVertical="10dp"
+            android:paddingStart="5dp"
+            android:layout_below="@id/seprator">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/logo_card"
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:layout_marginStart="5dp"
+                android:elevation="0dp"
+                app:cardBackgroundColor="@color/transparent"
+                app:cardCornerRadius="7dp"
+                app:cardElevation="0dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/group_logo"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scaleType="fitXY"
+                    android:src="@drawable/movie" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/limit_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="Limit:"
+                android:textColor="@color/primary_txt"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/logo_card"
+                app:layout_constraintTop_toTopOf="@id/logo_card" />
+
+            <TextView
+                android:id="@+id/limit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="5000"
+                android:textColor="@color/purple_500"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/limit_text"
+                app:layout_constraintTop_toTopOf="@id/limit_text" />
+
+            <TextView
+                android:id="@+id/spent_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="Spent:"
+                android:textColor="@color/primary_txt"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/logo_card"
+                app:layout_constraintTop_toBottomOf="@id/limit_text" />
+
+            <TextView
+                android:id="@+id/spent"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="3000"
+                android:textColor="@color/pausedColor"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/spent_text"
+                app:layout_constraintTop_toBottomOf="@id/limit_text" />
+
+            <TextView
+                android:id="@+id/remaining_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="Remaining:"
+                android:textColor="@color/primary_txt"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/logo_card"
+                app:layout_constraintTop_toBottomOf="@id/spent_text" />
+
+            <TextView
+                android:id="@+id/remaining"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="2000"
+                android:textColor="@color/soft_green_color"
+                android:textSize="15sp"
+                app:layout_constraintStart_toEndOf="@id/remaining_text"
+                app:layout_constraintTop_toBottomOf="@id/spent_text" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/records_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/abc_diatype_medium"
+            android:text="Records"
+            android:textColor="@color/primary_txt"
+            android:textSize="16sp"
+            android:layout_below="@id/category_detail"
+            android:layout_alignParentStart="true" />
+
+        <View
+            android:id="@+id/seprator_2"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="5dp"
+            android:background="@color/progress_bar_background"
+            android:layout_below="@id/records_text" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:clipToPadding="false"
+            android:paddingVertical="10dp"
+            android:layout_below="@id/seprator_2"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentEnd="true" />
+
+    </RelativeLayout>
+</layout>

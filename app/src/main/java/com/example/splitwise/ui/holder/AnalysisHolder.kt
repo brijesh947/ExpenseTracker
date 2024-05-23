@@ -26,7 +26,11 @@ class AnalysisHolder(val binding: PieChartAnalysisBinding, val context: Context)
             var spending: ArrayList<PieEntry> = ArrayList()
 
             for ((key, value) in pieData.listMap) {
-                spending.add(PieEntry(value.toFloat(), key as String))
+                var totalSum = 0.0
+                for (item in value) {
+                    totalSum += item.second
+                }
+                spending.add(PieEntry(totalSum.toFloat(), key))
             }
 
             val colors = intArrayOf(
