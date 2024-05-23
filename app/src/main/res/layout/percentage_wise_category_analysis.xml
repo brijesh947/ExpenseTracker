@@ -5,18 +5,18 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="70dp">
+        android:layout_height="85dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/logo_card"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_marginStart="13dp"
+            android:layout_marginTop="12dp"
             android:elevation="0dp"
             app:cardBackgroundColor="@color/transparent"
             app:cardCornerRadius="7dp"
             app:cardElevation="0dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -59,45 +59,60 @@
                 style="?android:attr/progressBarStyleHorizontal"
                 android:layout_width="match_parent"
                 android:layout_height="10dp"
+                android:layout_marginTop="5dp"
                 android:background="@drawable/full_rounded_31sdp_ce_primary_fg"
                 android:progressDrawable="@drawable/progress_bar_drawable"
                 android:textColor="@color/secondary_txt"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spending_type"
+                app:layout_constraintTop_toBottomOf="@id/total_expense"
                 tools:progress="10" />
 
             <TextView
                 android:id="@+id/total_expense"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="2500"
+                android:layout_marginTop="2dp"
                 android:textColor="@color/text_cta_color"
                 android:textSize="15sp"
-                app:layout_constraintBottom_toTopOf="@id/expense_progress"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintStart_toEndOf="@id/total_expense_text"
+                app:layout_constraintTop_toBottomOf="@id/spending_type" />
+
+            <TextView
+                android:id="@+id/total_expense_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/abc_diatype_medium"
+                android:text="Total Expense:"
+                android:textColor="@color/secondary_txt"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@id/spending_type"
+                app:layout_constraintTop_toBottomOf="@id/spending_type" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <TextView
             android:id="@+id/category_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
+            android:layout_marginEnd="6dp"
             android:fontFamily="@font/abc_diatype_medium"
             android:text="15%"
             android:textColor="@color/primary_txt"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/logo_card"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/logo_card" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/seprator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginBottom=".5dp"
+
             android:layout_marginHorizontal="10dp"
+            android:layout_marginBottom=".5dp"
             android:background="@color/progress_bar_background"
             app:layout_constraintBottom_toBottomOf="parent" />
 

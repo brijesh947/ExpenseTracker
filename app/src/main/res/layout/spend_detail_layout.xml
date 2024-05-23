@@ -47,6 +47,9 @@
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/abc_diatype_medium"
                 android:text="Movie"
+                android:ellipsize="end"
+                android:maxLines="1"
+
                 android:textColor="@color/primary_txt"
                 android:textSize="18sp"
                 app:fontFamily="@font/abc_diatype_medium" />
