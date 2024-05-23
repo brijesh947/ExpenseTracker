@@ -298,13 +298,31 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
 
         return when (currFilter) {
             ASCENDING_ORDER -> {
+                if (o1.finalExpenseInCategory.toInt() == 0)
+                    o1.finalExpenseInCategory = calculateExpense(o1)
+                if (o2.finalExpenseInCategory.toInt() == 0)
+                    o2.finalExpenseInCategory = calculateExpense(o2)
+
                 (o1.finalExpenseInCategory - o2.finalExpenseInCategory).toInt()
             }
             DESCENDING_ORDER -> {
+                if (o1.finalExpenseInCategory.toInt() == 0)
+                    o1.finalExpenseInCategory = calculateExpense(o1)
+                if (o2.finalExpenseInCategory.toInt() == 0)
+                    o2.finalExpenseInCategory = calculateExpense(o2)
+
                 (o2.finalExpenseInCategory - o1.finalExpenseInCategory).toInt()
             }
             else ->
                 0
         }
+    }
+
+    private fun calculateExpense(o1: CategoryAnalysisData): Double {
+        var sum = 0.0
+        for (item in o1.totalExpenseInCategory) {
+            sum += item.second
+        }
+        return sum
     }
 }
