@@ -14,6 +14,7 @@ import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.fragment.AnalysisFragment
 import com.example.splitwise.ui.fragment.BudgetFragment
 import com.example.splitwise.ui.fragment.CategoryFragment
+import com.example.splitwise.ui.fragment.MonthManager
 import com.example.splitwise.ui.fragment.RecordsFragment
 import javax.inject.Inject
 
@@ -46,7 +47,7 @@ class ExpenseDetailActivity :AppCompatActivity(){
         intent.extras?.let {
             data = GroupDetailData(it.getString("id")!!,it.getString("name")!!,"",it.getString("expenses")!!)
         }
-
+        MonthManager.getInstance().resetMonthAndYear()
     }
     private var selectedFragmentPos = 1
     private var selectedFragment :Fragment? = null

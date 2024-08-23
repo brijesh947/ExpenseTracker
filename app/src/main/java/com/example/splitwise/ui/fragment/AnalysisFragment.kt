@@ -84,8 +84,6 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
 
-        binding.userGroupName.text = getMonthName(currMonth)+ " " + currYear
-
         binding.monthFilter.setOnClickListener {
             openMonthSelectorDialog()
         }
@@ -129,14 +127,12 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
     }
 
     private fun sortRecylerViewData(currFilter: Int) {
-
         val newList = list.subList(1, list.size)
         Collections.sort(newList, this)
         val finalList: ArrayList<Data> = ArrayList()
         finalList.add(list[0]);
         finalList.addAll(newList)
         adapter.setList(finalList)
-
     }
 
     private fun showCheckStatus(currFilter: Int, filterBinding: AnalysisFilterSelectorBinding) {
@@ -175,18 +171,16 @@ class AnalysisFragment(val application: MyApplication, val activity: ExpenseDeta
             currMonth = selectedMonth - 1
             currYear = selectedYear
             fetchData()
+            MonthManager.getInstance().setMonthAndYear(currMonth,currYear)
             binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
         }
         pd.show(requireFragmentManager(), "MonthYearPickerDialog")
     }
 
     private fun setCurrentMonth() {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis();
-        }
-        currMonth = calendar.get(Calendar.MONTH)
-        currYear = calendar.get(Calendar.YEAR)
-
+        currMonth = MonthManager.getInstance().getCurrentMonth()
+        currYear = MonthManager.getInstance().getCurrentYear()
+        binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
     }
 
 

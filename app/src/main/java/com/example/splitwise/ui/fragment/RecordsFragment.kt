@@ -202,18 +202,19 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         binding.searchButton.setOnClickListener {
             openSearchPanel()
         }
-
+        setCurrentMonth()
         recyclerView = binding.expenseRecylerview
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
 
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-        }
-        currMonth = calendar.get(Calendar.MONTH)
-        currYear = calendar.get(Calendar.YEAR)
         adapter.setListener(this)
         return binding.root
+    }
+
+    private fun setCurrentMonth() {
+        currMonth = MonthManager.getInstance().getCurrentMonth()
+        currYear = MonthManager.getInstance().getCurrentYear()
+        binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -402,6 +403,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                     .setDuration(300).start()
             }
 
+            MonthManager.getInstance().setMonthAndYear(currMonth,currYear)
             fetchData(currMonth, currYear)
             binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
         }

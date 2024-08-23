@@ -39,10 +39,7 @@ class CategoryFragment : BaseFragment() {
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
-
         setCurrentMonth()
-        binding.userGroupName.text = getMonthName(currMonth)+ " " + currYear
-
         val vibrator = requireContext().getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 
         binding.monthFilter.setOnClickListener {
@@ -60,12 +57,9 @@ class CategoryFragment : BaseFragment() {
     private var currYear = -1
 
     private fun setCurrentMonth() {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis();
-        }
-        currMonth = calendar.get(Calendar.MONTH)
-        currYear = calendar.get(Calendar.YEAR)
-
+        currMonth = MonthManager.getInstance().getCurrentMonth()
+        currYear = MonthManager.getInstance().getCurrentYear()
+        binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
     }
 
     private fun prepareData() {

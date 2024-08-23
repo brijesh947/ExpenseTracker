@@ -75,7 +75,7 @@ class BudgetFragment(val application: MyApplication, val activity: ExpenseDetail
         recyclerView.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
         recyclerView.adapter = adapter
 
-        binding.userGroupName.text = getMonthName(currMonth)+ " " + currYear
+
 
         binding.monthFilter.setOnClickListener {
             openMonthSelectorDialog()
@@ -115,6 +115,7 @@ class BudgetFragment(val application: MyApplication, val activity: ExpenseDetail
         pd.setListener { view, selectedYear, selectedMonth, selectedDay ->
             currMonth = selectedMonth - 1
             currYear = selectedYear
+            MonthManager.getInstance().setMonthAndYear(currMonth,currYear)
             fetchData()
             binding.userGroupName.text = getMonthName(currMonth) + " " + currYear
         }
@@ -122,12 +123,9 @@ class BudgetFragment(val application: MyApplication, val activity: ExpenseDetail
     }
 
     private fun setCurrentMonth() {
-        val calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis();
-        }
-        currMonth = calendar.get(Calendar.MONTH)
-        currYear = calendar.get(Calendar.YEAR)
-
+        currMonth = MonthManager.getInstance().getCurrentMonth()
+        currYear = MonthManager.getInstance().getCurrentYear()
+        binding.userGroupName.text = getMonthName(currMonth)+ " " + currYear
     }
 
     @SuppressLint("RepeatOnLifecycleWrongUsage")
