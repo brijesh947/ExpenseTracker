@@ -16,14 +16,12 @@ import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.databinding.DateLayoutBinding
 import com.example.splitwise.databinding.ExpesnseFilterLayoutBinding
 import com.example.splitwise.databinding.GroupDetailLayoutBinding
-import com.example.splitwise.databinding.MonthWiseBalanceCardviewBinding
 import com.example.splitwise.databinding.RecentTransactionLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
 import com.example.splitwise.databinding.SwipableMonthDetailLayoutBinding
 import com.example.splitwise.ui.holder.DateHolder
 import com.example.splitwise.ui.holder.ExpenseFilterHolder
 import com.example.splitwise.ui.holder.RecentTransactionHolder
-import com.example.splitwise.ui.holder.MonthWiseProgressHolder
 import com.example.splitwise.ui.holder.SwipableMonthHolder
 import com.example.splitwise.ui.util.GROUP_DATA
 import com.example.splitwise.ui.util.RECENT_TRANSACTION
@@ -158,7 +156,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
                 }
 
                 "Home" -> {
-                    binding.groupLogo.setImageResource(R.drawable.home)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_106)
                 }
 
                 "Couple" -> {

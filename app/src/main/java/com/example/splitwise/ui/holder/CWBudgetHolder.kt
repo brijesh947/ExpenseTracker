@@ -130,43 +130,43 @@ class CWBudgetHolder(val binding: CategoryWiseBudgetLayoutBinding, val context: 
 
         when (name) {
             "MOVIE" ->
-                binding.groupLogo.setImageResource(R.drawable.movie)
+                binding.groupLogo.setImageResource(R.drawable.shopping_101)
 
             "CLOTHING" ->
-                binding.groupLogo.setImageResource(R.drawable.clothing)
+                binding.groupLogo.setImageResource(R.drawable.shopping_102)
 
             "BEAUTY" ->
-                binding.groupLogo.setImageResource(R.drawable.beauty)
+                binding.groupLogo.setImageResource(R.drawable.shopping_103)
 
             "FOOD" ->
-                binding.groupLogo.setImageResource(R.drawable.food)
+                binding.groupLogo.setImageResource(R.drawable.shopping_104)
 
             "HEALTH" ->
-                binding.groupLogo.setImageResource(R.drawable.health)
+                binding.groupLogo.setImageResource(R.drawable.shopping_105)
 
             "RENT" ->
-                binding.groupLogo.setImageResource(R.drawable.home)
+                binding.groupLogo.setImageResource(R.drawable.shopping_106)
 
             "PETROL_PUMP" ->
-                binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                binding.groupLogo.setImageResource(R.drawable.shopping_107)
 
             "BIKE" ->
-                binding.groupLogo.setImageResource(R.drawable.bike)
+                binding.groupLogo.setImageResource(R.drawable.shopping_109)
 
             "TRANSPORT" ->
-                binding.groupLogo.setImageResource(R.drawable.car)
+                binding.groupLogo.setImageResource(R.drawable.shopping_108)
 
             "DONATE" ->
-                binding.groupLogo.setImageResource(R.drawable.donate)
+                binding.groupLogo.setImageResource(R.drawable.shopping_110)
 
             "SPORTS" ->
-                binding.groupLogo.setImageResource(R.drawable.sports)
+                binding.groupLogo.setImageResource(R.drawable.shopping_111)
 
             "MOBILE" ->
-                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                binding.groupLogo.setImageResource(R.drawable.shopping_112)
 
             else ->
-                binding.groupLogo.setImageResource(R.drawable.shopping)
+                binding.groupLogo.setImageResource(R.drawable.shopping_113)
         }
 
 

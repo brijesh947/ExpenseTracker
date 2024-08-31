@@ -39,67 +39,67 @@ class CategoryDescriptionHolder(val binding: CategoryFragmentItemLayoutBinding,v
         when (categoryDescriptionData.getType()) {
             MOVIE -> {
                 binding.groupName.text = "Movie"
-                binding.groupLogo.setImageResource(R.drawable.movie)
+                binding.groupLogo.setImageResource(R.drawable.shopping_101)
             }
 
             HEALTH -> {
                 binding.groupName.text = "Health"
-                binding.groupLogo.setImageResource(R.drawable.health)
+                binding.groupLogo.setImageResource(R.drawable.shopping_105)
             }
 
             RENT -> {
                 binding.groupName.text = "Rent"
-                binding.groupLogo.setImageResource(R.drawable.home)
+                binding.groupLogo.setImageResource(R.drawable.shopping_106)
             }
 
             BEAUTY -> {
                 binding.groupName.text = "Beauty"
-                binding.groupLogo.setImageResource(R.drawable.beauty)
+                binding.groupLogo.setImageResource(R.drawable.shopping_103)
             }
 
             PETROL_PUMP -> {
                 binding.groupName.text = "Petrol"
-                binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                binding.groupLogo.setImageResource(R.drawable.shopping_107)
             }
 
             FOOD -> {
                 binding.groupName.text = "Food"
-                binding.groupLogo.setImageResource(R.drawable.food)
+                binding.groupLogo.setImageResource(R.drawable.shopping_104)
             }
 
             CLOTHING -> {
                 binding.groupName.text = "Clothing"
-                binding.groupLogo.setImageResource(R.drawable.clothing)
+                binding.groupLogo.setImageResource(R.drawable.shopping_102)
             }
 
             BIKE -> {
                 binding.groupName.text = "BIKE"
-                binding.groupLogo.setImageResource(R.drawable.bike)
+                binding.groupLogo.setImageResource(R.drawable.shopping_109)
             }
 
             TRANSPORT -> {
                 binding.groupName.text = "Travel"
-                binding.groupLogo.setImageResource(R.drawable.car)
+                binding.groupLogo.setImageResource(R.drawable.shopping_108)
             }
 
             DONATE -> {
                 binding.groupName.text = "Donation"
-                binding.groupLogo.setImageResource(R.drawable.donate)
+                binding.groupLogo.setImageResource(R.drawable.shopping_110)
             }
 
             SPORTS -> {
                 binding.groupName.text = "Sports"
-                binding.groupLogo.setImageResource(R.drawable.sports)
+                binding.groupLogo.setImageResource(R.drawable.shopping_111)
             }
 
             MOBILE -> {
                 binding.groupName.text = "Mobile"
-                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                binding.groupLogo.setImageResource(R.drawable.shopping_112)
             }
 
             else -> {
                 binding.groupName.text = "Other"
-                binding.groupLogo.setImageResource(R.drawable.shopping)
+                binding.groupLogo.setImageResource(R.drawable.shopping_113)
             }
 
         }

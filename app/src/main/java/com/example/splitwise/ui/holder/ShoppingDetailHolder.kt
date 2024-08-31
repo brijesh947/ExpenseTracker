@@ -61,55 +61,55 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
         }
         when (data.shoppingCategory.toUpperCase()) {
             "RENT" -> {
-                binding.groupLogo.setImageResource(R.drawable.home)
+                binding.groupLogo.setImageResource(R.drawable.shopping_106)
             }
 
             "HEALTH" -> {
-                binding.groupLogo.setImageResource(R.drawable.health)
+                binding.groupLogo.setImageResource(R.drawable.shopping_105)
             }
 
             "FOOD" -> {
-                binding.groupLogo.setImageResource(R.drawable.food)
+                binding.groupLogo.setImageResource(R.drawable.shopping_104)
             }
 
             "MOVIE" -> {
-                binding.groupLogo.setImageResource(R.drawable.movie)
+                binding.groupLogo.setImageResource(R.drawable.shopping_101)
             }
 
             "CLOTHING" -> {
-                binding.groupLogo.setImageResource(R.drawable.clothing)
+                binding.groupLogo.setImageResource(R.drawable.shopping_102)
             }
 
             "PETROL_PUMP" -> {
-                binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                binding.groupLogo.setImageResource(R.drawable.shopping_107)
             }
 
             "BEAUTY" -> {
-                binding.groupLogo.setImageResource(R.drawable.beauty)
+                binding.groupLogo.setImageResource(R.drawable.shopping_103)
             }
 
             "BIKE" -> {
-                binding.groupLogo.setImageResource(R.drawable.bike)
+                binding.groupLogo.setImageResource(R.drawable.shopping_109)
             }
 
             "SPORTS" -> {
 
-                binding.groupLogo.setImageResource(R.drawable.sports)
+                binding.groupLogo.setImageResource(R.drawable.shopping_111)
             }
 
             "MOBILE" -> {
-                binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                binding.groupLogo.setImageResource(R.drawable.shopping_112)
             }
 
             "TRANSPORT" -> {
-                binding.groupLogo.setImageResource(R.drawable.car)
+                binding.groupLogo.setImageResource(R.drawable.shopping_108)
             }
 
             "DONATE" -> {
-                binding.groupLogo.setImageResource(R.drawable.donate)
+                binding.groupLogo.setImageResource(R.drawable.shopping_110)
             }
 
-            else -> binding.groupLogo.setImageResource(R.drawable.shopping)
+            else -> binding.groupLogo.setImageResource(R.drawable.shopping_113)
         }
     }
 

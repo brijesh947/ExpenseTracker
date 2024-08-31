@@ -1,7 +1,6 @@
 package com.example.splitwise.ui.holder
 
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.drawable.ClipDrawable
 import android.graphics.drawable.GradientDrawable
 import android.graphics.drawable.LayerDrawable
@@ -135,103 +134,103 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
         when (categoryData.categoryName) {
             "MOVIE" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.movie)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_101)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.movie)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_101)
             }
 
             "CLOTHING" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.clothing)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_102)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.clothing)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_102)
 
             }
 
             "BEAUTY" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.beauty)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_103)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.beauty)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_103)
 
             }
 
             "FOOD" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.food)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_104)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
                     binding.groupLogo.setImageResource(R.drawable.pizza_food)
             }
 
             "HEALTH" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.health)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_105)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.health)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_105)
 
             }
 
             "RENT" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.home)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_106)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.home)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_106)
 
             }
 
             "PETROL_PUMP" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_107)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.petrol_pump)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_107)
 
             }
 
             "BIKE" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.bike)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_109)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.bike)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_109)
 
             }
 
             "TRANSPORT" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.car)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_108)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.car)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_108)
 
             }
 
             "DONATE" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.donate)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_110)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.donate)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_110)
 
             }
 
             "SPORTS" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.sports)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_111)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.sports)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_111)
 
             }
 
             "MOBILE" -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_112)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.mobile_recharge)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_112)
 
             }
 
             else -> {
                 if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_113)
                 else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping)
+                    binding.groupLogo.setImageResource(R.drawable.shopping_113)
 
             }
         }
