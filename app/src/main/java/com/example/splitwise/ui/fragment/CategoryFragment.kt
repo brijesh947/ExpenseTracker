@@ -3,6 +3,7 @@ package com.example.splitwise.ui.fragment
 import android.content.Context
 import android.os.Bundle
 import android.os.Vibrator
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +13,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.data.CategoryDescriptionData
 import com.example.splitwise.data.Data
+import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.data.RecentTransactionData
 import com.example.splitwise.data.SimpleTextData
 import com.example.splitwise.databinding.CategoryFragmentLayoutBinding
 import com.example.splitwise.ui.CategoryFragmentAdapter
+import com.example.splitwise.ui.util.CategoryManager
 import com.example.splitwise.ui.util.SIMPLE_TEXT
 import java.util.Calendar
 
@@ -27,6 +30,9 @@ class CategoryFragment : BaseFragment() {
     private val list :ArrayList<Data> = ArrayList()
 
     private val adapter : CategoryFragmentAdapter = CategoryFragmentAdapter()
+
+    private val categoryManager : CategoryManager = CategoryManager.getInstance()
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -66,9 +72,9 @@ class CategoryFragment : BaseFragment() {
         list.clear()
         list.add(SimpleTextData("Default monthly budget is set at ₹50000,with ₹10000 allocated for individual categories.\nYou can change it from budget tab"))
         list.add(RecentTransactionData("Expense categories"))
-
-        for (index in 101..113) {
-            list.add(CategoryDescriptionData(index))
+        Log.d("jbkdsasvlh", "total category size  ${categoryManager.getTotalCategoryList().size}")
+        categoryManager.getTotalCategoryList().forEach {
+            list.add( CategoryDescriptionData(it.categoryName,it.type))
         }
         list.add(SimpleTextData("\nCreate new category feature will be available soon"))
     }

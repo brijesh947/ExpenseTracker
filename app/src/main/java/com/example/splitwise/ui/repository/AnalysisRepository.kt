@@ -47,7 +47,7 @@ class AnalysisRepository @Inject constructor(private val db: FirebaseFirestore, 
                         var totalSpending = 0.0
 
                         for (doc in it.documents) {
-                            val key = ("" + doc.get("type")).toUpperCase()
+                            val key = ("" + doc.get("type") + "_" + doc.get("categoryType"))
                             val time = ("" + doc.get("time")).toLong()
                             val amount = ("" + doc.get("amount")).toDouble()
                             val pair = Pair(time, amount)
@@ -68,7 +68,7 @@ class AnalysisRepository @Inject constructor(private val db: FirebaseFirestore, 
 
                         list.add(pieData)
                         for ((key, value) in pieData.listMap) {
-                           list.add(CategoryAnalysisData(key,value,totalSpending.toLong()))
+                           list.add(CategoryAnalysisData(key.substringBefore("_"),key.substringAfter("_"),value,totalSpending.toLong()))
                         }
                     }
                     Log.d("ajdkfgb", "list data is ${list.toList()}:")

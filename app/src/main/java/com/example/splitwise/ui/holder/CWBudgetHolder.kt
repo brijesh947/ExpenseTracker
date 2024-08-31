@@ -26,7 +26,7 @@ class CWBudgetHolder(val binding: CategoryWiseBudgetLayoutBinding, val context: 
 
         val budgetData = data as CurrBudgetData
 
-        binding.spendingType.text = budgetData.name
+        binding.spendingType.text = budgetData.name.substringAfter("_")
         binding.limit.text = showRupeeString(budgetData.totalBudget)
         binding.spent.text = showRupeeString(budgetData.totalExpense.toLong())
         binding.remaining.text = showRupeeString((budgetData.totalBudget - budgetData.totalExpense).toLong())
@@ -111,7 +111,7 @@ class CWBudgetHolder(val binding: CategoryWiseBudgetLayoutBinding, val context: 
             dialog.dismiss()
 
         }
-        dialogView.categoryName.setText(budgetData.name)
+        dialogView.categoryName.setText(budgetData.name.substringAfter("_"))
         dialog.setContentView(dialogView.root)
         dialog.show()
     }
@@ -127,48 +127,7 @@ class CWBudgetHolder(val binding: CategoryWiseBudgetLayoutBinding, val context: 
     }
 
     private fun setImageIcon(name: String) {
-
-        when (name) {
-            "MOVIE" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_101)
-
-            "CLOTHING" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_102)
-
-            "BEAUTY" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_103)
-
-            "FOOD" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_104)
-
-            "HEALTH" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_105)
-
-            "RENT" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_106)
-
-            "PETROL_PUMP" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_107)
-
-            "BIKE" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_109)
-
-            "TRANSPORT" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_108)
-
-            "DONATE" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_110)
-
-            "SPORTS" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_111)
-
-            "MOBILE" ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_112)
-
-            else ->
-                binding.groupLogo.setImageResource(R.drawable.shopping_113)
-        }
-
-
+        val drawableId = context.resources.getIdentifier("shopping_${name.substringBefore("_")}", "drawable", context.packageName)
+        binding.groupLogo.setImageResource(drawableId)
     }
 }

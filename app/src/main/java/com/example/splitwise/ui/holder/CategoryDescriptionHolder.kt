@@ -36,73 +36,16 @@ class CategoryDescriptionHolder(val binding: CategoryFragmentItemLayoutBinding,v
         else
             binding.seprator.show()
 
-        when (categoryDescriptionData.getType()) {
-            MOVIE -> {
-                binding.groupName.text = "Movie"
-                binding.groupLogo.setImageResource(R.drawable.shopping_101)
-            }
+        val drawableId = context.resources.getIdentifier(
+            "shopping_${categoryDescriptionData.categoryDestype}",
+            "drawable",
+            context.packageName
+        )
 
-            HEALTH -> {
-                binding.groupName.text = "Health"
-                binding.groupLogo.setImageResource(R.drawable.shopping_105)
-            }
+        binding.groupName.text = categoryDescriptionData.categoryName
+        binding.groupLogo.setImageResource(drawableId)
 
-            RENT -> {
-                binding.groupName.text = "Rent"
-                binding.groupLogo.setImageResource(R.drawable.shopping_106)
-            }
 
-            BEAUTY -> {
-                binding.groupName.text = "Beauty"
-                binding.groupLogo.setImageResource(R.drawable.shopping_103)
-            }
-
-            PETROL_PUMP -> {
-                binding.groupName.text = "Petrol"
-                binding.groupLogo.setImageResource(R.drawable.shopping_107)
-            }
-
-            FOOD -> {
-                binding.groupName.text = "Food"
-                binding.groupLogo.setImageResource(R.drawable.shopping_104)
-            }
-
-            CLOTHING -> {
-                binding.groupName.text = "Clothing"
-                binding.groupLogo.setImageResource(R.drawable.shopping_102)
-            }
-
-            BIKE -> {
-                binding.groupName.text = "BIKE"
-                binding.groupLogo.setImageResource(R.drawable.shopping_109)
-            }
-
-            TRANSPORT -> {
-                binding.groupName.text = "Travel"
-                binding.groupLogo.setImageResource(R.drawable.shopping_108)
-            }
-
-            DONATE -> {
-                binding.groupName.text = "Donation"
-                binding.groupLogo.setImageResource(R.drawable.shopping_110)
-            }
-
-            SPORTS -> {
-                binding.groupName.text = "Sports"
-                binding.groupLogo.setImageResource(R.drawable.shopping_111)
-            }
-
-            MOBILE -> {
-                binding.groupName.text = "Mobile"
-                binding.groupLogo.setImageResource(R.drawable.shopping_112)
-            }
-
-            else -> {
-                binding.groupName.text = "Other"
-                binding.groupLogo.setImageResource(R.drawable.shopping_113)
-            }
-
-        }
 
         val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 

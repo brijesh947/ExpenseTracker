@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.CategoryFilterListener
 import com.example.splitwise.R
 import com.example.splitwise.data.Data
+import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.databinding.ExpenseCategoryRecyclerItemBinding
 import com.example.splitwise.ui.holder.ExpenseCategoryHolder
 
@@ -31,6 +32,11 @@ class CategoryAdapter(val filterListener: CategoryFilterListener<Int>) : Recycle
     override fun getItemCount(): Int {
         return list.size
     }
+
+    fun findPositionBasedOnBoolean(): Int {
+        return list.indexOfFirst { (it as ExpenseCategoryData).isSelected }
+    }
+
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         (holder as ExpenseCategoryHolder).setData(list[position],filterListener,position)

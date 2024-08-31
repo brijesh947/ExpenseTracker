@@ -6,6 +6,7 @@ data class ShoppingData(
     var id: String,
     var shoppingName: String,
     var shoppingCategory: String,
+    var shoppingCategoryType: String,
     var totalAmount: String,
     val month :Int,
     val year :Int,

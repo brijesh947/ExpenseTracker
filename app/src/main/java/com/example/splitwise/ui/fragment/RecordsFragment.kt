@@ -82,7 +82,10 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
     override fun onCreate(savedInstanceState: Bundle?) {
         initFragment()
         super.onCreate(savedInstanceState)
+    }
 
+    private fun fetchCategoryData() {
+        viewModel.getCategoryDetail(groupData!!)
     }
 
     private val searchList: ArrayList<ShoppingData> = ArrayList()
@@ -219,6 +222,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        fetchCategoryData();
     }
 
     private fun openCreateGroupDialog() {
@@ -227,10 +231,12 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         dialog.behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
 
         var selectedCategory = SHOPPING_GENERAL
+        var selectedCategoryName = "Other"
         var previousPosition = -1
         categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {
-            override fun selectedFilter(categoryType: Int, position: Int) {
+            override fun selectedFilter(categoryName: String, categoryType: Int, position: Int) {
                 selectedCategory = categoryType
+                selectedCategoryName = categoryName
                 (categoryList[position] as ExpenseCategoryData).isSelected = true
                 if (previousPosition != -1 && previousPosition != position) {
                     (categoryList[previousPosition] as ExpenseCategoryData).isSelected = false
@@ -239,7 +245,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
                 previousPosition = position
                 categoryAdapter.notifyItemChanged(position)
             }
-
         })
         dialogView.expenseFilterRecylerView.layoutManager = GridLayoutManager(requireContext(),2,GridLayoutManager.HORIZONTAL,false)
         dialogView.expenseFilterRecylerView.adapter = categoryAdapter
@@ -253,11 +258,12 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         dialogView.createGroupButton.setOnClickListener {
             if (verifyInput(dialogView)) {
                 binding.noElement.visibility = View.GONE
-                var filter = getFilterType(selectedCategory)
+
                 val data = ShoppingData(
                     "",
                     dialogView.shoppingName.text.toString(),
-                    filter,
+                    "" + selectedCategory,
+                    selectedCategoryName,
                     dialogView.shoppingPrice.text.toString(),
                     getNewDate(false).month,
                     getNewDate(false).year,

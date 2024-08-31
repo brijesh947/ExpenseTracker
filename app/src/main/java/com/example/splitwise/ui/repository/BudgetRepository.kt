@@ -6,12 +6,15 @@ import com.example.splitwise.data.CurrBudgetData
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.PieChartData
 import com.example.splitwise.data.RecentTransactionData
+import com.example.splitwise.ui.util.CategoryManager
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
 import javax.inject.Inject
 
 class BudgetRepository @Inject constructor(private val context: Context) : BaseRepository() {
+
+    private val categoryManager: CategoryManager = CategoryManager.getInstance()
 
     fun getBudgetDataForMonthAndCategory(month: Int, year: Int, list1: List<Data>): Flow<List<Data>> {
         return callbackFlow {
@@ -28,13 +31,15 @@ class BudgetRepository @Inject constructor(private val context: Context) : BaseR
 
                 val sharePref = context.getSharedPreferences("budget", Context.MODE_PRIVATE)
 
-                for (index in 101..113) {
-                    val key = getCategoryType(index)
+
+                categoryManager.getTotalCategoryList().forEach {
+                    val key = "" + it.type + "_" + it.categoryName
                     if (pieDataMap.containsKey(key = key))
                         list.add(CurrBudgetData(key, sharePref.getLong(("" + month + "_" + year + "_" + key), categoryBudget), getTotalExpense(pieDataMap[key]!!)))
                     else
                         list.add(CurrBudgetData(key, sharePref.getLong(("" + month + "_" + year + "_" + key), categoryBudget), 0.0))
                 }
+
 
                 list.add(0,RecentTransactionData("Budget Categories: ${getMonthShortName(month)}-$year"))
                 list.add(0, CurrBudgetData("" + getMonthShortName(month) + " " + year, sharePref.getLong("" + month + "_" + year, monthDefaultBudget), totalExpense.toDouble()))

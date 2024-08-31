@@ -30,7 +30,7 @@ class AnalysisHolder(val binding: PieChartAnalysisBinding, val context: Context)
                 for (item in value) {
                     totalSum += item.second
                 }
-                spending.add(PieEntry(totalSum.toFloat(), key))
+                spending.add(PieEntry(totalSum.toFloat(), key.substringAfter("_")))
             }
 
             val colors = intArrayOf(

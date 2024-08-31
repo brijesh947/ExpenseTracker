@@ -38,6 +38,17 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
         }
     }
 
+    fun getCategoryDetail(groupDetailData: GroupDetailData) {
+        viewModelScope.launch {
+            repository.getTotalCategoryType(groupDetailData).catch {
+                //do  nothing
+                Log.d("jbkdsasvlh", "exception while fetching category ${it.message}")
+            }.collect {
+                //do nothing
+            }
+        }
+    }
+
     fun getUserPersonalDetail(callback: FirebaseCallback<List<String>>) {
         viewModelScope.launch {
             repository.getUserPersonalDetail().catch {

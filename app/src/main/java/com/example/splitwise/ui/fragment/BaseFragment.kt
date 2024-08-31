@@ -6,6 +6,7 @@ import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.ui.util.BEAUTY
 import com.example.splitwise.ui.util.BIKE
 import com.example.splitwise.ui.util.CLOTHING
+import com.example.splitwise.ui.util.CategoryManager
 import com.example.splitwise.ui.util.DONATE
 import com.example.splitwise.ui.util.FOOD
 import com.example.splitwise.ui.util.HEALTH
@@ -21,14 +22,16 @@ open class BaseFragment() : Fragment() {
 
 
     val categoryList: ArrayList<Data> = ArrayList()
+    private val categoryManager : CategoryManager = CategoryManager.getInstance()
+
 
     fun createCategoryList(): ArrayList<Data> {
         categoryList.clear()
-        for (i in 101..113) {
-            categoryList.add(ExpenseCategoryData(i, false))
+        var i = 0
+        categoryManager.getTotalCategoryList().forEach {
+            categoryList.add(i++, ExpenseCategoryData(it.categoryName, it.type, false))
         }
         return categoryList
-
     }
 
     fun getFilterType(selectedCategory: Int): String {

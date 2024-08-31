@@ -14,19 +14,7 @@ import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.databinding.AddExpenseLayoutBinding
 import com.example.splitwise.databinding.SpendDetailLayoutBinding
 import com.example.splitwise.ui.CategoryAdapter
-import com.example.splitwise.ui.util.BEAUTY
-import com.example.splitwise.ui.util.BIKE
-import com.example.splitwise.ui.util.CLOTHING
-import com.example.splitwise.ui.util.DONATE
-import com.example.splitwise.ui.util.FOOD
-import com.example.splitwise.ui.util.HEALTH
-import com.example.splitwise.ui.util.MOBILE
-import com.example.splitwise.ui.util.MOVIE
-import com.example.splitwise.ui.util.PETROL_PUMP
-import com.example.splitwise.ui.util.RENT
-import com.example.splitwise.ui.util.SHOPPING_GENERAL
-import com.example.splitwise.ui.util.SPORTS
-import com.example.splitwise.ui.util.TRANSPORT
+import com.example.splitwise.ui.util.CategoryManager
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -35,14 +23,15 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
 
     private lateinit var categoryAdapter: CategoryAdapter
     val categoryList: ArrayList<Data> = ArrayList()
+    private val categoryManager :CategoryManager = CategoryManager.getInstance()
 
-    private fun createCategoryList(): ArrayList<Data> {
+    private fun createCategoryList(newData: ShoppingData): ArrayList<Data> {
         categoryList.clear()
-        for (i in 101..113) {
-            categoryList.add(i-101,ExpenseCategoryData(i, false))
+
+        categoryManager.getTotalCategoryList().forEach {
+            categoryList.add(ExpenseCategoryData(it.categoryName,it.type, newData.shoppingCategory == "" + it.type))
         }
         return categoryList
-
     }
 
     fun setData(data: Data, isLast: Boolean) {
@@ -59,72 +48,26 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
         binding.root.setOnClickListener {
             openEditRecordsDialog(newData)
         }
-        when (data.shoppingCategory.toUpperCase()) {
-            "RENT" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_106)
-            }
 
-            "HEALTH" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_105)
-            }
+        binding.groupLogo.setImageResource(context.resources.getIdentifier("shopping_${data.shoppingCategory}", "drawable", context.packageName))
 
-            "FOOD" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_104)
-            }
-
-            "MOVIE" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_101)
-            }
-
-            "CLOTHING" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_102)
-            }
-
-            "PETROL_PUMP" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_107)
-            }
-
-            "BEAUTY" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_103)
-            }
-
-            "BIKE" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_109)
-            }
-
-            "SPORTS" -> {
-
-                binding.groupLogo.setImageResource(R.drawable.shopping_111)
-            }
-
-            "MOBILE" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_112)
-            }
-
-            "TRANSPORT" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_108)
-            }
-
-            "DONATE" -> {
-                binding.groupLogo.setImageResource(R.drawable.shopping_110)
-            }
-
-            else -> binding.groupLogo.setImageResource(R.drawable.shopping_113)
-        }
     }
 
     private fun openEditRecordsDialog(newData: ShoppingData) {
-        createCategoryList()
+        createCategoryList(newData)
         val dialogView = AddExpenseLayoutBinding.inflate(LayoutInflater.from(context))
         val dialog = BottomSheetDialog(context,R.style.BottomSheetDialogStyle)
         dialog.behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
 
-        var selectedCategory = getFilterType(newData.shoppingCategory)
-        var previousPosition = selectedCategory - 101
-        (categoryList[previousPosition] as ExpenseCategoryData).isSelected = true
+        var selectedCategory = newData.shoppingCategory
+        var selectedCategoryType = newData.shoppingCategoryType
+
+        var previousPosition = -1
+
         categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {
-            override fun selectedFilter(categoryType: Int, position: Int) {
-                selectedCategory = categoryType
+            override fun selectedFilter(categoryName: String, categoryType: Int, position: Int) {
+                selectedCategory = "" + categoryType
+                selectedCategoryType = categoryName
                 (categoryList[position] as ExpenseCategoryData).isSelected = true
                 if (previousPosition != -1 && previousPosition != position) {
                     (categoryList[previousPosition] as ExpenseCategoryData).isSelected = false
@@ -146,6 +89,7 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
             GridLayoutManager.HORIZONTAL,false)
         dialogView.expenseFilterRecylerView.adapter = categoryAdapter
         categoryAdapter.setList(categoryList)
+        previousPosition = categoryAdapter.findPositionBasedOnBoolean()
 
         dialogView.expenseFilterRecylerView.smoothScrollToPosition(previousPosition)
 
@@ -156,8 +100,9 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
                 newData.shoppingName = dialogView.shoppingName.text.toString()
                 newData.totalAmount = dialogView.shoppingPrice.text.toString()
                 newData.comment = dialogView.descriptionText.text.toString()
-                newData.shoppingCategory = getFilterTypeString(selectedCategory)
-                listener.updateRecord(newData, newData.totalAmount.toDouble()- previousBudget,position)
+                newData.shoppingCategory = "" + selectedCategory
+                newData.shoppingCategoryType = selectedCategoryType
+                listener.updateRecord(newData, newData.totalAmount.toDouble() - previousBudget,position)
                 dialog.dismiss()
             }
         }
@@ -189,92 +134,4 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
         return true
     }
 
-    fun getFilterTypeString(selectedCategory: Int): String {
-
-        when (selectedCategory) {
-            MOVIE ->
-                return "MOVIE"
-
-            CLOTHING ->
-                return "CLOTHING"
-
-            BEAUTY ->
-                return "BEAUTY"
-
-            FOOD ->
-                return "FOOD"
-
-            HEALTH ->
-                return "HEALTH"
-
-            RENT ->
-                return "RENT"
-
-            PETROL_PUMP ->
-                return "PETROL_PUMP"
-
-            BIKE ->
-                return "BIKE"
-
-            TRANSPORT ->
-                return "TRANSPORT"
-
-            DONATE ->
-                return "DONATE"
-
-            SPORTS ->
-                return "SPORTS"
-
-            MOBILE ->
-                return "MOBILE"
-
-            else ->
-                return "OTHER"
-        }
-
-    }
-    private fun getFilterType(selectedCategory: String): Int {
-
-        when (selectedCategory) {
-            "MOVIE" ->
-                return MOVIE
-
-            "CLOTHING" ->
-                return CLOTHING
-
-            "BEAUTY" ->
-                return BEAUTY
-
-            "FOOD" ->
-                return FOOD
-
-            "HEALTH" ->
-                return HEALTH
-
-            "RENT" ->
-                return RENT
-
-            "PETROL_PUMP" ->
-                return PETROL_PUMP
-
-            "BIKE" ->
-                return BIKE
-
-            "TRANSPORT" ->
-                return TRANSPORT
-
-            "DONATE" ->
-                return DONATE
-
-            "SPORTS" ->
-                return SPORTS
-
-            "MOBILE" ->
-                return MOBILE
-
-            else ->
-                return SHOPPING_GENERAL
-        }
-
-    }
 }

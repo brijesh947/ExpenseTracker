@@ -9,6 +9,7 @@ import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.MonthWiseProgressData
 import com.example.splitwise.data.RecentTransactionData
 import com.example.splitwise.data.ShoppingData
+import com.example.splitwise.ui.util.CategoryManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
@@ -73,6 +74,8 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
             awaitClose { }
         }
     }
+
+
     fun getUserExpenseDetail(groupData: GroupDetailData,currMonth:Int,currYear:Int): Flow<List<Data>> {
         Log.d("TAGD", "getUserDetail in repo is called")
         return callbackFlow {
@@ -104,8 +107,12 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         if (doc.contains("comment")) {
                             comment = "" + doc.get("comment")
                         }
+                        var categoryType = ""
+                        if(doc.contains("categoryType")){
+                            categoryType = "" + doc.get("categoryType")
+                        }
                         Log.d("djkvf", "Date is ${calendar.get(Calendar.DATE)} and Month is ${calendar.get(Calendar.MONTH)+1} and the year is ${calendar.get(Calendar.YEAR)}")
-                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),""+doc.get("amount"),month,year,"" + date,comment)
+                        val tempData = ShoppingData(doc.id,"" + doc.get("name"),""+ doc.get("type"),categoryType,""+doc.get("amount"),month,year,"" + date,comment)
                         list.add(tempData)
                     }
                     if (list.isNotEmpty()) {
@@ -125,9 +132,62 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
         }
     }
 
-    /*
-    * here DMY stands for Date wise ,Month and Year wise Filter
-    * */
+
+    fun getTotalCategoryType(groupData: GroupDetailData):Flow<Boolean>{
+
+        val instance = CategoryManager.getInstance()
+        instance.clearMap()
+
+        return callbackFlow {
+            if(auth.currentUser!=null){
+                val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id).collection("categoryDetail")
+
+                userRef.get().addOnSuccessListener {
+
+                    for (doc in it.documents) {
+                        instance.createNewCategory(
+                            "" + doc.get("type"),
+                            "" + doc.get("name"),
+                            "",
+                            "" + doc.get("id")
+                        )
+                    }
+                    trySend(true)
+                }.addOnFailureListener {
+                    trySend(false)
+                }
+
+            }
+
+            awaitClose{
+
+            }
+
+        }
+    }
+
+    fun addNewCategoryType(groupData: GroupDetailData, categoryData: CategoryManager.CategoryHolderData): Flow<Boolean> {
+        return callbackFlow {
+            if (auth.currentUser != null) {
+                val userRef =
+                    db.collection("users").document(auth.currentUser!!.uid).collection("userDetail")
+                        .document(groupData.id).collection("categoryDetail")
+
+                val categoryDetail = hashMapOf(
+                    "name" to categoryData.categoryName,
+                    "type" to categoryData.type
+                )
+
+                userRef.add(categoryDetail).addOnSuccessListener {
+
+                    trySend(true)
+                }.addOnFailureListener {
+                    trySend(false)
+                }
+            }
+            awaitClose {  }
+        }
+    }
 
     fun addNewGroupToFirebase(groupData: GroupDetailData): Flow<Boolean> {
         return callbackFlow {
@@ -167,6 +227,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userDetail = hashMapOf(
                     "name" to expenseData.shoppingName,
                     "type" to expenseData.shoppingCategory,
+                    "categoryType" to expenseData.shoppingCategoryType,
                     "amount" to expenseData.totalAmount,
                     "time" to System.currentTimeMillis(),
                     "date" to calendar.get(Calendar.DATE),
@@ -200,6 +261,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userDetail = hashMapOf<String,Any>(
                     "name" to expenseData.shoppingName,
                     "type" to expenseData.shoppingCategory,
+                    "categoryType" to expenseData.shoppingCategoryType,
                     "amount" to expenseData.totalAmount,
                     "comment" to expenseData.comment
                 )

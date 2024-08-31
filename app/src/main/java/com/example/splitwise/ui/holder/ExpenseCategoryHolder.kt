@@ -9,90 +9,22 @@ import com.example.splitwise.R
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.databinding.ExpenseCategoryRecyclerItemBinding
-import com.example.splitwise.ui.util.BEAUTY
-import com.example.splitwise.ui.util.BIKE
-import com.example.splitwise.ui.util.CLOTHING
-import com.example.splitwise.ui.util.DONATE
-import com.example.splitwise.ui.util.FOOD
-import com.example.splitwise.ui.util.HEALTH
-import com.example.splitwise.ui.util.MOBILE
-import com.example.splitwise.ui.util.MOVIE
-import com.example.splitwise.ui.util.PETROL_PUMP
-import com.example.splitwise.ui.util.RENT
-import com.example.splitwise.ui.util.SPORTS
-import com.example.splitwise.ui.util.TRANSPORT
 
 class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
 
     fun setData(data: Data, filterListener: CategoryFilterListener<Int>, position: Int) {
         val categoryData = data as ExpenseCategoryData
-        when (categoryData.getType()) {
-            MOVIE -> {
-                binding.categoryName.text = "Movie"
-                binding.groupLogo.setImageResource(R.drawable.shopping_101)
-            }
 
-            HEALTH -> {
-                binding.categoryName.text = "Health"
-                binding.groupLogo.setImageResource(R.drawable.shopping_105)
-            }
 
-            RENT -> {
-                binding.categoryName.text = "Rent"
-                binding.groupLogo.setImageResource(R.drawable.shopping_106)
-            }
+        val drawableId = context.resources.getIdentifier(
+            "shopping_${categoryData.categoryType}",
+            "drawable",
+            context.packageName
+        )
 
-            BEAUTY -> {
-                binding.categoryName.text = "Beauty"
-                binding.groupLogo.setImageResource(R.drawable.shopping_103)
-            }
+        binding.categoryName.text = categoryData.getCategoryTypeName()
+        binding.groupLogo.setImageResource(drawableId)
 
-            PETROL_PUMP -> {
-                binding.categoryName.text = "Petrol"
-                binding.groupLogo.setImageResource(R.drawable.shopping_107)
-            }
-
-            FOOD -> {
-                binding.categoryName.text = "Food"
-                binding.groupLogo.setImageResource(R.drawable.shopping_104)
-            }
-
-            CLOTHING -> {
-                binding.categoryName.text = "Clothing"
-                binding.groupLogo.setImageResource(R.drawable.shopping_102)
-            }
-
-            BIKE -> {
-                binding.categoryName.text = "BIKE"
-                binding.groupLogo.setImageResource(R.drawable.shopping_109)
-            }
-
-            TRANSPORT -> {
-                binding.categoryName.text = "Travel"
-                binding.groupLogo.setImageResource(R.drawable.shopping_108)
-            }
-
-            DONATE -> {
-                binding.categoryName.text = "Donation"
-                binding.groupLogo.setImageResource(R.drawable.shopping_110)
-            }
-
-            SPORTS -> {
-                binding.categoryName.text = "Sports"
-                binding.groupLogo.setImageResource(R.drawable.shopping_111)
-            }
-
-            MOBILE -> {
-                binding.categoryName.text = "Mobile"
-                binding.groupLogo.setImageResource(R.drawable.shopping_112)
-            }
-
-            else -> {
-                binding.categoryName.text = "Other"
-                binding.groupLogo.setImageResource(R.drawable.shopping_113)
-            }
-
-        }
         val density = Resources.getSystem().displayMetrics.density
         if (categoryData.isSelected) {
 
@@ -119,6 +51,6 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
         }
         
 
-        binding.root.setOnClickListener { filterListener.selectedFilter(categoryData.getType(),position) }
+        binding.root.setOnClickListener { filterListener.selectedFilter(categoryData.getCategoryTypeName(),categoryData.getType(),position) }
     }
 }

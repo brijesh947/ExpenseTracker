@@ -130,112 +130,15 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
     }
 
     private fun setImageIcon(categoryData: CategoryAnalysisData, binding: ViewBinding) {
-
-        when (categoryData.categoryName) {
-            "MOVIE" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_101)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_101)
-            }
-
-            "CLOTHING" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_102)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_102)
-
-            }
-
-            "BEAUTY" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_103)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_103)
-
-            }
-
-            "FOOD" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_104)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.pizza_food)
-            }
-
-            "HEALTH" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_105)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_105)
-
-            }
-
-            "RENT" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_106)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_106)
-
-            }
-
-            "PETROL_PUMP" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_107)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_107)
-
-            }
-
-            "BIKE" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_109)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_109)
-
-            }
-
-            "TRANSPORT" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_108)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_108)
-
-            }
-
-            "DONATE" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_110)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_110)
-
-            }
-
-            "SPORTS" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_111)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_111)
-
-            }
-
-            "MOBILE" -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_112)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_112)
-
-            }
-
-            else -> {
-                if (binding is PercentageWiseCategoryAnalysisBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_113)
-                else if (binding is CategoryWiseRecordsLayoutBinding)
-                    binding.groupLogo.setImageResource(R.drawable.shopping_113)
-
-            }
-        }
-
-
+        val drawableId = context.resources.getIdentifier(
+            "shopping_${categoryData.categoryType}",
+            "drawable",
+            context.packageName
+        )
+        if (binding is PercentageWiseCategoryAnalysisBinding)
+            binding.groupLogo.setImageResource(drawableId)
+        else if (binding is CategoryWiseRecordsLayoutBinding)
+            binding.groupLogo.setImageResource(drawableId)
     }
 
 }
