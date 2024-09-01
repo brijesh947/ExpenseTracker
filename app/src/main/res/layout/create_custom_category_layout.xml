@@ -28,7 +28,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
             android:fontFamily="@font/abc_diatype_medium"
-            android:text="Expense Name*"
+            android:text="Category Name*"
             android:textColor="@color/primary_txt"
             android:textSize="15sp"
             app:layout_constraintStart_toStartOf="parent"
