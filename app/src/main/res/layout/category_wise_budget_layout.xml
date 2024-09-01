@@ -32,14 +32,18 @@
 
         <TextView
             android:id="@+id/spending_type"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
+            android:layout_marginEnd="8dp"
+            android:ellipsize="end"
             android:fontFamily="@font/abc_diatype_regular"
+            android:maxLines="1"
             android:text="Movie"
             android:textColor="@color/primary_txt"
             android:textSize="15sp"
             app:fontFamily="@font/abc_diatype_medium"
+            app:layout_constraintEnd_toStartOf="@id/edit_button"
             app:layout_constraintStart_toEndOf="@id/logo_card"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -50,9 +54,9 @@
             android:layout_marginEnd="10dp"
             android:padding="8dp"
             android:src="@drawable/edit_icon"
+            app:layout_constraintBottom_toTopOf="@id/limit_text"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/limit_text"/>
+            app:layout_constraintTop_toTopOf="parent" />
 
 
         <TextView
@@ -163,14 +167,14 @@
                 android:id="@+id/limit_exceeded"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="5dp"
+                android:fontFamily="@font/abc_diatype_medium"
                 android:text="*Limit Exceeded"
+                android:textColor="@color/pausedColor"
                 android:textSize="12sp"
                 android:visibility="gone"
-                android:fontFamily="@font/abc_diatype_medium"
-                android:textColor="@color/pausedColor"
-                app:layout_constraintTop_toBottomOf="@id/expense_progress"/>
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/expense_progress" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -180,8 +184,8 @@
             android:id="@+id/seprator"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_marginTop="12dp"
             android:layout_marginHorizontal="10dp"
+            android:layout_marginTop="12dp"
             android:layout_marginBottom=".5dp"
             android:background="@color/progress_bar_background"
             app:layout_constraintTop_toBottomOf="@id/progress_parent" />

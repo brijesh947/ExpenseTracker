@@ -104,7 +104,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                         year = calendar.get(Calendar.YEAR)
                         month = calendar.get(Calendar.MONTH)
                         date = calendar.get(Calendar.DATE)
-                        totalSum+=(doc.get("amount") as String).toLong()
+                        totalSum += (doc.get("amount") as String).toDouble().toLong()
                         var comment = ""
                         if (doc.contains("comment")) {
                             comment = "" + doc.get("comment")

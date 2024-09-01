@@ -28,7 +28,15 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
         else
             binding.categoryName.visibility = View.VISIBLE
 
-        binding.categoryName.text = categoryData.getCategoryTypeName()
+
+        if (categoryData.getCategoryTypeName().length > 12) {
+            val truncatedText = categoryData.getCategoryTypeName().substring(0, 8) + "..."
+            binding.categoryName.text = truncatedText
+        } else {
+            binding.categoryName.text = categoryData.getCategoryTypeName()
+        }
+
+//        binding.categoryName.text = categoryData.getCategoryTypeName()
         binding.groupLogo.setImageResource(drawableId)
 
         val density = Resources.getSystem().displayMetrics.density

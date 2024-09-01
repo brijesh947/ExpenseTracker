@@ -30,7 +30,7 @@ class AnalysisHolder(val binding: PieChartAnalysisBinding, val context: Context)
                 for (item in value) {
                     totalSum += item.second
                 }
-                spending.add(PieEntry(totalSum.toFloat(), key.substringAfter("_")))
+                spending.add(PieEntry(totalSum.toFloat(), getTrunkedString(key.substringAfter("_"))))
             }
 
             val colors = intArrayOf(
@@ -84,5 +84,13 @@ class AnalysisHolder(val binding: PieChartAnalysisBinding, val context: Context)
             Log.d("sdfvfr", "setData: ${e.message}")
         }
 
+    }
+
+    private fun getTrunkedString(substringAfter: String): String {
+        return if (substringAfter.length > 8) {
+            substringAfter.substring(0, 8) + ".."
+        } else {
+            substringAfter
+        }
     }
 }

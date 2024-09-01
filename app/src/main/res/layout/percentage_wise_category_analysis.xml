@@ -43,13 +43,17 @@
 
             <TextView
                 android:id="@+id/spending_type"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/abc_diatype_regular"
                 android:text="Movie"
                 android:textColor="@color/primary_txt"
                 android:textSize="15sp"
+                android:maxLines="1"
+                android:ellipsize="end"
+                android:layout_marginEnd="8dp"
                 app:fontFamily="@font/abc_diatype_medium"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/expense_progress"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
