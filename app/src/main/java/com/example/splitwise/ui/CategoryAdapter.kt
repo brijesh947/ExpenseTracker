@@ -33,7 +33,7 @@ class CategoryAdapter(val filterListener: CategoryFilterListener<Int>) : Recycle
         return list.size
     }
 
-    fun findPositionBasedOnBoolean(): Int {
+    fun findPreviousCategoryPosition(): Int {
         return list.indexOfFirst { (it as ExpenseCategoryData).isSelected }
     }
 

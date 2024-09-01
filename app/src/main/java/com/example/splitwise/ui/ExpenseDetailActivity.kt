@@ -120,9 +120,6 @@ class ExpenseDetailActivity :AppCompatActivity(){
                 .commit()
             true
         }
-        if(recordsFragment!=null){
-            recordsFragment.setGroupData(data)
-        }
     }
 
     private fun selectCurrentFragment() {

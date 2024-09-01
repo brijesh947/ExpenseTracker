@@ -1,28 +1,90 @@
 package com.example.splitwise.ui.fragment
 
+import android.content.res.Resources
+import android.os.Bundle
+import android.util.Log
+import android.widget.EditText
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import com.example.splitwise.CategoryFilterListener
+import com.example.splitwise.FirebaseCallback
+import com.example.splitwise.MyApplication
+import com.example.splitwise.R
 import com.example.splitwise.data.Data
+import com.example.splitwise.data.DateData
 import com.example.splitwise.data.ExpenseCategoryData
-import com.example.splitwise.ui.util.BEAUTY
-import com.example.splitwise.ui.util.BIKE
-import com.example.splitwise.ui.util.CLOTHING
+import com.example.splitwise.data.GroupDetailData
+import com.example.splitwise.databinding.CreateCustomCategoryLayoutBinding
+import com.example.splitwise.ui.CategoryAdapter
+import com.example.splitwise.ui.ExpenseDetailActivity
+import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
+import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
+import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.CategoryManager
-import com.example.splitwise.ui.util.DONATE
-import com.example.splitwise.ui.util.FOOD
-import com.example.splitwise.ui.util.HEALTH
-import com.example.splitwise.ui.util.MOBILE
-import com.example.splitwise.ui.util.MOVIE
-import com.example.splitwise.ui.util.PETROL_PUMP
-import com.example.splitwise.ui.util.RENT
-import com.example.splitwise.ui.util.SPORTS
-import com.example.splitwise.ui.util.TRANSPORT
-import java.util.Calendar
 
-open class BaseFragment() : Fragment() {
+import com.example.splitwise.ui.util.SHOPPING_GENERAL
+import com.example.splitwise.ui.viewmodel.HomeViewModel
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import java.util.Calendar
+import javax.inject.Inject
+
+open class BaseFragment(open val application: MyApplication, open val activity: ExpenseDetailActivity) : Fragment() {
 
 
     val categoryList: ArrayList<Data> = ArrayList()
     private val categoryManager : CategoryManager = CategoryManager.getInstance()
+    private val customCategoryList = ArrayList<Data>()
+
+    private var mActivity:ExpenseDetailActivity? = null
+
+
+    fun getEDetailActivity(): ExpenseDetailActivity {
+        if (mActivity == null) {
+            if (getActivity() == null) onAttach(activity)
+            mActivity = getActivity() as ExpenseDetailActivity
+        }
+        return mActivity!!
+    }
+
+
+    @Inject
+    lateinit var viewModelRF: HomeViewModel
+
+    var groupData: GroupDetailData? = null
+
+
+
+
+    private lateinit var  categoryAdapter : CategoryAdapter
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        initFragmentBase(application, activity)
+        super.onCreate(savedInstanceState)
+    }
+
+    private fun initFragmentBase(application: MyApplication, activity: ExpenseDetailActivity) {
+        DaggerExpenseDetailActivityComponent.builder()
+            .applicationComponent((application as MyApplication).applicationComponent)
+            .homeActivityModule(HomeActivityModule(activity = activity as AppCompatActivity))
+            .expenseDetailActivityModule(ExpenseDetailActivityModule(application, activity))
+            .build()
+            .inject(this)
+    }
+
+    fun getNewDate(needToUpdate: Boolean): DateData {
+        val calendar = Calendar.getInstance().apply {
+            this.timeInMillis = System.currentTimeMillis()
+        }
+        var today = getDate(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH))
+        return DateData(
+            today,
+            calendar.get(Calendar.DATE),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.YEAR)
+        )
+    }
 
 
     fun createCategoryList(): ArrayList<Data> {
@@ -34,50 +96,6 @@ open class BaseFragment() : Fragment() {
         return categoryList
     }
 
-    fun getFilterType(selectedCategory: Int): String {
-
-        when (selectedCategory) {
-            MOVIE ->
-                return "MOVIE"
-
-            CLOTHING ->
-                return "CLOTHING"
-
-            BEAUTY ->
-                return "BEAUTY"
-
-            FOOD ->
-                return "FOOD"
-
-            HEALTH ->
-                return "HEALTH"
-
-            RENT ->
-                return "RENT"
-
-            PETROL_PUMP ->
-                return "PETROL_PUMP"
-
-            BIKE ->
-                return "BIKE"
-
-            TRANSPORT ->
-                return "TRANSPORT"
-
-            DONATE ->
-                return "DONATE"
-
-            SPORTS ->
-                return "SPORTS"
-
-            MOBILE ->
-                return "MOBILE"
-
-            else ->
-                return "OTHER"
-        }
-
-    }
 
     fun getDate(date: Int, month: Int): String {
         var today = "$date"
@@ -126,38 +144,74 @@ open class BaseFragment() : Fragment() {
         return ""
     }
 
-    fun getPreviousMonth(month: Int): Int {
-        if (month > 0)
-            return month - 1;
-        return 11;
+    fun openCreateCustomCategoryDialog(callback: FirebaseCallback<Boolean>) {
+        val dialogView = CreateCustomCategoryLayoutBinding.inflate(layoutInflater)
+        val dialog = BottomSheetDialog(requireContext(), R.style.BottomSheetDialogStyle)
+        dialog.behavior.peekHeight = Resources.getSystem().displayMetrics.heightPixels
 
+        var selectedCategory = SHOPPING_GENERAL
+        var selectedCategoryName = "Other"
+        var previousPosition = -1
+        categoryAdapter = CategoryAdapter(object : CategoryFilterListener<Int> {
+            override fun selectedFilter(categoryName: String, categoryType: Int, position: Int) {
+                selectedCategory = categoryType
+                selectedCategoryName = categoryName
+                (customCategoryList[position] as ExpenseCategoryData).isSelected = true
+                if (previousPosition != -1 && previousPosition != position) {
+                    (customCategoryList[previousPosition] as ExpenseCategoryData).isSelected = false
+                    categoryAdapter.notifyItemChanged(previousPosition)
+                }
+                previousPosition = position
+                categoryAdapter.notifyItemChanged(position)
+            }
+        })
+        dialogView.expenseFilterRecylerView.layoutManager = GridLayoutManager(requireContext(),2,
+            GridLayoutManager.HORIZONTAL,false)
+        dialogView.expenseFilterRecylerView.adapter = categoryAdapter
+
+        categoryAdapter.setList(createMultipleCategoryList())
+        dialogView.close.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialogView.updateButton.setOnClickListener {
+            Log.d("sdfndnfvew", "is group data null ${groupData == null} and category name is $selectedCategoryName and category type is $selectedCategory")
+            groupData?.let {
+                if (verifyInput(dialogView.customCategoryName)) {
+                    viewModelRF.createNewCategory(
+                        groupData!!,
+                        CategoryManager.CategoryHolderData(
+                            selectedCategory,
+                            dialogView.customCategoryName.text.toString(),
+                            "",
+                            0
+                        ), callback
+                    )
+                    dialog.dismiss()
+                }
+            }
+
+
+        }
+
+        dialog.setContentView(dialogView.root)
+        dialog.show()
     }
 
-    fun getNextYear(currMonth: Int, currYear: Int): Int {
-        if (currMonth < 11)
-            return currYear
-        return currYear + 1
+    private fun verifyInput(inputName: EditText): Boolean {
+        if (inputName.text.toString().isEmpty()) {
+            inputName.error = "Please enter category name"
+            return false
+        }
+        return true
     }
 
-    fun getNextMonth(currMonth: Int): Int {
-        if (currMonth < 11)
-            return currMonth + 1
-        return 0;
-    }
-
-    fun getCurrentMonth(month: Int, year: Int): String {
-        var name = ""
-        name += getMonthName(month)
-        name += ", "
-        name += year
-        return name
-    }
-
-
-    fun getPrevYear(currMonth: Int, currYear: Int): Int {
-        if (currMonth > 0)
-            return currYear
-        return currYear - 1
+    private fun createMultipleCategoryList(): ArrayList<Data> {
+       customCategoryList.clear()
+        for (i in 140 downTo 101) {
+            customCategoryList.add(ExpenseCategoryData("", i, false,true))
+        }
+        return customCategoryList
     }
 
 

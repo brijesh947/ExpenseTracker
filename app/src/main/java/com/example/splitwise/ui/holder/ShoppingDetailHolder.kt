@@ -89,7 +89,7 @@ class ShoppingDetailHolder(val binding: SpendDetailLayoutBinding,val listener: U
             GridLayoutManager.HORIZONTAL,false)
         dialogView.expenseFilterRecylerView.adapter = categoryAdapter
         categoryAdapter.setList(categoryList)
-        previousPosition = categoryAdapter.findPositionBasedOnBoolean()
+        previousPosition = categoryAdapter.findPreviousCategoryPosition()
 
         dialogView.expenseFilterRecylerView.smoothScrollToPosition(previousPosition)
 

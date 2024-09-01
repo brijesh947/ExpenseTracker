@@ -22,6 +22,8 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 class HomeRepository @Inject constructor(private val db: FirebaseFirestore, private val auth: FirebaseAuth,private val application:MyApplication) : BaseRepository() {
+    private val instance = CategoryManager.getInstance()
+
     fun getUserDetail(): Flow<List<GroupDetailData>> {
         Log.d("TAGD", "getUserDetail in repo is called")
         return callbackFlow {
@@ -135,7 +137,6 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
 
     fun getTotalCategoryType(groupData: GroupDetailData):Flow<Boolean>{
 
-        val instance = CategoryManager.getInstance()
         instance.clearMap()
 
         return callbackFlow {
@@ -179,7 +180,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 )
 
                 userRef.add(categoryDetail).addOnSuccessListener {
-
+                    instance.createNewCategory("" + categoryData.type,categoryData.categoryName,"","")
                     trySend(true)
                 }.addOnFailureListener {
                     trySend(false)

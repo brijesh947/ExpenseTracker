@@ -45,7 +45,7 @@ class ExpenseDetailActivityModule(private val application: MyApplication, privat
 
     @Provides
     fun getCategoryFragment(): CategoryFragment {
-        return CategoryFragment()
+        return CategoryFragment(application,activity)
     }
 
     @Provides

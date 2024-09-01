@@ -2,6 +2,7 @@ package com.example.splitwise.ui.holder
 
 import android.content.Context
 import android.content.res.Resources
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.splitwise.CategoryFilterListener
@@ -21,6 +22,11 @@ class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val
             "drawable",
             context.packageName
         )
+
+        if (categoryData.needToHideText)
+            binding.categoryName.visibility = View.GONE
+        else
+            binding.categoryName.visibility = View.VISIBLE
 
         binding.categoryName.text = categoryData.getCategoryTypeName()
         binding.groupLogo.setImageResource(drawableId)

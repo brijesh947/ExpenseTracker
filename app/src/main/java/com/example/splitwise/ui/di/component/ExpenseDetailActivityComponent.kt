@@ -6,6 +6,7 @@ import com.example.splitwise.ui.di.ActivityScope
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.fragment.AnalysisFragment
+import com.example.splitwise.ui.fragment.BaseFragment
 import com.example.splitwise.ui.fragment.BudgetFragment
 import dagger.Component
 
@@ -17,4 +18,5 @@ interface ExpenseDetailActivityComponent {
     fun inject(fragment: RecordsFragment)
     fun inject(fragment: AnalysisFragment)
     fun inject(fragment: BudgetFragment)
+    fun inject(fragment: BaseFragment)
 }

@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -28,13 +27,12 @@ import com.example.splitwise.ui.di.module.HomeActivityModule
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
 import com.example.splitwise.ui.util.show
-import com.example.splitwise.ui.viewmodel.AnalysisViewModel
 import com.example.splitwise.ui.viewmodel.BudgetViewModel
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import javax.inject.Inject
 
-class BudgetFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(), BudgetBuilder {
+class BudgetFragment(override val application: MyApplication, override val activity: ExpenseDetailActivity) : BaseFragment(application, activity), BudgetBuilder {
     private lateinit var binding: BudgetFragmentLayoutBinding
 
     @Inject

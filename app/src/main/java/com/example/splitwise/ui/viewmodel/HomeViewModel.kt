@@ -8,11 +8,11 @@ import com.example.splitwise.data.Data
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.ShoppingData
 import com.example.splitwise.ui.repository.HomeRepository
+import com.example.splitwise.ui.util.CategoryManager
 import com.example.splitwise.ui.util.UiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -45,6 +45,19 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
                 Log.d("jbkdsasvlh", "exception while fetching category ${it.message}")
             }.collect {
                 //do nothing
+            }
+        }
+    }
+
+    fun createNewCategory(groupDetailData: GroupDetailData, categoryData: CategoryManager.CategoryHolderData, callback: FirebaseCallback<Boolean>) {
+        viewModelScope.launch {
+            repository.addNewCategoryType(groupDetailData, categoryData).catch {
+                //do  nothing
+                Log.d("jbkdsasvlh", "exception while fetching category ${it.message}")
+                callback.isFailed(it.message.toString())
+            }.collect {
+                //do nothing
+                callback.isSuccess(it)
             }
         }
     }

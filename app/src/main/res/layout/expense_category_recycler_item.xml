@@ -39,6 +39,7 @@
             android:layout_marginTop="3dp"
             android:fontFamily="@font/abc_diatype_medium"
             android:text="Movie"
+            android:visibility="gone"
             android:textColor="@color/primary_txt"
             android:textSize="15sp"
             app:layout_constraintEnd_toEndOf="parent"

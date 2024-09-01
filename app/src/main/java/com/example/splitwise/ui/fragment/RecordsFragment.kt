@@ -31,7 +31,6 @@ import com.example.splitwise.UpdateRecordsListener
 import com.example.splitwise.data.Data
 import com.example.splitwise.data.DateData
 import com.example.splitwise.data.ExpenseCategoryData
-import com.example.splitwise.data.ExpenseFilterData
 import com.example.splitwise.data.GroupDetailData
 import com.example.splitwise.data.MonthWiseProgressData
 import com.example.splitwise.data.RecentTransactionData
@@ -40,14 +39,11 @@ import com.example.splitwise.databinding.AddExpenseLayoutBinding
 import com.example.splitwise.databinding.RecordFragmentLayoutBinding
 import com.example.splitwise.ui.CategoryAdapter
 import com.example.splitwise.ui.ExpenseDetailActivity
-import com.example.splitwise.ui.ExpenseFilterListener
 import com.example.splitwise.ui.HomeAdapter
 import com.example.splitwise.ui.di.component.DaggerExpenseDetailActivityComponent
 import com.example.splitwise.ui.di.module.ExpenseDetailActivityModule
 import com.example.splitwise.ui.di.module.HomeActivityModule
-import com.example.splitwise.ui.util.CURR_MONTH_FILTER
 import com.example.splitwise.ui.util.NO_FILTER
-import com.example.splitwise.ui.util.PREV_MONTH_FILTER
 import com.example.splitwise.ui.util.SHOPPING_GENERAL
 import com.example.splitwise.ui.util.UiState
 import com.example.splitwise.ui.util.hide
@@ -59,18 +55,13 @@ import java.util.Calendar
 import javax.inject.Inject
 
 
-class RecordsFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(), UpdateRecordsListener{
+class RecordsFragment(override val application: MyApplication, override val activity: ExpenseDetailActivity) : BaseFragment(application,activity), UpdateRecordsListener{
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var binding: RecordFragmentLayoutBinding
     private var list: ArrayList<Data> = ArrayList()
-    private var groupData: GroupDetailData? = null
-    private var currExpesneFilter: Int = NO_FILTER
 
     var isSearchOpen = false
-    private var date = -1
-    private var month = -1
-    private var year = -1
 
     private lateinit var categoryAdapter: CategoryAdapter
 
@@ -166,7 +157,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         binding.searchLayout.root.hide()
         binding.toolbarParent.show()
         binding.expenseRecylerview.show()
-        binding.addRecordsButton.show()
+        setAddRecordButtonVisibilty()
         binding.searchLayout.fragmentHomeSearchTeamEditTxt.setText("")
         binding.searchLayout.fragmentHomeSearchTeamEditTxt.clearFocus()
 
@@ -180,10 +171,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             adapter.setList(list)
         }
 
-    }
-
-    fun setGroupData(data: GroupDetailData?) {
-        groupData = data
     }
 
     private fun initFragment() {
@@ -222,6 +209,7 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        groupData = getEDetailActivity().getGroupData()
         fetchCategoryData();
     }
 
@@ -307,24 +295,6 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
         viewModel.updateTotalExpense(groupData!!, totalShoppingSum.toString())
     }
 
-    private fun getNewDate(needToUpdate: Boolean): DateData {
-        val calendar = Calendar.getInstance().apply {
-            this.timeInMillis = System.currentTimeMillis()
-        }
-        var today = getDate(calendar.get(Calendar.DATE), calendar.get(Calendar.MONTH))
-        if (needToUpdate) {
-            date = calendar.get(Calendar.DATE)
-            month = calendar.get(Calendar.MONTH)
-            year = calendar.get(Calendar.YEAR)
-        }
-        return DateData(
-            today,
-            calendar.get(Calendar.DATE),
-            calendar.get(Calendar.MONTH),
-            calendar.get(Calendar.YEAR)
-        )
-
-    }
 
     private fun verifyInput(dialogView: AddExpenseLayoutBinding): Boolean {
         if (dialogView.shoppingName.text.isEmpty()) {
@@ -354,6 +324,9 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
 
         if (!isSearchOpen)
             fetchData(currMonth,currYear)
+
+        setAddRecordButtonVisibilty()
+
 
         recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             private val HIDE_THRESHOLD = 20
@@ -386,6 +359,13 @@ class RecordsFragment(val application: MyApplication, val activity: ExpenseDetai
             }
         })
 
+    }
+
+    private fun setAddRecordButtonVisibilty() {
+        if (currMonth != getNewDate(false).month || currYear != getNewDate(false).year)
+            binding.addRecordsButton.hide()
+        else
+            binding.addRecordsButton.show()
     }
 
     private fun openMonthSelectorDialog() {

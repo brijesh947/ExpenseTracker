@@ -12,10 +12,11 @@ import com.example.splitwise.databinding.SimpleTextDescriptionLayoutBinding
 import com.example.splitwise.ui.holder.CategoryDescriptionHolder
 import com.example.splitwise.ui.holder.RecentTransactionHolder
 import com.example.splitwise.ui.holder.SimpleTextHolder
+import com.example.splitwise.ui.util.CategoryCreator
 import com.example.splitwise.ui.util.RECENT_TRANSACTION
 import com.example.splitwise.ui.util.SIMPLE_TEXT
 
-class CategoryFragmentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class CategoryFragmentAdapter(val listener:CategoryCreator) : RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private var list:List<Data> = ArrayList()
 
@@ -73,6 +74,9 @@ class CategoryFragmentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>(
 
             SIMPLE_TEXT -> {
                 (holder as SimpleTextHolder).setData(list[position])
+                holder.binding.root.setOnClickListener {
+                    listener.createCategory()
+                }
             }
 
             RECENT_TRANSACTION -> {
@@ -80,7 +84,11 @@ class CategoryFragmentAdapter() : RecyclerView.Adapter<RecyclerView.ViewHolder>(
             }
 
             else -> {
-                (holder as CategoryDescriptionHolder).setData(data = list[position] ,position == list.size-2)
+                val lastPosition = if (list.last().getType() == SIMPLE_TEXT)
+                    list.size - 2
+                 else
+                    list.size - 1
+                (holder as CategoryDescriptionHolder).setData(data = list[position] ,position == lastPosition)
             }
         }
     }

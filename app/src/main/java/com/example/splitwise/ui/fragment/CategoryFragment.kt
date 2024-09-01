@@ -8,28 +8,28 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.splitwise.FirebaseCallback
+import com.example.splitwise.MyApplication
 import com.example.splitwise.data.CategoryDescriptionData
 import com.example.splitwise.data.Data
-import com.example.splitwise.data.ExpenseCategoryData
 import com.example.splitwise.data.RecentTransactionData
 import com.example.splitwise.data.SimpleTextData
 import com.example.splitwise.databinding.CategoryFragmentLayoutBinding
 import com.example.splitwise.ui.CategoryFragmentAdapter
+import com.example.splitwise.ui.ExpenseDetailActivity
+import com.example.splitwise.ui.util.CategoryCreator
 import com.example.splitwise.ui.util.CategoryManager
-import com.example.splitwise.ui.util.SIMPLE_TEXT
-import java.util.Calendar
 
-class CategoryFragment : BaseFragment() {
+class CategoryFragment(application: MyApplication, activity: ExpenseDetailActivity) : BaseFragment(application, activity), CategoryCreator {
 
     lateinit  var recyclerView: RecyclerView
     private lateinit var binding: CategoryFragmentLayoutBinding
 
     private val list :ArrayList<Data> = ArrayList()
 
-    private val adapter : CategoryFragmentAdapter = CategoryFragmentAdapter()
+    private val adapter : CategoryFragmentAdapter = CategoryFragmentAdapter(this)
 
     private val categoryManager : CategoryManager = CategoryManager.getInstance()
 
@@ -76,7 +76,8 @@ class CategoryFragment : BaseFragment() {
         categoryManager.getTotalCategoryList().forEach {
             list.add( CategoryDescriptionData(it.categoryName,it.type))
         }
-        list.add(SimpleTextData("\nCreate new category feature will be available soon"))
+        if (getNewDate(false).month == currMonth && getNewDate(false).year == currYear)
+            list.add(SimpleTextData("\nCreate new category feature will be available soon", true))
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -84,7 +85,30 @@ class CategoryFragment : BaseFragment() {
     }
     override fun onResume() {
         super.onResume()
+        groupData = getEDetailActivity().getGroupData()
         adapter.setList(list)
+
+    }
+
+
+    override fun createCategory() {
+        openCreateCustomCategoryDialog(object : FirebaseCallback<Boolean> {
+            override fun isSuccess(result: Boolean) {
+                if (result) {
+                    prepareData()
+                    adapter.setList(list)
+                } else
+                    showErrorToast()
+            }
+
+            override fun isFailed(reason: String) {
+                showErrorToast()
+            }
+        })
+    }
+
+    private fun showErrorToast() {
+        Toast.makeText(requireContext(), "Something went wrong", Toast.LENGTH_SHORT).show()
     }
 
 }

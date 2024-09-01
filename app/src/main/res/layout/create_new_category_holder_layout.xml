@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingVertical="8dp"
+    android:layout_marginHorizontal="15dp"
+    android:background="@drawable/only_stroke_ce_low_contrast_fg_2_7sdp">
+
+    <androidx.appcompat.widget.AppCompatImageView
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_marginEnd="5dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/add_button"
+        android:backgroundTint="@color/ce_cta_light"
+        app:layout_constraintBottom_toBottomOf="@id/new_category_text"
+        app:layout_constraintEnd_toStartOf="@id/new_category_text"
+        app:layout_constraintTop_toTopOf="@id/new_category_text" />
+
+
+    <TextView
+        android:id="@+id/new_category_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/abc_diatype_medium"
+        android:text="Create New Category"
+        android:textColor="@color/primary_txt"
+        android:textSize="20sp"
+        app:fontFamily="@font/abc_diatype_medium"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -36,7 +36,7 @@ import java.util.Calendar
 import java.util.Collections
 import javax.inject.Inject
 
-class AnalysisFragment(val application: MyApplication, val activity: ExpenseDetailActivity) : BaseFragment(),Comparator<Data> {
+class AnalysisFragment(override val application: MyApplication, override val activity: ExpenseDetailActivity) : BaseFragment(application, activity),Comparator<Data> {
     private lateinit var binding: AnalysisFragmentLayoutBinding
 
     private var currMonth = -1
