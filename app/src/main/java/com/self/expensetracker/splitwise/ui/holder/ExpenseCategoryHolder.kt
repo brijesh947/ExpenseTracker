@@ -1,0 +1,70 @@
+package com.self.expensetracker.splitwise.ui.holder
+
+import android.content.Context
+import android.content.res.Resources
+import android.view.View
+import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.RecyclerView
+import com.self.expensetracker.splitwise.CategoryFilterListener
+import com.self.expensetracker.splitwise.R
+import com.self.expensetracker.splitwise.data.Data
+import com.self.expensetracker.splitwise.data.ExpenseCategoryData
+import com.self.expensetracker.splitwise.databinding.ExpenseCategoryRecyclerItemBinding
+
+class ExpenseCategoryHolder(val binding: ExpenseCategoryRecyclerItemBinding, val context: Context) : RecyclerView.ViewHolder(binding.root) {
+
+    fun setData(data: Data, filterListener: CategoryFilterListener<Int>, position: Int) {
+        val categoryData = data as ExpenseCategoryData
+
+
+        val drawableId = context.resources.getIdentifier(
+            "shopping_${categoryData.categoryType}",
+            "drawable",
+            context.packageName
+        )
+
+        if (categoryData.needToHideText)
+            binding.categoryName.visibility = View.GONE
+        else
+            binding.categoryName.visibility = View.VISIBLE
+
+
+        if (categoryData.getCategoryTypeName().length > 12) {
+            val truncatedText = categoryData.getCategoryTypeName().substring(0, 8) + "..."
+            binding.categoryName.text = truncatedText
+        } else {
+            binding.categoryName.text = categoryData.getCategoryTypeName()
+        }
+
+//        binding.categoryName.text = categoryData.getCategoryTypeName()
+        binding.groupLogo.setImageResource(drawableId)
+
+        val density = Resources.getSystem().displayMetrics.density
+        if (categoryData.isSelected) {
+
+            binding.categoryName.setTextColor(context.resources.getColor(R.color.text_cta_color))
+            val drawable = ContextCompat.getDrawable(context, R.drawable.only_stroke_text_cta_color_33dp)
+            binding.logoCard.foreground = drawable
+//            val drawable = binding.logoCard.foreground as GradientDrawable
+//            drawable.mutate()
+//
+//            drawable.setStroke((1*density).toInt(),context.getColor(R.color.text_cta_color))
+            binding.logoCard.foreground = drawable
+
+        } else {
+            binding.categoryName.setTextColor(context.resources.getColor(R.color.primary_txt))
+            val drawable = ContextCompat.getDrawable(context, R.drawable.only_stroke_ce_low_contrast_fg_33dp)
+            binding.logoCard.foreground = drawable
+
+//            val drawable = binding.logoCard.foreground as GradientDrawable
+//            drawable.mutate()
+//            drawable.setStroke((1*density).toInt(),context.getColor(R.color.ce_low_contrast_fg_light))
+            binding.logoCard.foreground = drawable
+
+
+        }
+        
+
+        binding.root.setOnClickListener { filterListener.selectedFilter(categoryData.getCategoryTypeName(),categoryData.getType(),position) }
+    }
+}

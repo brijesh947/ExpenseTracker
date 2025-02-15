@@ -8,11 +8,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.splitwise"
+    namespace = "com.self.expensetracker.splitwise"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.splitwise"
+        applicationId = "com.self.expensetracker.splitwise"
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 33
