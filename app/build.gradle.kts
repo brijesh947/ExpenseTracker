@@ -49,7 +49,7 @@ android {
 
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        kotlinCompilerExtensionVersion = "1.5.10"
     }
     packaging {
         resources {
@@ -70,6 +70,7 @@ dependencies {
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.firebase:firebase-firestore-ktx:24.11.0")
     testImplementation("junit:junit:4.13.2")
+
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.annotation:annotation:1.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
