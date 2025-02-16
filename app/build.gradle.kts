@@ -9,15 +9,15 @@ plugins {
 
 android {
     namespace = "com.self.expensetracker.splitwise"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.self.expensetracker.splitwise"
         minSdk = 24
         //noinspection EditedTargetSdkVersion
-        targetSdk = 33
-        versionCode = 1
-        versionName = "1.0"
+        targetSdk = 34
+        versionCode = 2
+        versionName = "1.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

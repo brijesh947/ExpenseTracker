@@ -99,7 +99,7 @@ class CategoryWiseAnalysisHolder(val binding: PercentageWiseCategoryAnalysisBind
 
         val pref = context.getSharedPreferences("budget",Context.MODE_PRIVATE)
 
-        val budget = pref.getLong("" + month + "_" + year + "_" + categoryData.categoryName,10000)
+        val budget = pref.getLong("" + month + "_" + year + "_" + categoryData.categoryType + "_" + categoryData.categoryName,10000)
 
         dialogView.recyclerView.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false)
         dialogView.recyclerView.adapter = adapter
