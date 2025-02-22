@@ -37,7 +37,7 @@
                 android:id="@+id/logo"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:src="@drawable/app_logo" />
+                android:src="@mipmap/app_logo_final" />
 
         </androidx.cardview.widget.CardView>
 
