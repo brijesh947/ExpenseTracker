@@ -262,7 +262,7 @@ class RecordsFragment(override val application: MyApplication, override val acti
                             if (list.isEmpty()) {
                                 list.add(0, data)
                                 list.add(0, RecentTransactionData("Recent Transaction"))
-                                list.add(0, MonthWiseProgressData(50000, data.totalAmount.toLong()))
+                                list.add(0, MonthWiseProgressData(50000, data.totalAmount.toDoubleOrNull()?.toLong() ?: 0L))
 
                             } else {
                                 list.add(2, data)
@@ -456,6 +456,7 @@ class RecordsFragment(override val application: MyApplication, override val acti
                 totalShoppingSum += diff
                 (list[0] as MonthWiseProgressData).totalExpense = totalShoppingSum.toLong()
                 adapter.notifyItemChanged(0)
+                updateCurrentMonthExpenseForHome()
 
             }
 
@@ -476,6 +477,7 @@ class RecordsFragment(override val application: MyApplication, override val acti
                totalShoppingSum -= data.totalAmount.toDouble()
                (list[0] as MonthWiseProgressData).totalExpense = totalShoppingSum.toLong()
                adapter.notifyItemChanged(0)
+               updateCurrentMonthExpenseForHome()
            }
 
            override fun isFailed(reason: String) {
