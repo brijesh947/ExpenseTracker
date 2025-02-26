@@ -471,20 +471,33 @@ class RecordsFragment(override val application: MyApplication, override val acti
     override fun deleteRecord(data: ShoppingData, position: Int) {
        viewModel.deleteUserExpenses(groupData!!,data,object :FirebaseCallback<Boolean>{
            override fun isSuccess(result: Boolean) {
-               Log.d("8iuhgvghjk", "update isSuccess:")
-               list.removeAt(position)
+               Log.d("8iuhgvghjk", "delete  isSuccess:")
+               searchList.removeAt(position)
                adapter.notifyItemRemoved(position)
                totalShoppingSum -= data.totalAmount.toDouble()
+
+               removeItemFromList(data)
                (list[0] as MonthWiseProgressData).totalExpense = totalShoppingSum.toLong()
                adapter.notifyItemChanged(0)
+
                updateCurrentMonthExpenseForHome()
            }
 
            override fun isFailed(reason: String) {
-               Log.d("8iuhgvghjk", "update is Failed $reason")
+               Log.d("8iuhgvghjk", "delete is Failed $reason")
            }
 
        })
+    }
+
+    private fun removeItemFromList(data: ShoppingData) {
+        for (i in 0 until list.size) {
+            if ((list[i] is ShoppingData) && ((list.get(i) as ShoppingData).id == data.id)) {
+                list.removeAt(i);
+                adapter.notifyItemRemoved(i)
+                break
+            }
+        }
     }
 
 }
