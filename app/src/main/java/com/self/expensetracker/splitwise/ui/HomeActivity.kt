@@ -329,14 +329,14 @@ class HomeActivity : AppCompatActivity() {
                      "Other"
 
 
-                 val data = GroupDetailData("0",dialogView.groupName.text.toString().trim(),group,"No spending to display here")
+                 val data = GroupDetailData("0",dialogView.groupName.text.toString().trim(),group,"Add Expense to display here.")
                  viewModel.addNewUserGroup(data, object : FirebaseCallback<Boolean> {
                      override fun isSuccess(result: Boolean) {
                          if (result) {
                              list.add(data)
                              adapter.setList(list)
                          } else
-                             showError("User not Added")
+                             showError("Unable to create group")
                          if (list.isNotEmpty()) {
                              binding.noGroup.hide()
                          }

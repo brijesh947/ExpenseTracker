@@ -168,7 +168,7 @@ class HomeAdapter(private val context: Context, private val application: Applica
                 }
 
             }
-            if (data.totalExpense == "No spending to display here")
+            if (data.totalExpense == "Add Expense to display here.")
                 binding.totalExpense.text = data.totalExpense
             else
                 binding.totalExpense.text = "Total expenses: " + showRupeeString(data.totalExpense)

@@ -11,6 +11,7 @@ import com.self.expensetracker.splitwise.ui.util.CategoryManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
+import com.self.expensetracker.splitwise.ui.util.getCurrentMonthAndYear
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
@@ -31,10 +32,14 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 userRef.get().addOnSuccessListener { querySnapshot ->
                     for (doc in querySnapshot.documents) {
                         var group = "Home"
+                        var expense = "Add Expense to display here."
                         if (doc.contains("type"))
                             group = "" + doc.get("type")
 
-                        val tempData = GroupDetailData(doc.id,"" + doc.get("group_name"), group, "" + doc.get("total_expense"))
+                        if (doc.contains("total_expense" + getCurrentMonthAndYear()))
+                            expense = "" + doc.get("total_expense" + getCurrentMonthAndYear())
+
+                        val tempData = GroupDetailData(doc.id,"" + doc.get("group_name"), group, expense)
                         list.add(tempData)
                     }
                     trySend(list)
@@ -195,7 +200,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail")
                 val userDetail = hashMapOf(
                     "group_name" to groupData.groupName,
-                    "total_expense" to groupData.totalExpense,
+                    ("total_expense" + getCurrentMonthAndYear()) to groupData.totalExpense,
                     "type" to groupData.groupType,
                     "time" to System.currentTimeMillis()
                 )
@@ -305,7 +310,7 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
                 val userRef = db.collection("users").document(auth.currentUser!!.uid).collection("userDetail").document(groupData.id)
 
                 db.runTransaction { transaction ->
-                    transaction.update(userRef, "total_expense", totalExpenses)
+                    transaction.update(userRef, ("total_expense" + getCurrentMonthAndYear()), totalExpenses)
                 }.addOnSuccessListener {
                     continuation.resume(true)
                 }.addOnFailureListener {
