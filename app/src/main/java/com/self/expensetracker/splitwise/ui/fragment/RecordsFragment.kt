@@ -289,7 +289,17 @@ class RecordsFragment(override val application: MyApplication, override val acti
     }
 
     private fun updateCurrentMonthExpenseForHome() {
-        viewModel.updateTotalExpense(groupData!!, totalShoppingSum.toString())
+
+        val calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+        }
+        val tempCurrMonth = calendar.get(Calendar.MONTH)
+        val tempCurrYear = calendar.get(Calendar.YEAR)
+
+
+        if (tempCurrMonth == currMonth && tempCurrYear == currYear)
+            viewModel.updateTotalExpense(groupData!!, totalShoppingSum.toString())
+
     }
 
 
