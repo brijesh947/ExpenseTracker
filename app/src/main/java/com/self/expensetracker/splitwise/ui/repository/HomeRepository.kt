@@ -12,9 +12,13 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.self.expensetracker.splitwise.ui.util.getCurrentMonthAndYear
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.tasks.await
 import java.util.Calendar
 import javax.inject.Inject
 import kotlin.coroutines.resume
@@ -79,6 +83,44 @@ class HomeRepository @Inject constructor(private val db: FirebaseFirestore, priv
             awaitClose { }
         }
     }
+
+
+    suspend fun updateUserNameAndPassword(newName: String, newPassword: String): Result<Boolean> = coroutineScope {
+        val user = auth.currentUser
+        val userId = user?.uid ?: return@coroutineScope Result.failure(Exception("User not logged in"))
+
+        val firestore = db
+        val userDocRef = firestore.collection("users").document(userId).collection("userPersonalDetail")
+
+        try {
+            val snapshot = userDocRef.get().await()
+            val document = snapshot.documents.firstOrNull()
+                ?: return@coroutineScope Result.failure(Exception("User detail document not found"))
+
+            val docRef = document.reference
+
+            val updateNameDeferred = async {
+                docRef.update(
+                    mapOf(
+                        "name" to newName,
+                        "password" to newPassword
+                    )
+                ).await()
+            }
+
+//            val updatePasswordDeferred = async {
+//                user.updatePassword(newPassword).await()
+//            }
+
+            // Wait for both operations to complete
+            awaitAll(updateNameDeferred)
+
+            Result.success(true)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
 
 
     fun getUserExpenseDetail(groupData: GroupDetailData,currMonth:Int,currYear:Int): Flow<List<Data>> {

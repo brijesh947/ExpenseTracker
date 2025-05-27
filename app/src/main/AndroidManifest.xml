@@ -38,6 +38,12 @@
             android:exported="false"
             android:screenOrientation="portrait"
             android:theme="@style/Theme.Home"></activity>
+        <activity
+            android:name=".ui.UserDetailActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme.Home"></activity>
+
     </application>
 
 </manifest>

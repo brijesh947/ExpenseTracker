@@ -44,12 +44,11 @@ class SignUpFragment : Fragment() {
                             if (user != null) {
                                 val userName = binding.name.text.toString()
                                 val userEmail = inputEmail
-                                val userPassword = inputPassword
 
                                 val userMap = hashMapOf(
                                     "name" to userName,
                                     "email" to userEmail,
-                                    "password" to userPassword
+                                    "password" to ""
                                 )
                                 FirebaseFirestore.getInstance().collection("users")
                                     .document(user.uid)

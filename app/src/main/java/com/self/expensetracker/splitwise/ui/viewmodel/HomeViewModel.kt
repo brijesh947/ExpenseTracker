@@ -7,6 +7,7 @@ import com.self.expensetracker.splitwise.FirebaseCallback
 import com.self.expensetracker.splitwise.data.Data
 import com.self.expensetracker.splitwise.data.GroupDetailData
 import com.self.expensetracker.splitwise.data.ShoppingData
+import com.self.expensetracker.splitwise.data.UserPersonalData
 import com.self.expensetracker.splitwise.ui.repository.HomeRepository
 import com.self.expensetracker.splitwise.ui.util.CategoryManager
 import com.self.expensetracker.splitwise.ui.util.UiState
@@ -20,8 +21,15 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
 
     private var _groupDetail = MutableStateFlow<UiState<List<GroupDetailData>>>(UiState.Loading)
     private var _expenseDetail = MutableStateFlow<UiState<List<Data>>>(UiState.Loading)
+
+    private var _userPersonalDetail = MutableStateFlow<UiState<UserPersonalData>>(UiState.Loading)
+    val userPersonalDetail: StateFlow<UiState<UserPersonalData>> = _userPersonalDetail
+
+
     val expenseDetail :StateFlow<UiState<List<Data>>> get() = _expenseDetail
     val groupDetail: StateFlow<UiState<List<GroupDetailData>>> get() = _groupDetail
+
+
     fun getUserDetail() {
         viewModelScope.launch {
             Log.d("TAGD", "getUserDetail in view model  is called")
@@ -74,6 +82,41 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+
+    fun getUserPersonalDetail() {
+        _userPersonalDetail.value = UiState.Loading
+        viewModelScope.launch {
+            repository.getUserPersonalDetail().catch {
+                _userPersonalDetail.value =
+                    UiState.Error(it?.message ?: "Something went wrong")
+            }.collect {
+                if (it.isEmpty())
+                    UiState.Error("Response is Empty")
+                else {
+                    val userPersonalData = UserPersonalData(it[0], it[1], it[0][0].toString())
+                    _userPersonalDetail.value = UiState.Success(userPersonalData)
+                }
+            }
+        }
+    }
+
+
+    fun updateNameAndPassword(
+        name: String,
+        updatedPassword: String,
+        callback: FirebaseCallback<String>
+    ) {
+
+        viewModelScope.launch {
+            val result = repository.updateUserNameAndPassword(name, updatedPassword)
+            if (result.isSuccess) {
+                callback.isSuccess(result = result.toString())
+            } else {
+                callback.isFailed(reason = result.toString())
+            }
+        }
+    }
+
     fun getExpenseDetail(groupDetailData: GroupDetailData, currMonth: Int, currYear: Int) {
         viewModelScope.launch {
             Log.d("TAGD", "getUserDetail in view model  is called")
@@ -112,6 +155,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+
     fun updateUserExpenses(data: GroupDetailData, shoppingData: ShoppingData, callback: FirebaseCallback<Boolean>) {
         viewModelScope.launch {
             repository.updateExpenseToFirebase(data, shoppingData).catch {
@@ -121,6 +165,7 @@ class HomeViewModel @Inject constructor(private val repository: HomeRepository) 
             }
         }
     }
+
     fun deleteUserExpenses(data: GroupDetailData,shoppingData: ShoppingData, callback: FirebaseCallback<Boolean>) {
         viewModelScope.launch {
             repository.deleteExpenseToFirebase(data,shoppingData).catch {

@@ -3,6 +3,7 @@ package com.self.expensetracker.splitwise.ui
 import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Context
+import android.content.Intent
 import android.graphics.Canvas
 import android.graphics.Path
 import android.graphics.RectF
@@ -63,6 +64,9 @@ class HomeActivity : AppCompatActivity() {
         binding.createGroup.setOnClickListener {
             openCreateGroupDialog()
         }
+        binding.appBar.setOnClickListener {
+            openUserDetailActivity()
+        }
         recyclerView = binding.recyclerView
         recyclerView.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL, false)
         adapter = HomeAdapter(this,application)
@@ -73,6 +77,11 @@ class HomeActivity : AppCompatActivity() {
 
         setScrollListener()
 
+    }
+
+    private fun openUserDetailActivity() {
+        val intent = Intent(this, UserDetailActivity::class.java)
+        this.startActivity(intent)
     }
 
     private fun setScrollListener() {
@@ -268,6 +277,7 @@ class HomeActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         fetchData()
+        setUserNameAndEmail()
         val appBarLayout1: AppBarLayout = binding.appBar
         appBarLayout1.addOnOffsetChangedListener { appBarLayout, verticalOffset ->
             val percent = abs(verticalOffset) * 1f / (appBarLayout1.totalScrollRange * 1f)

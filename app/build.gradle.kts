@@ -16,8 +16,8 @@ android {
         minSdk = 24
         //noinspection EditedTargetSdkVersion
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.2"
+        versionCode = 6
+        versionName = "1.6.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -111,4 +111,12 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation( "androidx.core:core-ktx:1.13.1")
+    implementation ("androidx.activity:activity-compose:1.9.0")
+    implementation( "androidx.compose.ui:ui:1.6.4")
+    implementation ("androidx.compose.ui:ui-tooling-preview:1.6.4")
+    implementation( "androidx.compose.material3:material3:1.2.1")
+
+    debugImplementation( "androidx.compose.ui:ui-tooling:1.6.4")
+    debugImplementation ("androidx.compose.ui:ui-test-manifest:1.6.4")
 }
