@@ -390,15 +390,11 @@ class HomeActivity : AppCompatActivity() {
 
         WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        // Apply system bar colors
-//        window.statusBarColor = ContextCompat.getColor(this, R.color.app_bar_background)
         window.navigationBarColor = ContextCompat.getColor(this, R.color.primary_bg)
 
-        // Handle icon contrast (light/dark)
         val insetsController = WindowInsetsControllerCompat(window, window.decorView)
-        insetsController.isAppearanceLightStatusBars = true   // dark text/icons on light bar
-        insetsController.isAppearanceLightNavigationBars = true // light icons on dark bar
-
+        insetsController.isAppearanceLightStatusBars = true
+        insetsController.isAppearanceLightNavigationBars = true
         ViewCompat.setOnApplyWindowInsetsListener(binding.parent) { v, insets ->
             val bars = insets.getInsets(
                 WindowInsetsCompat.Type.systemBars()

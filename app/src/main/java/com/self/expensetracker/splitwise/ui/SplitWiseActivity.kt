@@ -2,11 +2,14 @@ package com.self.expensetracker.splitwise.ui
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
-import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import com.self.expensetracker.splitwise.R
 import com.self.expensetracker.splitwise.databinding.MainLayoutBinding
 import com.self.expensetracker.splitwise.ui.fragment.login.LoginFragment
@@ -23,9 +26,7 @@ class SplitWiseActivity : AppCompatActivity() {
         setWindowColor()
         auth = FirebaseAuth.getInstance()
         if (auth.currentUser == null) {
-            supportFragmentManager.beginTransaction().replace(
-                binding.fragmentContainer.id, LoginFragment()
-            ).commit()
+            supportFragmentManager.beginTransaction().replace(binding.fragmentContainer.id, LoginFragment()).commit()
         } else {
             openHomeActivity()
         }
@@ -47,14 +48,24 @@ class SplitWiseActivity : AppCompatActivity() {
 
     @SuppressLint("ObsoleteSdkInt")
     private fun setWindowColor() {
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.transparent)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true
+        insetsController.isAppearanceLightNavigationBars = true
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
         }
-
-        window.statusBarColor = resources.getColor(R.color.transparent)
     }
 }
 
