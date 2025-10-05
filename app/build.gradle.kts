@@ -4,18 +4,20 @@ plugins {
     kotlin("kapt")
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
+    id("org.jetbrains.kotlin.plugin.compose") version "2.0.0" // this version matches your Kotlin version
+
 
 }
 
 android {
     namespace = "com.self.expensetracker.splitwise"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.self.expensetracker.splitwise"
         minSdk = 24
         //noinspection EditedTargetSdkVersion
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 6
         versionName = "1.6.0"
 
@@ -56,6 +58,11 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+composeCompiler {
+    reportsDestination = layout.buildDirectory.dir("compose_compiler")
+    stabilityConfigurationFile = rootProject.layout.projectDirectory.file("stability_config.conf")
 }
 
 dependencies {
@@ -101,8 +108,8 @@ dependencies {
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-database")
-    implementation("com.google.dagger:dagger:2.51.1")
-    kapt("com.google.dagger:dagger-compiler:2.51.1")
+    implementation("com.google.dagger:dagger:2.57.2")
+    kapt("com.google.dagger:dagger-compiler:2.57.2")
 
 
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

@@ -19,6 +19,12 @@ import android.view.animation.DecelerateInterpolator
 import android.widget.Toast
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
@@ -381,8 +387,30 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun setWindowColor() {
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
-        window.statusBarColor = resources.getColor(R.color.app_bar_background)
+
+        WindowCompat.setDecorFitsSystemWindows(window, false)
+
+        // Apply system bar colors
+//        window.statusBarColor = ContextCompat.getColor(this, R.color.app_bar_background)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.primary_bg)
+
+        // Handle icon contrast (light/dark)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true   // dark text/icons on light bar
+        insetsController.isAppearanceLightNavigationBars = true // light icons on dark bar
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.parent) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 }

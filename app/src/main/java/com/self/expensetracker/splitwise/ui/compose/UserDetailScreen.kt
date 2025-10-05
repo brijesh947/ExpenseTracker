@@ -59,7 +59,7 @@ fun UserDetailScreen(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center
         ) {
-            profileImage(firstLetterOfName.toUpperCase())
+            profileImage(firstLetterOfName.uppercase())
         }
 
         Spacer(Modifier.padding(top = 32.dp))

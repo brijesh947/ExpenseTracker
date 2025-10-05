@@ -112,13 +112,13 @@ class RecordsFragment(override val application: MyApplication, override val acti
                 if (s == null)
                     return
                 searchList.clear()
-                val searchText = s.toString().trim().toLowerCase()
+                val searchText = s.toString().trim().lowercase()
 
                 if (s.isNotEmpty()) {
                     binding.searchLayout.fragmentHomeSearchClearTextButton.show()
                     list.forEach {
                         if (it is ShoppingData)
-                            if (it.shoppingName.trim().toLowerCase().contains(searchText)) {
+                            if (it.shoppingName.trim().lowercase().contains(searchText)) {
                                 searchList.add(it)
                             }
                     }

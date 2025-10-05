@@ -3,6 +3,12 @@ package com.self.expensetracker.splitwise.ui
 import android.os.Bundle
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
+import androidx.core.view.updatePadding
 import androidx.fragment.app.Fragment
 import com.self.expensetracker.splitwise.MyApplication
 import com.self.expensetracker.splitwise.R
@@ -43,6 +49,8 @@ class ExpenseDetailActivity :AppCompatActivity(){
         binding = ExpensesDetailLayoutBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setWindowColor()
+
+
         binding.bottomNavigation.itemIconTintList = null
         intent.extras?.let {
             data = GroupDetailData(it.getString("id")!!,it.getString("name")!!,"",it.getString("expenses")!!)
@@ -66,10 +74,31 @@ class ExpenseDetailActivity :AppCompatActivity(){
     }
 
     private fun setWindowColor() {
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS)
-        window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
+        // Enable edge-to-edge layout
+        WindowCompat.setDecorFitsSystemWindows(window, false)
 
-        window.statusBarColor = resources.getColor(R.color.app_bar_background)
+        // Apply system bar colors
+        window.statusBarColor = ContextCompat.getColor(this, R.color.app_bar_background)
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.app_bar_background_2)
+
+        // Handle icon contrast (light/dark)
+        val insetsController = WindowInsetsControllerCompat(window, window.decorView)
+        insetsController.isAppearanceLightStatusBars = true   // dark text/icons on light bar
+        insetsController.isAppearanceLightNavigationBars = false // light icons on dark bar
+
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val bars = insets.getInsets(
+                WindowInsetsCompat.Type.systemBars()
+                        or WindowInsetsCompat.Type.displayCutout()
+            )
+            v.updatePadding(
+                left = bars.left,
+                top = bars.top,
+                right = bars.right,
+                bottom = bars.bottom,
+            )
+            WindowInsetsCompat.CONSUMED
+        }
     }
 
     override fun onResume() {

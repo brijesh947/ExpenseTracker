@@ -3,12 +3,12 @@
 
     <style name="Theme.Splitwise" parent="Theme.AppCompat.Light">
         <item name="android:windowBackground">@color/primary_bg</item>
-        <item name="android:windowContentTransitions">true</item>
+<!--        <item name="android:windowContentTransitions">true</item>-->
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
     </style>
 
     <style name="Theme.Home" parent="Theme.MaterialComponents.NoActionBar">
-        <item name="android:windowBackground">@color/primary_bg</item>
+        <item name="android:windowBackground">@color/app_bar_background</item>
         <item name="android:windowContentTransitions">true</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
 

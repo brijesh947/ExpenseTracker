@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
@@ -24,6 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -34,9 +36,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import androidx.core.view.WindowCompat
 
 import com.self.expensetracker.splitwise.FirebaseCallback
 import com.self.expensetracker.splitwise.MyApplication
@@ -81,6 +85,21 @@ class UserDetailActivity : ComponentActivity() {
 
         val context = LocalContext.current
         val activity = context as? Activity
+
+        val isDarkMod = isSystemInDarkTheme() // Or your custom theme check
+
+        DisposableEffect(isDarkMod) {
+            activity?.let {
+                activity.window.statusBarColor = Color(0xFFF2D5).toArgb()
+                activity.window.navigationBarColor =  Color(0xF9F9F9).toArgb()
+
+                WindowCompat.getInsetsController(activity.window, activity.window.decorView).apply {
+                    isAppearanceLightStatusBars = true
+                    isAppearanceLightNavigationBars = true
+                }
+            }
+            onDispose { }
+        }
 
         LaunchedEffect(Unit) {
             viewModel.getUserPersonalDetail()

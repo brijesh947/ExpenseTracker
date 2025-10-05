@@ -6,8 +6,7 @@
         android:id="@+id/parent"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/primary_bg"
-        android:fitsSystemWindows="true"
+        android:background="@color/app_bar_background"
         app:elevation="0dp">
 
         <com.google.android.material.appbar.AppBarLayout
@@ -90,6 +89,7 @@
             android:layout_height="match_parent"
             app:layout_anchor="@id/app_bar"
             app:layout_anchorGravity="bottom"
+            android:background="@color/primary_bg"
             app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
             <View
